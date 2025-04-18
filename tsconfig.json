@@ -26,6 +26,18 @@
       "@/*": [
         "./*"
       ],
+      "@/components/*": [
+        "./app/(frontend)/components/*"
+      ],
+      "@/components": [
+        "./app/(frontend)/components"
+      ],
+      "@/hooks/*": [
+        "./app/(frontend)/hooks/*"
+      ],
+      "@/lib/*": [
+        "./app/(frontend)/lib/*"
+      ],
       "@payload-config": [
         "./payload.config.ts"
       ]
