@@ -1,19 +1,35 @@
-import React from 'react'
-import './styles.css'
+import type React from 'react';
+import type { Metadata } from 'next';
+import { Nunito } from 'next/font/google';
+import './globals.css';
+// import { ThemeProvider } from "@/components/theme-provider"
+import Navigation from '@/components/navigation';
+import { DateProvider } from '@/app/(frontend)/context/date-context';
 
-export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
-}
+const inter = Nunito({ weight: '400', subsets: ['latin'], display: 'swap' });
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
-  const { children } = props
+export const metadata: Metadata = {
+  title: 'workITout - Workout & Nutrition Tracker',
+  description: 'Track your workouts and nutrition with ease',
+};
 
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en">
-      <body>
-        <main>{children}</main>
+      <body className={inter.className}>
+        {/*<ThemeProvider attribute="class" defaultTheme="light">*/}
+        <DateProvider>
+          <div className="flex flex-col min-h-screen">
+            <main className="flex-1">{children}</main>
+            <Navigation />
+          </div>
+        </DateProvider>
+        {/*</ThemeProvider>*/}
       </body>
     </html>
-  )
+  );
 }
