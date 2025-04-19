@@ -66,10 +66,6 @@
     @apply shadow-card hover:shadow-card-hover transition-shadow duration-300;
   }
 
-  .gradient-bg {
-    @apply bg-gradient-to-br from-primary/80 to-primary;
-  }
-
   @keyframes waterWave {
     0%,
     100% {

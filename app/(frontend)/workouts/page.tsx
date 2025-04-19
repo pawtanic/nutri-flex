@@ -10,6 +10,7 @@ import { format } from 'date-fns';
 import { WorkoutTemplates } from '@/components/workout-templates';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDate } from '@/app/(frontend)/context/date-context';
+import { linkAkaBtnStyles } from '@/app/(frontend)/utils/constants';
 
 export default function WorkoutsPage() {
   const { selectedDate } = useDate();
@@ -67,11 +68,9 @@ export default function WorkoutsPage() {
 
         <TabsContent value="workout" className="mt-4">
           <div className="flex justify-end mb-4">
-            <Link href="/workouts/add">
-              <Button size="sm">
-                <Plus className="h-4 w-4 mr-1" />
-                New Workout
-              </Button>
+            <Link className={linkAkaBtnStyles} href="/workouts/add">
+              <Plus className="h-4 w-4 mr-1" />
+              New Workout
             </Link>
           </div>
 
@@ -105,12 +104,6 @@ export default function WorkoutsPage() {
           ) : (
             <div className="text-center py-12">
               <p className="text-muted-foreground mb-4">No workouts for this date</p>
-              <Link href="/workouts/add">
-                <Button>
-                  <Plus className="h-4 w-4 mr-1" />
-                  Add Workout
-                </Button>
-              </Link>
             </div>
           )}
         </TabsContent>

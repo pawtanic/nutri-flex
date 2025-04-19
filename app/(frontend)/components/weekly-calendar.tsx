@@ -111,7 +111,7 @@ export function WeeklyCalendar() {
                 key={day.toString()}
                 className={cn(
                   'w-[40px] p-2 py-4 space-y-2 hover:bg-primary/10 rounded-2xl bg-[#FAFCFC]',
-                  isToday && 'bg-[#FAEFFD]',
+                  isToday && 'bg-quinary',
                   isSelected && 'bg-tertiary'
                 )}
               >
@@ -122,6 +122,16 @@ export function WeeklyCalendar() {
               </button>
             );
           })}
+        </div>
+        <div className="flex justify-center mt-4 space-x-4 text-xs">
+          <div className="flex items-center">
+            <div className="w-3 h-3 rounded-full bg-tertiary mr-2"></div>
+            <span className="text-sm">Selected workout date</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-3 h-3 rounded-full bg-quinary mr-2"></div>
+            <span className="text-sm">Today</span>
+          </div>
         </div>
       </CardContent>
     </Card>

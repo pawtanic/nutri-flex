@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function SettingsPage() {
   return (
@@ -20,9 +20,11 @@ export default function SettingsPage() {
 
         <TabsContent value="profile" className="space-y-4 mt-4">
           <Card className="card-shadow border-none overflow-hidden">
-            <CardHeader className="pb-2 gradient-bg text-white">
+            <CardHeader className="pb-2 text-white">
               <CardTitle>Personal Information</CardTitle>
-              <CardDescription className="text-white/80">Update your personal details</CardDescription>
+              <CardDescription className="text-white/80">
+                Update your personal details
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 p-4">
               <div className="grid gap-2">
@@ -48,9 +50,11 @@ export default function SettingsPage() {
           </Card>
 
           <Card className="card-shadow border-none overflow-hidden">
-            <CardHeader className="pb-2 gradient-bg text-white">
+            <CardHeader className="pb-2 text-white">
               <CardTitle>Goals</CardTitle>
-              <CardDescription className="text-white/80">Set your fitness and nutrition goals</CardDescription>
+              <CardDescription className="text-white/80">
+                Set your fitness and nutrition goals
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 p-4">
               <div className="grid gap-2">
@@ -92,7 +96,9 @@ export default function SettingsPage() {
                   <Label htmlFor="dark-mode" className="block">
                     Dark Mode
                   </Label>
-                  <p className="text-sm text-muted-foreground">Switch between light and dark themes</p>
+                  <p className="text-sm text-muted-foreground">
+                    Switch between light and dark themes
+                  </p>
                 </div>
                 <Switch id="dark-mode" />
               </div>
@@ -119,7 +125,9 @@ export default function SettingsPage() {
             <CardContent className="space-y-4">
               <div className="grid gap-2">
                 <Label>Export Data</Label>
-                <p className="text-sm text-muted-foreground">Download all your workout and nutrition data</p>
+                <p className="text-sm text-muted-foreground">
+                  Download all your workout and nutrition data
+                </p>
                 <Button variant="outline">Export as CSV</Button>
               </div>
 
@@ -133,5 +141,5 @@ export default function SettingsPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
