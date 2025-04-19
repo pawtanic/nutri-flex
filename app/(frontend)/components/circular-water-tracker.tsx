@@ -1,6 +1,7 @@
 'use client';
 
 import { Droplet } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 
 interface CircularWaterTrackerProps {
   percentage: number;
@@ -18,21 +19,73 @@ export function CircularWaterTracker({ percentage, current, goal }: CircularWate
   const currentMl = current * 250;
   const goalMl = goal * 250;
 
+  // Animation refs
+  const waveRef = useRef<SVGPathElement>(null);
+  const styleRef = useRef<HTMLStyleElement | null>(null);
+
+  // Set up water wave animation on component mount and when percentage changes
+  useEffect(() => {
+    // Create style element if it doesn't exist
+    if (!styleRef.current) {
+      styleRef.current = document.createElement('style');
+      document.head.appendChild(styleRef.current);
+    }
+
+    // Calculate water level based on percentage (inverted - higher percentage means more water)
+    // 180 is viewBox height, we want to go from bottom (180) to top (0)
+    const waterLevel = 180 - (percentage / 100) * 180;
+
+    // Define keyframes for wave animation
+    const keyframes = `
+      @keyframes waveAnimation {
+        0% {
+          d: path('M-20,${waterLevel} C20,${waterLevel - 10} 60,${waterLevel + 10} 100,${waterLevel} C140,${waterLevel - 10} 180,${waterLevel + 10} 220,${waterLevel} L220,200 L-20,200 Z');
+        }
+        50% {
+          d: path('M-20,${waterLevel} C20,${waterLevel + 10} 60,${waterLevel - 10} 100,${waterLevel} C140,${waterLevel + 10} 180,${waterLevel - 10} 220,${waterLevel} L220,200 L-20,200 Z');
+        }
+        100% {
+          d: path('M-20,${waterLevel} C20,${waterLevel - 10} 60,${waterLevel + 10} 100,${waterLevel} C140,${waterLevel - 10} 180,${waterLevel + 10} 220,${waterLevel} L220,200 L-20,200 Z');
+        }
+      }
+    `;
+
+    styleRef.current.innerHTML = keyframes;
+
+    // Apply the animation to the wave
+    if (waveRef.current) {
+      // Set initial wave shape
+      waveRef.current.setAttribute(
+        'd',
+        `M-20,${waterLevel} C20,${waterLevel - 10} 60,${waterLevel + 10} 100,${waterLevel} C140,${waterLevel - 10} 180,${waterLevel + 10} 220,${waterLevel} L220,200 L-20,200 Z`
+      );
+
+      // Apply animation
+      waveRef.current.style.animation = 'waveAnimation 4s ease-in-out infinite';
+    }
+
+    return () => {
+      // Clean up only when component unmounts
+      if (styleRef.current && !percentage) {
+        document.head.removeChild(styleRef.current);
+        styleRef.current = null;
+      }
+    };
+  }, [percentage]);
+
   return (
     <div className="relative flex flex-col items-center">
       <div className="relative w-64 h-64">
-        {/* Water wave animation (simplified) */}
-        <div
-          className="absolute bottom-0 left-0 right-0 bg-blue-500/20 rounded-full"
-          style={{
-            height: `${percentage}%`,
-            transition: 'height 0.5s ease-in-out',
-            animation: 'waterWave 2s infinite ease-in-out',
-          }}
-        />
-
-        {/* Background circle */}
+        {/* SVG with clip path for the water animation */}
         <svg className="w-full h-full" viewBox="0 0 180 180">
+          {/* Define clip path for the water */}
+          <defs>
+            <clipPath id="circleClip">
+              <circle cx="90" cy="90" r={radius} />
+            </clipPath>
+          </defs>
+
+          {/* Background circle */}
           <circle
             cx="90"
             cy="90"
@@ -42,6 +95,27 @@ export function CircularWaterTracker({ percentage, current, goal }: CircularWate
             strokeWidth="12"
             strokeLinecap="round"
           />
+
+          {/* Water filling with wave effect */}
+          <g clipPath="url(#circleClip)">
+            <path
+              ref={waveRef}
+              fill="rgba(59, 130, 246, 0.3)"
+              style={{
+                transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+              }}
+            />
+            {/* Additional overlay for a more watery look */}
+            <circle
+              cx="90"
+              cy="90"
+              r={radius}
+              fill="rgba(59, 130, 246, 0.05)"
+              style={{
+                transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+              }}
+            />
+          </g>
 
           {/* Progress circle */}
           <circle
