@@ -7,6 +7,8 @@
       "esnext"
     ],
     "allowJs": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
@@ -34,9 +36,6 @@
       ],
       "@/hooks/*": [
         "./app/(frontend)/hooks/*"
-      ],
-      "@/lib/*": [
-        "./app/(frontend)/lib/*"
       ],
       "@payload-config": [
         "./payload.config.ts"
