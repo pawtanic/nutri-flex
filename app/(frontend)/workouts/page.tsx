@@ -11,6 +11,21 @@ import { WorkoutTemplates } from '@/components/workout-templates';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDate } from '@/app/(frontend)/context/date-context';
 import { linkAkaBtnStyles } from '@/app/(frontend)/utils/constants';
+import { RoutesConfig } from '@/components/navigation';
+
+// Sample workout data - in a real app, you'd filter this based on the selected date
+const workouts = [
+  {
+    id: 1,
+    date: format(selectedDate, 'yyyy-MM-dd'),
+    name: 'Upper Body',
+    exercises: [
+      { name: 'Bench Press', sets: 3, reps: 10 },
+      { name: 'Pull-ups', sets: 3, reps: 8 },
+      { name: 'Shoulder Press', sets: 3, reps: 12 },
+    ],
+  },
+];
 
 export default function WorkoutsPage() {
   const { selectedDate } = useDate();
@@ -18,20 +33,6 @@ export default function WorkoutsPage() {
     name: '',
     exercises: [],
   });
-
-  // Sample workout data - in a real app, you'd filter this based on the selected date
-  const workouts = [
-    {
-      id: 1,
-      date: format(selectedDate, 'yyyy-MM-dd'),
-      name: 'Upper Body',
-      exercises: [
-        { name: 'Bench Press', sets: 3, reps: 10 },
-        { name: 'Pull-ups', sets: 3, reps: 8 },
-        { name: 'Shoulder Press', sets: 3, reps: 12 },
-      ],
-    },
-  ];
 
   // Check if there are workouts for the selected date
   const hasWorkouts = workouts.length > 0;
@@ -68,7 +69,7 @@ export default function WorkoutsPage() {
 
         <TabsContent value="workout" className="mt-4">
           <div className="flex justify-end mb-4">
-            <Link className={linkAkaBtnStyles} href="/workouts/add">
+            <Link className={linkAkaBtnStyles} href={RoutesConfig.addWorkout}>
               <Plus className="h-4 w-4 mr-1" />
               New Workout
             </Link>
@@ -133,7 +134,7 @@ export default function WorkoutsPage() {
                   </ul>
 
                   <div className="mt-4">
-                    <Link href="/workouts/add">
+                    <Link href={RoutesConfig.addWorkout}>
                       <Button className="w-full">
                         <Plus className="h-4 w-4 mr-1" />
                         Create Workout from Template

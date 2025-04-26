@@ -5,6 +5,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/app/(frontend)/lib/utils';
 import { isSameDay } from 'date-fns';
+import { RoutesConfig } from './navigation';
 
 // Sample data for dates with workouts
 const workoutDates = [
@@ -21,7 +22,7 @@ export function WorkoutCalendar() {
   const handleDateSelect = (date: Date | undefined) => {
     if (date) {
       setSelectedDate(date);
-      router.push('/workouts');
+      router.push(RoutesConfig.workout);
     }
   };
 

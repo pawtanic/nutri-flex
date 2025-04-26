@@ -5,9 +5,17 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/app/(frontend)/lib/utils';
 
-const navItems = [
+export const RoutesConfig = {
+  workout: '/workouts',
+  addWorkout: '/workouts/add',
+  nutrition: '/nutrition',
+  water: '/water',
+  history: '/history',
+} as const;
+
+export const navItems = [
   { name: 'Home', href: '/', icon: Home },
-  { name: 'Workouts', href: '/workouts', icon: Dumbbell },
+  { name: 'Workouts', href: RoutesConfig.workout, icon: Dumbbell },
   { name: 'Water', href: '/water', icon: Droplet },
   { name: 'Nutrition', href: '/nutrition', icon: Apple },
   { name: 'History', href: '/history', icon: BarChart2 },

@@ -22,6 +22,7 @@ import { WeeklyCalendar } from '@/components/weekly-calendar';
 import Image from 'next/image';
 import { capitalize } from '@/app/(frontend)/utils/helpers';
 import { periodValue, tabsValues } from '@/app/(frontend)/utils/constants';
+import { RoutesConfig } from '@/components/navigation';
 
 export default function Home() {
   const [selectedTab, setSelectedTab] = useState(tabsValues.overview);
@@ -70,7 +71,6 @@ function TabContentByPeriod() {
           <SelectTrigger id="period">
             <SelectValue placeholder="Select period" />
           </SelectTrigger>
-          {/*// todo object here*/}
           <SelectContent>
             <SelectItem value={periodValue.week}>This Week</SelectItem>
             <SelectItem value={periodValue.month}>This Month</SelectItem>
@@ -87,7 +87,7 @@ function TabContentByPeriod() {
           type={tabsValues.workout}
         />
         <div className="flex justify-end">
-          <Link href="/workouts">
+          <Link href={RoutesConfig.workout}>
             <Button variant="outline" size="sm" className="mt-2">
               View All Workouts <ArrowRight className="ml-2 h-4 w-4" />
             </Button>

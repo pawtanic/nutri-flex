@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Coffee, Droplet, GlassWater, Wine } from 'lucide-react';
+import { Droplet, GlassWater } from 'lucide-react';
 import { Bottle } from '@/components/icons';
 
 interface WaterQuickAddProps {

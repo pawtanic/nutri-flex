@@ -17,6 +17,7 @@ import { cn } from '@/app/(frontend)/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useRouter } from 'next/navigation';
 import { useDate } from '@/app/(frontend)/context/date-context';
+import { RoutesConfig } from '@/components/navigation';
 
 // Sample workout data - in a real app, this would come from your database
 const workoutData = [
@@ -112,7 +113,7 @@ export function WorkoutHistoryCalendar({ period, workoutType }: WorkoutHistoryCa
   // Handle day click
   const handleDayClick = (day: Date) => {
     setSelectedDate(day);
-    router.push('/workouts');
+    router.push(RoutesConfig.workout);
   };
 
   return (
