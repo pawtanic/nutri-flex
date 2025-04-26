@@ -21,15 +21,10 @@ import Link from 'next/link';
 import { WeeklyCalendar } from '@/components/weekly-calendar';
 import Image from 'next/image';
 import { capitalize } from '@/app/(frontend)/utils/helpers';
-
-const tabsValues = {
-  overview: 'overview',
-  workouts: 'workouts',
-  nutrition: 'nutrition',
-} as const;
+import { periodValue, tabsValues } from '@/app/(frontend)/utils/constants';
 
 export default function Home() {
-  const [selectedTab, setSelectedTab] = useState<string>(tabsValues.overview);
+  const [selectedTab, setSelectedTab] = useState(tabsValues.overview);
   return (
     <div className="container max-w-md mx-auto pb-20 pt-6 px-4">
       <Image
@@ -41,10 +36,14 @@ export default function Home() {
       />
       <WeeklyCalendar />
       <StreakCard className="mb-6" />
-      <Tabs onValueChange={setSelectedTab} defaultValue="overview" className="mb-6">
+      <Tabs
+        onValueChange={setSelectedTab as (value: string) => void}
+        defaultValue="overview"
+        className="mb-6"
+      >
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value={tabsValues.overview}>{capitalize(tabsValues.overview)}</TabsTrigger>
-          <TabsTrigger value={tabsValues.workouts}>{capitalize(tabsValues.workouts)}</TabsTrigger>
+          <TabsTrigger value={tabsValues.workout}>{capitalize(tabsValues.workout)}</TabsTrigger>
           <TabsTrigger value={tabsValues.nutrition}>{capitalize(tabsValues.nutrition)}</TabsTrigger>
         </TabsList>
         {selectedTab !== tabsValues.overview ? (
@@ -59,22 +58,15 @@ export default function Home() {
   );
 }
 
-const periodValue = {
-  week: 'week',
-  month: 'month',
-  '3months': '3months',
-  year: 'year',
-} as const;
-
 function TabContentByPeriod() {
-  const [selectedPeriod, setSelectedPeriod] = useState<string>(periodValue.week);
+  const [selectedPeriod, setSelectedPeriod] = useState(periodValue.week);
   return (
     <>
       <div className="my-6">
         <Label htmlFor="period" className="mb-1 block text-md">
           View Progress
         </Label>
-        <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
+        <Select value={selectedPeriod} onValueChange={setSelectedPeriod as (value: string) => void}>
           <SelectTrigger id="period">
             <SelectValue placeholder="Select period" />
           </SelectTrigger>
@@ -87,9 +79,13 @@ function TabContentByPeriod() {
           </SelectContent>
         </Select>
       </div>
-      <TabsContent value={tabsValues.workouts} className="space-y-4 mt-4">
+      <TabsContent value={tabsValues.workout} className="space-y-4 mt-4">
         <WorkoutSummary period={selectedPeriod} />
-        <ProgressChart title="Workout Frequency" period={selectedPeriod} type="workout" />
+        <ProgressChart
+          title="Workout Frequency"
+          period={selectedPeriod}
+          type={tabsValues.workout}
+        />
         <div className="flex justify-end">
           <Link href="/workouts">
             <Button variant="outline" size="sm" className="mt-2">

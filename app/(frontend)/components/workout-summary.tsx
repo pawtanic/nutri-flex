@@ -7,25 +7,25 @@ interface WorkoutSummaryProps {
   period: string;
 }
 
-export function WorkoutSummary({ period }: WorkoutSummaryProps) {
-  // Sample data - in a real app, this would be calculated based on the period
-  const workoutStats = {
-    total: 12,
-    byType: {
-      strength: 7,
-      cardio: 3,
-      flexibility: 2,
-    },
-    averagePerWeek: 3,
-  };
+// Sample data - in a real app, this would be calculated based on the period
+const workoutStats = {
+  total: 12,
+  byType: {
+    strength: 7,
+    cardio: 3,
+    flexibility: 2,
+  },
+  averagePerWeek: 3,
+};
 
+export function WorkoutSummary({ period }: WorkoutSummaryProps) {
   return (
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-lg">Workout Summary</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex justify-between mb-2">
+        <div className="flex justify-between my-2">
           <div className="flex items-center gap-2">
             <Dumbbell className="small-icon" />
             <p>Total workouts</p>
