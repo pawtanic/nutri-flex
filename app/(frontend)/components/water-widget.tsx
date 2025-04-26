@@ -13,20 +13,20 @@ export function WaterWidget() {
   const waterPercentage = Math.min(Math.round((waterIntake / waterGoal) * 100), 100);
 
   return (
-    <Card className="card-shadow bg-quinary">
+    <Card className="card-shadow">
       <CardHeader className="pb-2 flex flex-row items-center justify-between">
         <CardTitle className="text-lg">Water Intake</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center">
-            <Droplet className="h-5 w-5 mr-2 text-blue-500" />
-            <span className="font-medium">
+            <Droplet className="h-6 w-6 mr-2 stroke-primary fill-quinary" />
+            <span>
               {waterIntake}/{waterGoal} glasses
             </span>
           </div>
         </div>
-        <Progress value={waterPercentage} className="h-2 bg-blue-100" />
+        <Progress value={waterPercentage} className="h-2 progress" />
       </CardContent>
     </Card>
   );

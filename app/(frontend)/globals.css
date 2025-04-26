@@ -67,6 +67,14 @@
     @apply shadow-card hover:shadow-card-hover transition-shadow duration-300;
   }
 
+  .progress {
+    @apply bg-white border border-zinc-400;
+  }
+
+  .small-icon {
+    @apply h-5 w-5 mb-1 text-primary
+  }
+
   @keyframes waterWave {
     0%,
     100% {

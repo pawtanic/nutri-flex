@@ -1,10 +1,10 @@
-"use client"
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Dumbbell, Heart, Zap } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { TrendingUp, Dumbbell } from 'lucide-react';
 
 interface WorkoutSummaryProps {
-  period: string
+  period: string;
 }
 
 export function WorkoutSummary({ period }: WorkoutSummaryProps) {
@@ -17,7 +17,7 @@ export function WorkoutSummary({ period }: WorkoutSummaryProps) {
       flexibility: 2,
     },
     averagePerWeek: 3,
-  }
+  };
 
   return (
     <Card>
@@ -25,32 +25,21 @@ export function WorkoutSummary({ period }: WorkoutSummaryProps) {
         <CardTitle className="text-lg">Workout Summary</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-3 gap-2 mb-4">
-          <div className="flex flex-col items-center p-2 bg-muted rounded-md">
-            <Dumbbell className="h-5 w-5 mb-1 text-primary" />
-            <span className="text-xs text-muted-foreground">Strength</span>
-            <span className="font-bold">{workoutStats.byType.strength}</span>
+        <div className="flex justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <Dumbbell className="small-icon" />
+            <p>Total workouts</p>
           </div>
-          <div className="flex flex-col items-center p-2 bg-muted rounded-md">
-            <Heart className="h-5 w-5 mb-1 text-primary" />
-            <span className="text-xs text-muted-foreground">Cardio</span>
-            <span className="font-bold">{workoutStats.byType.cardio}</span>
-          </div>
-          <div className="flex flex-col items-center p-2 bg-muted rounded-md">
-            <Zap className="h-5 w-5 mb-1 text-primary" />
-            <span className="text-xs text-muted-foreground">Flexibility</span>
-            <span className="font-bold">{workoutStats.byType.flexibility}</span>
-          </div>
+          <p className="font-medium">{workoutStats.total}</p>
         </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Total Workouts</span>
-          <span className="font-medium">{workoutStats.total}</span>
-        </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Average Per Week</span>
-          <span className="font-medium">{workoutStats.averagePerWeek}</span>
+        <div className="flex justify-between">
+          <div className="flex items-center gap-2">
+            <TrendingUp className="small-icon" />
+            <p>Average per {period}</p>
+          </div>
+          <p className="font-medium">{workoutStats.averagePerWeek}</p>
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

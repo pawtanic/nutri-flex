@@ -204,24 +204,6 @@ export function WorkoutHistoryCalendar({ period, workoutType }: WorkoutHistoryCa
           <div key={`empty-end-${i}`} className="h-10 rounded-md"></div>
         ))}
       </div>
-
-      <div className="mt-4 flex flex-col space-y-2 bg-muted/50 p-3 rounded-lg">
-        <div className="text-sm font-medium">Intensity Legend:</div>
-        <div className="flex space-x-4 text-xs">
-          <div className="flex items-center">
-            <div className="w-3 h-3 rounded-full bg-workout mr-1"></div>
-            <span>High</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-3 h-3 rounded-full bg-workout/60 mr-1"></div>
-            <span>Medium</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-3 h-3 rounded-full bg-workout/30 mr-1"></div>
-            <span>Low</span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

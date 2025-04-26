@@ -10,6 +10,7 @@ const goals = [
     current: 3,
     target: 4,
     percentage: 75,
+    unit: '',
   },
   {
     name: 'Daily Water',
@@ -32,28 +33,47 @@ const goals = [
     percentage: 83,
     unit: 'g',
   },
-];
+] as const;
 
-interface GoalProgressProps {
-  period: string;
-}
+type Goal = (typeof goals)[number];
 
-export function GoalProgress({ period }: GoalProgressProps) {
+// todo move to helpers ?
+
+const getFillColor = (goalName: Goal['name']): string => {
+  switch (goalName) {
+    case 'Weekly Workouts':
+      return 'bg-primary';
+    case 'Daily Water':
+      return 'bg-quinary';
+    case 'Calorie Goal':
+      return 'bg-tertiary';
+    case 'Protein Intake':
+      return 'bg-quaternary';
+    default:
+      return 'bg-primary';
+  }
+};
+
+export function GoalProgress() {
   return (
     <Card className="card-shadow">
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg">Goal Progress</CardTitle>
+        <CardTitle className="text-lg">Goal progress</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {goals.map(goal => (
           <div key={goal.name} className="space-y-1">
-            <div className="flex justify-between text-sm">
-              <span>{goal.name}</span>
-              <span>
+            <div className="flex justify-between">
+              <p>{goal.name}</p>
+              <p>
                 {goal.current} / {goal.target} {goal.unit}
-              </span>
+              </p>
             </div>
-            <Progress value={goal.percentage} className="h-2" />
+            <Progress
+              value={goal.percentage}
+              className="h-2 progress"
+              progressFill={getFillColor(goal.name)}
+            />
           </div>
         ))}
       </CardContent>

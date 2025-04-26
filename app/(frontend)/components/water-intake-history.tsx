@@ -56,7 +56,7 @@ export function WaterIntakeHistory() {
                 <Progress
                   value={(day.amount / day.goal) * 100}
                   className="h-2 bg-blue-100"
-                  indicatorClassName={`${day.amount >= day.goal ? 'bg-green-500' : 'bg-blue-500'}`}
+                  // indicatorClassName={`${day.amount >= day.goal ? 'bg-green-500' : 'bg-blue-500'}`}
                 />
               </div>
             ))}
@@ -69,7 +69,7 @@ export function WaterIntakeHistory() {
               <Progress
                 value={weeklyPercentage}
                 className="h-2 mt-1 bg-blue-100"
-                indicatorClassName="bg-blue-600"
+                // indicatorClassName="bg-blue-600"
               />
             </div>
           </TabsContent>

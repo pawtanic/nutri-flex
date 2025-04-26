@@ -21,9 +21,9 @@ export function StreakCard({ className }: StreakCardProps) {
               <Flame className="h-8 w-8 text-[#FF5C2B]" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Current Streak</p>
+              <p className="text-muted-foreground">Current Streak</p>
               <p className="text-xl font-bold">{totalWorkouts} workouts</p>
-              <p className="text-sm font-bold">since joined at 12/03/2024</p>
+              <p>since joined at 12/03/2024</p>
             </div>
           </div>
         </div>
