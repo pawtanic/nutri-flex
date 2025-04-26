@@ -79,7 +79,7 @@ export function WeeklyCalendar() {
             variant="ghost"
             size="icon"
             onClick={prevWeek}
-            className="h-8 w-8 bg-primary/5 hover:bg-primary/10"
+            className="h-8 w-8 bg-backgroundSecondary hover:bg-primary/10"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -87,7 +87,7 @@ export function WeeklyCalendar() {
             variant="ghost"
             size="icon"
             onClick={nextWeek}
-            className="h-8 w-8 bg-primary/5 hover:bg-primary/10"
+            className="h-8 w-8 bg-backgroundSecondary hover:bg-primary/10"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
@@ -110,7 +110,7 @@ export function WeeklyCalendar() {
                 onClick={() => handleDayClick(day)}
                 key={day.toString()}
                 className={cn(
-                  'w-[40px] p-2 py-4 space-y-2 hover:bg-primary/10 rounded-2xl bg-[#FAFCFC]',
+                  'w-[40px] p-2 py-4 space-y-2 hover:bg-primary/10 rounded-2xl bg-backgroundSecondary',
                   isToday && 'bg-quinary',
                   isSelected && 'bg-tertiary'
                 )}
