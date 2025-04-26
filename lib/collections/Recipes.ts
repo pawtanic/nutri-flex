@@ -194,7 +194,7 @@ export const Recipes: CollectionConfig = {
         beforeChange: [
           ({ req, operation }) => {
             if (operation === 'create') {
-              return req.user.id;
+              return req.user?.id;
             }
           },
         ],
