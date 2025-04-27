@@ -54,7 +54,7 @@ export function BarcodeProductDisplay({
       </div>
 
       <div className="flex gap-4">
-        <div className="relative h-24 w-24 bg-gray-100 rounded-md flex-shrink-0">
+        <div className="relative h-32 w-32 bg-white  border rounded-md flex-shrink-0">
           {nutritionInfo.image ? (
             <Image
               src={nutritionInfo.image || '/placeholder.svg'}
@@ -64,15 +64,15 @@ export function BarcodeProductDisplay({
               sizes="96px"
             />
           ) : (
-            <div className="h-full w-full flex items-center justify-center text-xs text-muted-foreground">
+            <div className="h-full w-full flex items-center justify-center text-muted-foreground">
               No image
             </div>
           )}
         </div>
-        <div className="flex-1">
-          <h3 className="font-medium line-clamp-2">{nutritionInfo.productName}</h3>
+        <div className="flex-1 bg-white p-4 border rounded-md">
+          <h3 className="font-medium text-xl line-clamp-2">{nutritionInfo.productName}</h3>
           <div className="flex items-center mt-2">
-            <span className="text-sm text-muted-foreground mr-2">Quantity:</span>
+            <span className="mr-2">Quantity:</span>
             <Button
               variant="outline"
               size="icon"
@@ -104,17 +104,17 @@ export function BarcodeProductDisplay({
           </div>
 
           <div className="grid grid-cols-3 gap-3">
-            <div className="bg-green-50 p-3 rounded-md text-center">
-              <div className="text-lg font-bold text-green-600">{calculatedNutrition.protein}g</div>
-              <div className="text-xs text-muted-foreground">Protein</div>
+            <div className="bg-tertiary p-3 rounded-md text-center">
+              <div className="text-lg font-bold">{calculatedNutrition.protein}g</div>
+              <div className="text-muted-foreground">Protein</div>
             </div>
-            <div className="bg-blue-50 p-3 rounded-md text-center">
-              <div className="text-lg font-bold text-blue-600">{calculatedNutrition.carbs}g</div>
-              <div className="text-xs text-muted-foreground">Carbs</div>
+            <div className="bg-quinary p-3 rounded-md text-center">
+              <div className="text-lg font-bold ">{calculatedNutrition.carbs}g</div>
+              <div className="text-muted-foreground">Carbs</div>
             </div>
-            <div className="bg-amber-50 p-3 rounded-md text-center">
-              <div className="text-lg font-bold text-amber-600">{calculatedNutrition.fat}g</div>
-              <div className="text-xs text-muted-foreground">Fat</div>
+            <div className="bg-quaternary p-3 rounded-md text-center">
+              <div className="text-lg font-bold">{calculatedNutrition.fat}g</div>
+              <div className="text-muted-foreground">Fat</div>
             </div>
           </div>
         </CardContent>

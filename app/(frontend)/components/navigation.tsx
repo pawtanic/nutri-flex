@@ -7,8 +7,9 @@ import { cn } from '@/app/(frontend)/lib/utils';
 
 export const RoutesConfig = {
   workout: '/workouts',
-  addWorkout: '/workout/add',
+  addWorkout: '/workouts/add',
   nutrition: '/nutrition',
+  addNutrition: '/nutrition/add',
   water: '/water',
   history: '/history',
 } as const;
@@ -26,14 +27,16 @@ type NavigationItem = (typeof navItems)[number]['name'];
 
 const getIconColor = (isActive: boolean, itemName: NavigationItem): string => {
   if (!isActive) return 'none';
-  switch (itemName) {
-    case 'Home':
+
+  const name = itemName.toLowerCase();
+  switch (true) {
+    case name.startsWith('home'):
       return 'hsl(var(--quaternary))';
-    case 'Workouts':
+    case name.startsWith('workouts'):
       return 'hsl(var(--secondary))';
-    case 'Water':
+    case name.startsWith('water'):
       return 'hsl(var(--quinary))';
-    case 'Nutrition':
+    case name.startsWith('nutrition'):
       return 'hsl(var(--tertiary))';
     default:
       return 'none';
@@ -47,7 +50,8 @@ export default function Navigation() {
     <div className="sm:max-w-md sm:mx-auto fixed bottom-0 left-0 right-0 border sm:rounded-md bg-white shadow-lg z-50">
       <nav className="flex justify-around items-center h-18 px-2">
         {navItems.map(item => {
-          const isActive = pathname === item.href;
+          const isActive =
+            (pathname.startsWith(item.href) && item.href !== '/') || pathname === item.href;
           return (
             <Link
               key={item.name}

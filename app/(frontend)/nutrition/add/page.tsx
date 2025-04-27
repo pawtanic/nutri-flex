@@ -9,10 +9,10 @@ import { ArrowLeft, Camera, Search } from 'lucide-react';
 import Link from 'next/link';
 import { Slider } from '@/components/ui/slider';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { BarcodeScanner } from '@/components/barcode-scanner';
-import { useToast } from '@/hooks/use-toast';
-import { RecipeGenerator } from '@/components/recipe-generator';
-import { BarcodeProductDisplay } from '@/components/scanned-product-output';
+import { BarcodeScanner } from '@/components/product-scan/barcode-scanner';
+import { RecipeGenerator } from '@/components/recipe/recipe-generator';
+import { BarcodeProductDisplay } from '@/components/product-scan/scanned-product-output';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function AddMealPage() {
   const [mealType, setMealType] = useState('breakfast');
@@ -21,6 +21,10 @@ export default function AddMealPage() {
     carbs: 30,
     fat: 15,
   });
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const tab = searchParams.get('tab') ?? 'manual';
 
   const handleMacroChange = (type: string, value: number[]) => {
     setMacros({ ...macros, [type]: value[0] });
@@ -35,7 +39,12 @@ export default function AddMealPage() {
         <h1 className="text-2xl font-bold">Add Meal</h1>
       </div>
 
-      <Tabs defaultValue="manual" className="mb-6">
+      <Tabs
+        value={tab}
+        onValueChange={tab => router.push(`?tab=${tab}`)}
+        defaultValue="manual"
+        className="mb-6"
+      >
         <TabsList className="grid w-full md:grid-cols-2 grid-cols-3">
           <TabsTrigger value="manual">Manual</TabsTrigger>
           <TabsTrigger value="recipe">AI recipe</TabsTrigger>
@@ -155,18 +164,38 @@ export default function AddMealPage() {
   );
 }
 
+export type Macro = {
+  productName: string;
+  image: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+};
+
 function ScannedProductMacro() {
-  const [scannedProductMacro, setScannedProductMacro] = useState(null);
+  const [scannedProductMacro, setScannedProductMacro] = useState<Macro | null>(null);
   return (
     <>
-      <BarcodeScanner onScannedProductMacro={setScannedProductMacro} />
-      {scannedProductMacro && (
+      {scannedProductMacro ? (
         <BarcodeProductDisplay
           nutritionInfo={scannedProductMacro}
           onSave={() => {}}
           onBack={() => {}}
         />
+      ) : (
+        <BarcodeScanner onScannedProductMacroAction={setScannedProductMacro} />
       )}
+      {/*// todo : component warnirn !!*/}
+      <div className="tip bg-red-50 border border-red-400">
+        <p className="text-md inline ">
+          <span className="text-red-600 font-bold">Warning</span>: The results rely on free data
+          from Open Food Facts
+        </p>
+        <Link href="https://world.openfoodfacts.org/" className="ml-2 underline">
+          Learn more
+        </Link>
+      </div>
     </>
   );
 }
