@@ -3,7 +3,7 @@
 import { useDate } from '@/app/(frontend)/context/date-context';
 import { Calendar } from '@/components/ui/calendar';
 import { useRouter } from 'next/navigation';
-import { cn } from '@/lib/utils';
+import { cn } from '@/app/(frontend)/lib/utils';
 import { isSameDay } from 'date-fns';
 import { RoutesConfig } from '../navigation';
 
