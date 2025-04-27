@@ -9,6 +9,10 @@ import { ArrowLeft, Camera, Search } from 'lucide-react';
 import Link from 'next/link';
 import { Slider } from '@/components/ui/slider';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { BarcodeScanner } from '@/components/product-scan/barcode-scanner';
+import { RecipeGenerator } from '@/components/recipe/recipe-generator';
+import { BarcodeProductDisplay } from '@/components/product-scan/scanned-product-output';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function AddMealPage() {
   const [mealType, setMealType] = useState('breakfast');
@@ -17,6 +21,10 @@ export default function AddMealPage() {
     carbs: 30,
     fat: 15,
   });
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const tab = searchParams.get('tab') ?? 'manual';
 
   const handleMacroChange = (type: string, value: number[]) => {
     setMacros({ ...macros, [type]: value[0] });
@@ -31,10 +39,18 @@ export default function AddMealPage() {
         <h1 className="text-2xl font-bold">Add Meal</h1>
       </div>
 
-      <Tabs defaultValue="manual" className="mb-6">
-        <TabsList className="grid w-full grid-cols-2">
+      <Tabs
+        value={tab}
+        onValueChange={tab => router.push(`?tab=${tab}`)}
+        defaultValue="manual"
+        className="mb-6"
+      >
+        <TabsList className="grid w-full md:grid-cols-2 grid-cols-3">
           <TabsTrigger value="manual">Manual</TabsTrigger>
-          <TabsTrigger value="scan">AI Scan</TabsTrigger>
+          <TabsTrigger value="recipe">AI recipe</TabsTrigger>
+          <TabsTrigger className="md:hidden block" value="barcode">
+            Barcode scan
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="manual" className="space-y-6 mt-4">
           <div>
@@ -137,26 +153,49 @@ export default function AddMealPage() {
 
           <Button className="w-full">Save Meal</Button>
         </TabsContent>
-
-        <TabsContent value="scan" className="space-y-6 mt-4">
-          <div className="border-2 border-dashed rounded-lg p-8 text-center">
-            <Camera className="h-10 w-10 mx-auto mb-4 text-muted-foreground" />
-            <h3 className="font-medium mb-1">Scan Food</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Take a photo of your food to analyze it
-            </p>
-            <Button>Take Photo</Button>
-          </div>
-
-          <div>
-            <Label>Or search food database</Label>
-            <div className="relative mt-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search foods..." className="pl-9" />
-            </div>
-          </div>
+        <TabsContent value="barcode" className="space-y-6 mt-4">
+          <ScannedProductMacro />
+        </TabsContent>
+        <TabsContent value="recipe" className="space-y-6 mt-4">
+          <RecipeGenerator />
         </TabsContent>
       </Tabs>
     </div>
+  );
+}
+
+export type Macro = {
+  productName: string;
+  image: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+};
+
+function ScannedProductMacro() {
+  const [scannedProductMacro, setScannedProductMacro] = useState<Macro | null>(null);
+  return (
+    <>
+      {scannedProductMacro ? (
+        <BarcodeProductDisplay
+          nutritionInfo={scannedProductMacro}
+          onSave={() => {}}
+          onBack={() => {}}
+        />
+      ) : (
+        <BarcodeScanner onScannedProductMacroAction={setScannedProductMacro} />
+      )}
+      {/*// todo : component warnirn !!*/}
+      <div className="tip bg-red-50 border border-red-400">
+        <p className="text-md inline ">
+          <span className="text-red-600 font-bold">Warning</span>: The results rely on free data
+          from Open Food Facts
+        </p>
+        <Link href="https://world.openfoodfacts.org/" className="ml-2 underline">
+          Learn more
+        </Link>
+      </div>
+    </>
   );
 }

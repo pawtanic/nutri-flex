@@ -12,6 +12,7 @@
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\""
   },
   "dependencies": {
+    "@ericblade/quagga2": "^1.8.4",
     "@google/genai": "^0.9.0",
     "@google/generative-ai": "^0.2.1",
     "@payloadcms/db-mongodb": "^3.35.1",
