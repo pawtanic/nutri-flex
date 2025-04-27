@@ -1,23 +1,23 @@
-"use client"
+'use client';
 
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Plus, Search } from "lucide-react"
-import { Input } from "@/components/ui/input"
-import { Progress } from "@/components/ui/progress"
-import { DateHeader } from "@/components/date-header"
-import { useDate } from "@/app/(frontend)/context/date-context"
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Plus, Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Progress } from '@/components/ui/progress';
+import { DateHeader } from '@/components/date-header';
+import { useDate } from '@/app/(frontend)/context/date-context';
 
 export default function NutritionPage() {
-  const { selectedDate } = useDate()
+  const { selectedDate } = useDate();
 
   // Sample nutrition data - in a real app, you'd filter this based on the selected date
   const meals = [
     {
       id: 1,
-      name: "Breakfast",
-      time: "8:30 AM",
+      name: 'Breakfast',
+      time: '8:30 AM',
       calories: 450,
       protein: 25,
       carbs: 45,
@@ -25,14 +25,14 @@ export default function NutritionPage() {
     },
     {
       id: 2,
-      name: "Lunch",
-      time: "12:30 PM",
+      name: 'Lunch',
+      time: '12:30 PM',
       calories: 650,
       protein: 35,
       carbs: 60,
       fat: 20,
     },
-  ]
+  ];
 
   // Daily totals
   const dailyTotals = {
@@ -40,7 +40,7 @@ export default function NutritionPage() {
     protein: { current: 60, target: 120 },
     carbs: { current: 105, target: 200 },
     fat: { current: 35, target: 65 },
-  }
+  };
 
   return (
     <div className="container max-w-md mx-auto pb-20 pt-6 px-4">
@@ -69,7 +69,10 @@ export default function NutritionPage() {
                   {dailyTotals.calories.current} / {dailyTotals.calories.target} kcal
                 </span>
               </div>
-              <Progress value={(dailyTotals.calories.current / dailyTotals.calories.target) * 100} className="h-2" />
+              <Progress
+                value={(dailyTotals.calories.current / dailyTotals.calories.target) * 100}
+                className="h-2"
+              />
             </div>
             <div>
               <div className="flex justify-between text-sm mb-1">
@@ -112,14 +115,14 @@ export default function NutritionPage() {
       </Card>
 
       {/* Search */}
-      <div className="relative mb-6">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input placeholder="Search foods..." className="pl-9" />
-      </div>
+      {/*<div className="relative mb-6">*/}
+      {/*  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />*/}
+      {/*  <Input placeholder="Search foods..." className="pl-9" />*/}
+      {/*</div>*/}
 
       {/* Meals */}
       <h2 className="text-lg font-medium mb-3">Today's Meals</h2>
-      {meals.map((meal) => (
+      {meals.map(meal => (
         <Card
           key={meal.id}
           className="mb-4 card-shadow border-none hover:translate-y-[-2px] transition-all duration-200"
@@ -152,5 +155,5 @@ export default function NutritionPage() {
         </Card>
       ))}
     </div>
-  )
+  );
 }
