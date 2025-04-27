@@ -13,10 +13,11 @@ import {
 } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/app/(frontend)/lib/utils';
+import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useRouter } from 'next/navigation';
 import { useDate } from '@/app/(frontend)/context/date-context';
+import { RoutesConfig } from '@/components/navigation';
 
 // Sample workout data - in a real app, this would come from your database
 const workoutData = [
@@ -112,7 +113,7 @@ export function WorkoutHistoryCalendar({ period, workoutType }: WorkoutHistoryCa
   // Handle day click
   const handleDayClick = (day: Date) => {
     setSelectedDate(day);
-    router.push('/workouts');
+    router.push(RoutesConfig.workout);
   };
 
   return (
@@ -203,24 +204,6 @@ export function WorkoutHistoryCalendar({ period, workoutType }: WorkoutHistoryCa
         }).map((_, i) => (
           <div key={`empty-end-${i}`} className="h-10 rounded-md"></div>
         ))}
-      </div>
-
-      <div className="mt-4 flex flex-col space-y-2 bg-muted/50 p-3 rounded-lg">
-        <div className="text-sm font-medium">Intensity Legend:</div>
-        <div className="flex space-x-4 text-xs">
-          <div className="flex items-center">
-            <div className="w-3 h-3 rounded-full bg-workout mr-1"></div>
-            <span>High</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-3 h-3 rounded-full bg-workout/60 mr-1"></div>
-            <span>Medium</span>
-          </div>
-          <div className="flex items-center">
-            <div className="w-3 h-3 rounded-full bg-workout/30 mr-1"></div>
-            <span>Low</span>
-          </div>
-        </div>
       </div>
     </div>
   );

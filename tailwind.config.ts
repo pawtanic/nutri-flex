@@ -24,6 +24,7 @@ const config = {
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
+        backgroundSecondary: 'hsl(var(--background-secondary))',
         foreground: 'hsl(var(--foreground))',
         tertiary: 'hsl(var(--tertiary))',
         quaternary: 'hsl(var(--quaternary))',

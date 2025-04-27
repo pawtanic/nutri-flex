@@ -5,18 +5,18 @@ import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BarChart3, Calendar } from 'lucide-react';
 
-export function WaterIntakeHistory() {
-  // Sample data for the past week
-  const weekHistory = [
-    { day: 'Mon', amount: 6, goal: 8 },
-    { day: 'Tue', amount: 8, goal: 8 },
-    { day: 'Wed', amount: 7, goal: 8 },
-    { day: 'Thu', amount: 5, goal: 8 },
-    { day: 'Fri', amount: 8, goal: 8 },
-    { day: 'Sat', amount: 4, goal: 8 },
-    { day: 'Sun', amount: 5, goal: 8 },
-  ];
+// Sample data for the past week
+const weekHistory = [
+  { day: 'Mon', amount: 6, goal: 8 },
+  { day: 'Tue', amount: 8, goal: 8 },
+  { day: 'Wed', amount: 7, goal: 8 },
+  { day: 'Thu', amount: 5, goal: 8 },
+  { day: 'Fri', amount: 8, goal: 8 },
+  { day: 'Sat', amount: 4, goal: 8 },
+  { day: 'Sun', amount: 5, goal: 8 },
+];
 
+export function WaterIntakeHistory() {
   // Calculate weekly average
   const weeklyTotal = weekHistory.reduce((sum, day) => sum + day.amount, 0);
   const weeklyAverage = (weeklyTotal / weekHistory.length).toFixed(1);
@@ -56,20 +56,20 @@ export function WaterIntakeHistory() {
                 <Progress
                   value={(day.amount / day.goal) * 100}
                   className="h-2 bg-blue-100"
-                  indicatorClassName={`${day.amount >= day.goal ? 'bg-green-500' : 'bg-blue-500'}`}
+                  // indicatorClassName={`${day.amount >= day.goal ? 'bg-green-500' : 'bg-blue-500'}`}
                 />
               </div>
             ))}
 
             <div className="pt-2 mt-2 border-t">
               <div className="flex justify-between text-sm font-medium">
-                <span>Weekly Total</span>
-                <span>{weeklyPercentage}% of goal</span>
+                <p>Weekly Total</p>
+                <p>{weeklyPercentage}% of goal</p>
               </div>
               <Progress
                 value={weeklyPercentage}
                 className="h-2 mt-1 bg-blue-100"
-                indicatorClassName="bg-blue-600"
+                // indicatorClassName="bg-blue-600"
               />
             </div>
           </TabsContent>
@@ -78,9 +78,9 @@ export function WaterIntakeHistory() {
             <div className="h-48 flex items-end justify-between px-2">
               {weekHistory.map((day, i) => (
                 <div key={i} className="flex flex-col items-center">
-                  <div className="text-xs text-muted-foreground mb-1">
+                  <p className="text-xs text-muted-foreground mb-1">
                     {day.amount}/{day.goal}
-                  </div>
+                  </p>
                   <div
                     className={`w-8 rounded-t-md ${day.amount >= day.goal ? 'bg-green-500' : 'bg-blue-500'}`}
                     style={{
@@ -88,7 +88,7 @@ export function WaterIntakeHistory() {
                       minHeight: '4px',
                     }}
                   ></div>
-                  <span className="text-xs mt-2 font-medium">{day.day}</span>
+                  <p className="text-xs mt-2 font-medium">{day.day}</p>
                 </div>
               ))}
             </div>

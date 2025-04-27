@@ -1,37 +1,38 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent } from "@/components/ui/card"
-import { ArrowLeft, Plus, Trash2 } from "lucide-react"
-import Link from "next/link"
-import { DateHeader } from "@/components/date-header"
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent } from '@/components/ui/card';
+import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import Link from 'next/link';
+import { DateHeader } from '@/components/date-header';
+import { RoutesConfig } from '@/components/navigation';
 
 export default function AddWorkoutPage() {
-  const [exercises, setExercises] = useState([{ name: "", sets: "", reps: "" }])
+  const [exercises, setExercises] = useState([{ name: '', sets: '', reps: '' }]);
 
   const addExercise = () => {
-    setExercises([...exercises, { name: "", sets: "", reps: "" }])
-  }
+    setExercises([...exercises, { name: '', sets: '', reps: '' }]);
+  };
 
   const removeExercise = (index: number) => {
-    const newExercises = [...exercises]
-    newExercises.splice(index, 1)
-    setExercises(newExercises)
-  }
+    const newExercises = [...exercises];
+    newExercises.splice(index, 1);
+    setExercises(newExercises);
+  };
 
   const updateExercise = (index: number, field: string, value: string) => {
-    const newExercises = [...exercises]
-    newExercises[index] = { ...newExercises[index], [field]: value }
-    setExercises(newExercises)
-  }
+    const newExercises = [...exercises];
+    newExercises[index] = { ...newExercises[index], [field]: value };
+    setExercises(newExercises);
+  };
 
   return (
     <div className="container max-w-md mx-auto pb-20 pt-6 px-4">
       <div className="flex items-center mb-2">
-        <Link href="/workouts">
+        <Link href={RoutesConfig.workout}>
           <Button variant="ghost" size="icon" className="mr-2">
             <ArrowLeft className="h-5 w-5" />
           </Button>
@@ -63,7 +64,7 @@ export default function AddWorkoutPage() {
                   <Input
                     placeholder="Exercise name"
                     value={exercise.name}
-                    onChange={(e) => updateExercise(index, "name", e.target.value)}
+                    onChange={e => updateExercise(index, 'name', e.target.value)}
                   />
                   <Button
                     variant="ghost"
@@ -84,7 +85,7 @@ export default function AddWorkoutPage() {
                         type="number"
                         placeholder="Sets"
                         value={exercise.sets}
-                        onChange={(e) => updateExercise(index, "sets", e.target.value)}
+                        onChange={e => updateExercise(index, 'sets', e.target.value)}
                       />
                     </div>
                     <div>
@@ -96,7 +97,7 @@ export default function AddWorkoutPage() {
                         type="number"
                         placeholder="Reps"
                         value={exercise.reps}
-                        onChange={(e) => updateExercise(index, "reps", e.target.value)}
+                        onChange={e => updateExercise(index, 'reps', e.target.value)}
                       />
                     </div>
                   </div>
@@ -109,5 +110,5 @@ export default function AddWorkoutPage() {
         <Button className="w-full">Save Workout</Button>
       </div>
     </div>
-  )
+  );
 }

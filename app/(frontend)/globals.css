@@ -5,6 +5,7 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
+    --background-secondary: 0, 0%, 98%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -57,7 +58,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-backgroundSecondary text-foreground;
   }
 }
 
@@ -66,8 +67,16 @@
     @apply shadow-card hover:shadow-card-hover transition-shadow duration-300;
   }
 
-  .gradient-bg {
-    @apply bg-gradient-to-br from-primary/80 to-primary;
+  .progress {
+    @apply bg-white border border-zinc-400;
+  }
+
+  .small-icon {
+    @apply h-5 w-5 mb-1 text-primary
+  }
+
+  .tip {
+    @apply bg-quinary/50 p-3 rounded-md
   }
 
   @keyframes waterWave {

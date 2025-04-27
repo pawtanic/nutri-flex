@@ -1,17 +1,23 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { DateHeader } from "@/components/date-header"
-import { WorkoutHistoryCalendar } from "@/components/workout-history-calendar"
-import { WorkoutStats } from "@/components/workout-stats"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DateHeader } from '@/components/date-header';
+import { WorkoutHistoryCalendar } from '@/components/workout/workout-history-calendar';
+import { WorkoutStats } from '@/components/workout/workout-stats';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 
 export default function HistoryPage() {
-  const [selectedPeriod, setSelectedPeriod] = useState("month")
-  const [selectedType, setSelectedType] = useState("all")
+  const [selectedPeriod, setSelectedPeriod] = useState('month');
+  const [selectedType, setSelectedType] = useState('all');
 
   return (
     <div className="container max-w-md mx-auto pb-20 pt-6 px-4">
@@ -59,7 +65,7 @@ export default function HistoryPage() {
         </TabsList>
         <TabsContent value="calendar" className="mt-4">
           <Card className="card-shadow border-none overflow-hidden">
-            <CardHeader className="pb-2 gradient-bg text-white">
+            <CardHeader className="pb-2 text-white">
               <CardTitle className="text-lg">Workout Frequency</CardTitle>
             </CardHeader>
             <CardContent className="p-4">
@@ -72,5 +78,5 @@ export default function HistoryPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

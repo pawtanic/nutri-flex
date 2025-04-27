@@ -1,18 +1,18 @@
-"use client"
+'use client';
 
-import { format } from "date-fns"
-import { useDate } from "@/app/(frontend)/context/date-context"
-import { Button } from "@/components/ui/button"
-import { CalendarIcon } from "lucide-react"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Calendar } from "@/components/ui/calendar"
+import { format } from 'date-fns';
+import { useDate } from '@/app/(frontend)/context/date-context';
+import { Button } from '@/components/ui/button';
+import { CalendarIcon } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 
 interface DateHeaderProps {
-  title: string
+  title: string;
 }
 
 export function DateHeader({ title }: DateHeaderProps) {
-  const { selectedDate, setSelectedDate } = useDate()
+  const { selectedDate, setSelectedDate } = useDate();
 
   return (
     <div className="flex items-center justify-between mb-6">
@@ -20,11 +20,16 @@ export function DateHeader({ title }: DateHeaderProps) {
         <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
           {title}
         </h1>
-        <p className="text-muted-foreground">{format(selectedDate, "EEEE, MMMM d, yyyy")}</p>
+        <p className="text-muted-foreground">{format(selectedDate, 'EEEE, MMMM d, yyyy')}</p>
       </div>
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline" size="icon" className="shadow-sm hover:shadow-md transition-all">
+          <Button
+            aria-label="Select workout date from calendar"
+            variant="outline"
+            size="icon"
+            className="shadow-sm hover:shadow-md transition-all"
+          >
             <CalendarIcon className="h-4 w-4" />
           </Button>
         </PopoverTrigger>
@@ -32,11 +37,11 @@ export function DateHeader({ title }: DateHeaderProps) {
           <Calendar
             mode="single"
             selected={selectedDate}
-            onSelect={(date) => date && setSelectedDate(date)}
+            onSelect={date => date && setSelectedDate(date)}
             initialFocus
           />
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }

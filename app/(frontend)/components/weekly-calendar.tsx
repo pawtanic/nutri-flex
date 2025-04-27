@@ -17,29 +17,7 @@ import {
 } from 'date-fns';
 import { useState } from 'react';
 import { cn } from '@/app/(frontend)/lib/utils';
-
-// Sample data for dates with activities
-const workoutDates = [
-  new Date(2025, 3, 10),
-  new Date(2025, 3, 12),
-  new Date(2025, 3, 15),
-  new Date(2025, 3, 17),
-];
-
-const nutritionDates = [
-  new Date(2025, 3, 10),
-  new Date(2025, 3, 11),
-  new Date(2025, 3, 13),
-  new Date(2025, 3, 16),
-];
-
-const waterDates = [
-  new Date(2025, 3, 10),
-  new Date(2025, 3, 11),
-  new Date(2025, 3, 12),
-  new Date(2025, 3, 14),
-  new Date(2025, 3, 16),
-];
+import { RoutesConfig } from '@/components/navigation';
 
 export function WeeklyCalendar() {
   const { selectedDate, setSelectedDate } = useDate();
@@ -67,7 +45,7 @@ export function WeeklyCalendar() {
   // Handle day click
   const handleDayClick = (day: Date) => {
     setSelectedDate(day);
-    router.push('/workouts');
+    router.push(RoutesConfig.workout);
   };
 
   return (
@@ -79,7 +57,7 @@ export function WeeklyCalendar() {
             variant="ghost"
             size="icon"
             onClick={prevWeek}
-            className="h-8 w-8 bg-primary/5 hover:bg-primary/10"
+            className="h-8 w-8 bg-backgroundSecondary hover:bg-primary/10"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -87,21 +65,21 @@ export function WeeklyCalendar() {
             variant="ghost"
             size="icon"
             onClick={nextWeek}
-            className="h-8 w-8 bg-primary/5 hover:bg-primary/10"
+            className="h-8 w-8 bg-backgroundSecondary hover:bg-primary/10"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
       </CardHeader>
       <CardContent className="p-2">
-        <div className="text-sm text-center mb-2">
+        <div className="text-center mb-2">
           {format(currentWeekStart, 'MMMM d')} -{' '}
           {format(addDays(currentWeekStart, 6), 'MMMM d, yyyy')}
         </div>
         <div className="grid grid-cols-7 gap-2 text-center mb-2">
           {weekDays.map(day => {
             // todo: better name
-            const x = day.toString().slice(0, 3);
+            const abbreviatedDayName = day.toString().slice(0, 3);
             const isToday = isSameDay(day, new Date());
             const isSelected = isSameDay(day, selectedDate);
 
@@ -110,18 +88,28 @@ export function WeeklyCalendar() {
                 onClick={() => handleDayClick(day)}
                 key={day.toString()}
                 className={cn(
-                  'w-[40px] p-2 py-4 space-y-2 hover:bg-primary/10 rounded-2xl bg-[#FAFCFC]',
-                  isToday && 'bg-[#FAEFFD]',
+                  'p-2 py-4 space-y-2 hover:bg-primary/10 rounded-2xl bg-backgroundSecondary',
+                  isToday && 'bg-quinary',
                   isSelected && 'bg-tertiary'
                 )}
               >
-                <div className="text-xs font-medium mb-1">{x}</div>
-                <span className={cn('text-sm font-medium text-primary bg-white p-1 rounded-full')}>
+                <div className="font-medium mb-1">{abbreviatedDayName}</div>
+                <span className={cn('font-medium text-primary bg-white p-1 rounded-full')}>
                   {format(day, 'd')}
                 </span>
               </button>
             );
           })}
+        </div>
+        <div className="flex justify-center mt-4 space-x-4">
+          <div className="flex items-center">
+            <div className="w-3 h-3 rounded-full bg-tertiary mr-2"></div>
+            <p>Selected workout date</p>
+          </div>
+          <div className="flex items-center">
+            <div className="w-3 h-3 rounded-full bg-quinary mr-2"></div>
+            <p>Today</p>
+          </div>
         </div>
       </CardContent>
     </Card>
