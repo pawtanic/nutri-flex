@@ -1,24 +1,23 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, Copy } from 'lucide-react';
 import { DateHeader } from '@/components/date-header';
-import { format } from 'date-fns';
-import { WorkoutTemplates } from '@/components/workout-templates';
+import { WorkoutTemplates } from '@/components/workout/workout-templates';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDate } from '@/app/(frontend)/context/date-context';
 import { linkAkaBtnStyles } from '@/app/(frontend)/utils/constants';
 import { RoutesConfig } from '@/components/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-// Sample workout data - in a real app, you'd filter this based on the selected date
-const workouts = [
+const workouts1 = [
   {
     id: 1,
-    date: format(selectedDate, 'yyyy-MM-dd'),
-    name: 'Upper Body',
+    date: new Date(),
+    name: 'Upper Body1',
     exercises: [
       { name: 'Bench Press', sets: 3, reps: 10 },
       { name: 'Pull-ups', sets: 3, reps: 8 },
@@ -27,29 +26,51 @@ const workouts = [
   },
 ];
 
+const fetchWorkouts = (): Promise<typeof workouts1> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(workouts1);
+    }, 1000);
+  });
+};
+
 export default function WorkoutsPage() {
   const { selectedDate } = useDate();
-  const [currentWorkout, setCurrentWorkout] = useState({
-    name: '',
-    exercises: [],
-  });
+  // temp
+  const [workouts, setWorkouts] = useState<
+    {
+      id: number;
+      date: Date;
+      name: string;
+      exercises: { name: string; sets: number; reps: number }[];
+    }[]
+  >([]);
 
-  // Check if there are workouts for the selected date
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchWorkouts();
+      setWorkouts(data);
+    };
+
+    fetchData();
+  }, []);
+
   const hasWorkouts = workouts.length > 0;
 
-  // Set current workout based on existing workout for the day
-  useEffect(() => {
+  const [currentWorkout, setCurrentWorkout] = useState(() => {
     if (hasWorkouts) {
-      setCurrentWorkout(workouts[0]);
+      const [workout] = workouts.filter(workout => workout.date === selectedDate);
+      return workout;
     } else {
-      setCurrentWorkout({
+      return {
+        // add unique ID when adding new exercise
+        // add date when adding an exercise
         name: '',
         exercises: [],
-      });
+      };
     }
-  }, [selectedDate, hasWorkouts]);
+  });
 
-  // Handle using a template
   const handleUseTemplate = (template: any) => {
     setCurrentWorkout({
       name: template.name,
@@ -57,16 +78,23 @@ export default function WorkoutsPage() {
     });
   };
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const tab = searchParams.get('tab') ?? (hasWorkouts ? 'workout' : 'templates');
+
   return (
     <div className="container max-w-md mx-auto pb-20 pt-6 px-4">
       <DateHeader title="Workouts" />
-
-      <Tabs defaultValue={hasWorkouts ? 'workout' : 'templates'} className="mb-6">
+      <Tabs
+        value={tab}
+        onValueChange={tab => router.push(`?tab=${tab}`)}
+        defaultValue={hasWorkouts ? 'workout' : 'templates'}
+        className="mb-6"
+      >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="workout">Workout</TabsTrigger>
           <TabsTrigger value="templates">Templates</TabsTrigger>
         </TabsList>
-
         <TabsContent value="workout" className="mt-4">
           <div className="flex justify-end mb-4">
             <Link className={linkAkaBtnStyles} href={RoutesConfig.addWorkout}>
@@ -108,7 +136,6 @@ export default function WorkoutsPage() {
             </div>
           )}
         </TabsContent>
-
         <TabsContent value="templates" className="mt-4">
           <WorkoutTemplates onUseTemplate={handleUseTemplate} currentWorkout={currentWorkout} />
 

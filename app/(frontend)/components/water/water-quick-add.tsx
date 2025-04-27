@@ -14,6 +14,7 @@ export function WaterQuickAdd({ onAddWater }: WaterQuickAddProps) {
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-lg">Quick Add</CardTitle>
+        <p>How much water did you drink today ?</p>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-3 gap-3">
@@ -26,7 +27,6 @@ export function WaterQuickAdd({ onAddWater }: WaterQuickAddProps) {
             <span className="text-sm font-medium">Glass</span>
             <span className="text-xs text-muted-foreground">250ml</span>
           </Button>
-
           <Button
             variant="outline"
             className="flex flex-col h-auto py-4 border-blue-200 hover:bg-blue-50 hover:text-blue-700"
@@ -47,6 +47,7 @@ export function WaterQuickAdd({ onAddWater }: WaterQuickAddProps) {
             <span className="text-xs text-muted-foreground">1L</span>
           </Button>
         </div>
+        {/*custom slider here*/}
       </CardContent>
     </Card>
   );

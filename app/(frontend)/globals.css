@@ -75,6 +75,10 @@
     @apply h-5 w-5 mb-1 text-primary
   }
 
+  .tip {
+    @apply bg-quinary/50 p-3 rounded-md
+  }
+
   @keyframes waterWave {
     0%,
     100% {

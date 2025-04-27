@@ -7,7 +7,7 @@ import { cn } from '@/app/(frontend)/lib/utils';
 
 export const RoutesConfig = {
   workout: '/workouts',
-  addWorkout: '/workouts/add',
+  addWorkout: '/workout/add',
   nutrition: '/nutrition',
   water: '/water',
   history: '/history',

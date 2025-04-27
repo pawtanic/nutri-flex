@@ -43,7 +43,6 @@ export function CircularWaterTracker({ percentage, current, goal }: CircularWate
   const { radius, circumference, strokeDashoffset } = calculateCircleProperties(percentage);
 
   // Calculate water in ml
-  const currentMl = current * 250;
   const goalMl = goal * 250;
 
   // Animation refs
@@ -92,13 +91,11 @@ export function CircularWaterTracker({ percentage, current, goal }: CircularWate
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
           <Droplet className="h-10 w-10 text-blue-500 mb-2" />
-          <p className="text-4xl font-bold">
-            {current}/{goal}
-          </p>
-          <p>glasses</p>
-          <p className="mt-1">
-            {currentMl} / {goalMl} ml
-          </p>
+          {/*<p className="text-4xl font-bold">*/}
+          {/*  {current}/{goal}*/}
+          {/*</p>*/}
+          {/*<p>glasses</p>*/}
+          <p className="mt-1 text-2xl">{goalMl} ml</p>
         </div>
       </div>
       <div className="mt-2 text-center">
