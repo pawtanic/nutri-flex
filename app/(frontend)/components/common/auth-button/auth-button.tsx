@@ -1,24 +1,18 @@
 import React, { useState } from 'react';
-import { Button, ButtonProps } from '@/components/ui/button'; // Assuming ButtonProps are exported
-import { Loader } from 'lucide-react';
+import { Button, ButtonProps } from '@/components/ui/button';
+import { Check, Loader, X } from 'lucide-react';
+import { toast } from 'sonner';
 
-// --- Conceptual Authentication Hook ---
-// Replace this with your actual authentication context/hook implementation
 const useAuth = () => {
   // const { isUserAuthenticated, openLoginModal } = useContext(AuthContext);
-  // Example implementation:
-  const isUserAuthenticated = true; // <-- Replace with your actual auth state
+  const isUserAuthenticated = true;
   const promptLogin = () => {
-    // <-- Replace with your login trigger logic
-    console.log('User not authenticated, prompting login...');
     // e.g., openLoginModal();
     alert('Please log in to perform this action.');
   };
   return { isUserAuthenticated, promptLogin };
 };
-// --- End Conceptual Hook ---
 
-// Define Props, extending ButtonProps but omitting 'onClick'
 interface AuthRequiredButtonProps extends Omit<ButtonProps, 'onClick'> {
   /**
    * The action to perform when the button is clicked and the user IS authenticated.
@@ -35,16 +29,17 @@ interface AuthRequiredButtonProps extends Omit<ButtonProps, 'onClick'> {
    * Defaults to calling `promptLogin` from the `useAuth` hook.
    */
   onUnauthenticatedClick?: () => void;
+  loadingText?: string;
 }
 
 export function AuthRequiredButton({
   children,
   onAuthenticatedClick,
-  onUnauthenticatedClick,
   loadingContent,
-  disabled = false, // Default disabled state
+  disabled = false,
   className,
-  ...props // Pass remaining ButtonProps down
+  loadingText,
+  ...props
 }: AuthRequiredButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { isUserAuthenticated, promptLogin } = useAuth();
@@ -53,9 +48,34 @@ export function AuthRequiredButton({
     if (isUserAuthenticated) {
       setIsLoading(true);
       try {
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await onAuthenticatedClick();
-      } catch (error) {
-        console.error('Error during authenticated action:', error);
+        // create a success toast component/hook
+        toast('Meal saved successfully!', {
+          // todo: create a success class and variable success clr
+          className: 'bg-green-50 border-green-200 text-green-900',
+          description: 'You can now view your meal in nutrition page',
+          position: 'top-center',
+          icon: (
+            <div className="rounded-full p-1 bg-green-700">
+              <Check className="h-3 w-3 text-white" />
+            </div>
+          ),
+        });
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          // create a success toast component/hook
+          toast('We could not save your meal.', {
+            description: error.message || 'Unknown error occurred. Please try again later',
+            position: 'top-center',
+            className: 'bg-red-50 border-red-200',
+            icon: (
+              <div className="rounded-full p-1 bg-red-700">
+                <X className="h-3 w-3 text-white" />
+              </div>
+            ),
+          });
+        }
       } finally {
         setIsLoading(false);
       }
@@ -67,18 +87,12 @@ export function AuthRequiredButton({
   const defaultLoadingContent = (
     <>
       <Loader className="mr-2 h-4 w-4 animate-spin" />
-      Loading...
+      {loadingText ?? 'Loading...'}
     </>
   );
 
   return (
-    <Button
-      onClick={handleClick}
-      // Disable the button if explicitly passed `disabled={true}` OR if it's currently loading
-      disabled={disabled || isLoading}
-      className={className}
-      {...props} // Spread the rest of the ButtonProps (variant, size, etc.)
-    >
+    <Button onClick={handleClick} disabled={disabled || isLoading} className={className} {...props}>
       {isLoading ? (loadingContent ?? defaultLoadingContent) : children}
     </Button>
   );

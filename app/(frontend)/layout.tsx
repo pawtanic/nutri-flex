@@ -5,6 +5,7 @@ import './globals.css';
 // import { ThemeProvider } from "@/components/theme-provider"
 import Navigation from '@/components/navigation';
 import { DateProvider } from '@/app/(frontend)/context/date-context';
+import { Toaster } from 'sonner';
 
 const inter = Nunito({ weight: '400', subsets: ['latin'], display: 'swap' });
 
@@ -29,6 +30,7 @@ export default function RootLayout({
             </Suspense>
             <Navigation />
           </div>
+          <Toaster />
         </DateProvider>
         {/*</ThemeProvider>*/}
       </body>
