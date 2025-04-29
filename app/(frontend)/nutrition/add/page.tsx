@@ -1,11 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Camera, Search } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Slider } from '@/components/ui/slider';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -14,6 +13,7 @@ import { RecipeGenerator } from '@/components/recipe/recipe-generator';
 import { BarcodeProductDisplay } from '@/components/product-scan/scanned-product-output';
 import { useRouter, useSearchParams } from 'next/navigation';
 import WarningAlert from '@/components/common/WarningAlert';
+import { AuthRequiredButton } from '@/components/common/auth-button/auth-button';
 
 export default function AddMealPage() {
   const [mealType, setMealType] = useState('breakfast');
@@ -71,7 +71,7 @@ export default function AddMealPage() {
               <Label
                 htmlFor="breakfast"
                 className={`flex items-center justify-center border rounded-md p-3 cursor-pointer ${
-                  mealType === 'breakfast' ? 'bg-primary/10 border-primary' : ''
+                  mealType === 'breakfast' ? 'bg-primary text-white' : ''
                 }`}
               >
                 <RadioGroupItem value="breakfast" id="breakfast" className="sr-only" />
@@ -80,7 +80,7 @@ export default function AddMealPage() {
               <Label
                 htmlFor="lunch"
                 className={`flex items-center justify-center border rounded-md p-3 cursor-pointer ${
-                  mealType === 'lunch' ? 'bg-primary/10 border-primary' : ''
+                  mealType === 'lunch' ? 'bg-primary text-white' : ''
                 }`}
               >
                 <RadioGroupItem value="lunch" id="lunch" className="sr-only" />
@@ -89,7 +89,7 @@ export default function AddMealPage() {
               <Label
                 htmlFor="dinner"
                 className={`flex items-center justify-center border rounded-md p-3 cursor-pointer ${
-                  mealType === 'dinner' ? 'bg-primary/10 border-primary' : ''
+                  mealType === 'dinner' ? 'bg-primary text-white' : ''
                 }`}
               >
                 <RadioGroupItem value="dinner" id="dinner" className="sr-only" />
@@ -104,6 +104,7 @@ export default function AddMealPage() {
               <span className="text-sm">{macros.protein}g</span>
             </div>
             <Slider
+              rangeColor="bg-tertiary"
               defaultValue={[20]}
               max={50}
               step={1}
@@ -122,6 +123,7 @@ export default function AddMealPage() {
               <span className="text-sm">{macros.carbs}g</span>
             </div>
             <Slider
+              rangeColor="bg-quinary"
               defaultValue={[30]}
               max={100}
               step={1}
@@ -140,6 +142,7 @@ export default function AddMealPage() {
               <span className="text-sm">{macros.fat}g</span>
             </div>
             <Slider
+              rangeColor="bg-quaternary"
               defaultValue={[15]}
               max={50}
               step={1}
@@ -152,7 +155,12 @@ export default function AddMealPage() {
             </div>
           </div>
 
-          <Button className="w-full">Save Meal</Button>
+          <AuthRequiredButton
+            onAuthenticatedClick={() => console.log('save meal')}
+            className="w-full"
+          >
+            Save Meal
+          </AuthRequiredButton>
         </TabsContent>
         <TabsContent value="barcode" className="space-y-6 mt-4">
           <ScannedProductMacro />

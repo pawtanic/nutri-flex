@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-// import { Save } from 'lucide-react';
 import { WaterIntakeHistory } from '@/components/water/water-intake-history';
 import { WaterGoalSetting } from '@/components/water/water-goal-setting';
 import { WaterQuickAdd } from '@/components/water/water-quick-add';
