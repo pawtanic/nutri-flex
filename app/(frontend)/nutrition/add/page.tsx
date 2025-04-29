@@ -13,6 +13,7 @@ import { BarcodeScanner } from '@/components/product-scan/barcode-scanner';
 import { RecipeGenerator } from '@/components/recipe/recipe-generator';
 import { BarcodeProductDisplay } from '@/components/product-scan/scanned-product-output';
 import { useRouter, useSearchParams } from 'next/navigation';
+import WarningAlert from '@/components/common/WarningAlert';
 
 export default function AddMealPage() {
   const [mealType, setMealType] = useState('breakfast');
@@ -186,16 +187,11 @@ function ScannedProductMacro() {
       ) : (
         <BarcodeScanner onScannedProductMacroAction={setScannedProductMacro} />
       )}
-      {/*// todo : component warnirn !!*/}
-      <div className="tip bg-red-50 border border-red-400">
-        <p className="text-md inline ">
-          <span className="text-red-600 font-bold">Warning</span>: The results rely on free data
-          from Open Food Facts
-        </p>
+      <WarningAlert description="The results rely on free data from Open Food Facts">
         <Link href="https://world.openfoodfacts.org/" className="ml-2 underline">
           Learn more
         </Link>
-      </div>
+      </WarningAlert>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import type React from 'react';
+import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
 import './globals.css';
@@ -24,7 +24,9 @@ export default function RootLayout({
         {/*<ThemeProvider attribute="class" defaultTheme="light">*/}
         <DateProvider>
           <div className="flex flex-col min-h-screen">
-            <main className="flex-1">{children}</main>
+            <Suspense fallback={<div>Loading...</div>}>
+              <main className="flex-1">{children}</main>
+            </Suspense>
             <Navigation />
           </div>
         </DateProvider>

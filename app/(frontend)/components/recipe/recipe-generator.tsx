@@ -6,7 +6,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { Sparkles, Loader2, Plus, ChevronDown, ChevronUp } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 
 interface Ingredient {
@@ -132,29 +131,12 @@ export function RecipeGenerator() {
   const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [recipe, setRecipe] = useState<Recipe | null>(null);
-  const [dietaryPreference, setDietaryPreference] = useState('balanced');
   const [showInstructions, setShowInstructions] = useState(false);
-
-  // Sample recipe data - in a real app, this would come from an AI API
 
   const handleGenerateRecipe = () => {
     if (!prompt.trim()) return;
-
     setIsGenerating(true);
-
-    // Simulate API call with a timeout
-    setTimeout(() => {
-      // In a real app, you would call an AI API here
-      // For now, we'll use sample data based on dietary preference
-      if (dietaryPreference === 'balanced') {
-        setRecipe(sampleRecipes.balanced);
-      } else if (dietaryPreference === 'highProtein') {
-        setRecipe(sampleRecipes.highProtein);
-      } else {
-        setRecipe(sampleRecipes.lowCarb);
-      }
-      setIsGenerating(false);
-    }, 1500);
+    setRecipe(sampleRecipes.balanced);
   };
 
   const handleSaveMeal = () => {
@@ -168,43 +150,6 @@ export function RecipeGenerator() {
       {!recipe ? (
         <>
           <div className="space-y-2">
-            <Label>Dietary Preference</Label>
-            <RadioGroup
-              defaultValue="balanced"
-              className="grid grid-cols-3 gap-2"
-              onValueChange={setDietaryPreference}
-            >
-              <Label
-                htmlFor="balanced"
-                className={`flex items-center justify-center border rounded-md p-3 cursor-pointer ${
-                  dietaryPreference === 'balanced' ? 'bg-primary/10 border-primary' : ''
-                }`}
-              >
-                <RadioGroupItem value="balanced" id="balanced" className="sr-only" />
-                Balanced
-              </Label>
-              <Label
-                htmlFor="highProtein"
-                className={`flex items-center justify-center border rounded-md p-3 cursor-pointer ${
-                  dietaryPreference === 'highProtein' ? 'bg-primary/10 border-primary' : ''
-                }`}
-              >
-                <RadioGroupItem value="highProtein" id="highProtein" className="sr-only" />
-                High Protein
-              </Label>
-              <Label
-                htmlFor="lowCarb"
-                className={`flex items-center justify-center border rounded-md p-3 cursor-pointer ${
-                  dietaryPreference === 'lowCarb' ? 'bg-primary/10 border-primary' : ''
-                }`}
-              >
-                <RadioGroupItem value="lowCarb" id="lowCarb" className="sr-only" />
-                Low Carb
-              </Label>
-            </RadioGroup>
-          </div>
-
-          <div className="space-y-2">
             <Label htmlFor="recipe-prompt">What would you like to cook?</Label>
             <Textarea
               id="recipe-prompt"
@@ -214,7 +159,6 @@ export function RecipeGenerator() {
               className="min-h-[100px]"
             />
           </div>
-
           <Button
             className="w-full"
             onClick={handleGenerateRecipe}
@@ -259,27 +203,21 @@ export function RecipeGenerator() {
                 <div className="p-3 rounded-lg">
                   <h4 className="font-medium mb-2">Nutrition Values</h4>
                   <div className="grid grid-cols-4 gap-2 text-center">
-                    <div className="border rounded-md p-2 space-y-1 bg-backgroundSecondary">
+                    <div className="shadow rounded-md p-2 space-y-1 bg-backgroundSecondary">
                       <div className="text-lg font-bold">{recipe.nutrition.calories}</div>
-                      <div className="text-xs text-muted-foreground">calories</div>
+                      <div className="text-xs">calories</div>
                     </div>
-                    <div className="border rounded-md p-2 space-y-1 bg-backgroundSecondary">
-                      <div className="text-lg font-bold text-tertiary">
-                        {recipe.nutrition.protein}g
-                      </div>
-                      <div className="text-xs text-muted-foreground">protein</div>
+                    <div className="shadow rounded-md p-2 space-y-1 bg-tertiary">
+                      <div className="text-lg font-bold">{recipe.nutrition.protein}g</div>
+                      <div className="text-xs">protein</div>
                     </div>
-                    <div className="border rounded-md p-2 space-y-1 bg-backgroundSecondary">
-                      <div className="text-lg font-bold text-quinary">
-                        {recipe.nutrition.carbs}g
-                      </div>
-                      <div className="text-xs text-muted-foreground">carbs</div>
+                    <div className="shadow rounded-md p-2 space-y-1 bg-quinary">
+                      <div className="text-lg font-bold">{recipe.nutrition.carbs}g</div>
+                      <div className="text-xs">carbs</div>
                     </div>
-                    <div className="border rounded-md p-2 space-y-1 bg-backgroundSecondary">
-                      <div className="text-lg font-bold text-quaternary">
-                        {recipe.nutrition.fat}g
-                      </div>
-                      <div className="text-xs text-muted-foreground">fat</div>
+                    <div className="shadow rounded-md p-2 space-y-1 bg-quaternary">
+                      <div className="text-lg font-bold">{recipe.nutrition.fat}g</div>
+                      <div className="text-xs">fat</div>
                     </div>
                   </div>
                 </div>
