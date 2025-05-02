@@ -1,10 +1,10 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload';
 
 export const Workouts: CollectionConfig = {
   slug: 'workouts',
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'level', 'duration', 'createdBy'],
+    defaultColumns: ['name', 'date', 'createdBy'],
   },
   access: {
     read: () => true,
@@ -16,56 +16,14 @@ export const Workouts: CollectionConfig = {
       required: true,
     },
     {
-      name: 'description',
-      type: 'textarea',
+      name: 'date',
+      type: 'date',
       required: true,
-    },
-    {
-      name: 'level',
-      type: 'select',
-      required: true,
-      options: [
-        { label: 'Beginner', value: 'beginner' },
-        { label: 'Intermediate', value: 'intermediate' },
-        { label: 'Advanced', value: 'advanced' },
-      ],
-    },
-    {
-      name: 'duration',
-      type: 'number',
-      required: true,
-      min: 5,
-      max: 180,
       admin: {
-        description: 'Estimated workout duration in minutes',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
       },
-    },
-    {
-      name: 'type',
-      type: 'select',
-      required: true,
-      options: [
-        { label: 'Strength', value: 'strength' },
-        { label: 'Cardio', value: 'cardio' },
-        { label: 'HIIT', value: 'hiit' },
-        { label: 'Flexibility', value: 'flexibility' },
-        { label: 'Hybrid', value: 'hybrid' },
-      ],
-    },
-    {
-      name: 'targetMuscleGroups',
-      type: 'select',
-      hasMany: true,
-      required: true,
-      options: [
-        { label: 'Chest', value: 'chest' },
-        { label: 'Back', value: 'back' },
-        { label: 'Shoulders', value: 'shoulders' },
-        { label: 'Arms', value: 'arms' },
-        { label: 'Legs', value: 'legs' },
-        { label: 'Core', value: 'core' },
-        { label: 'Full Body', value: 'fullBody' },
-      ],
     },
     {
       name: 'exercises',
@@ -76,9 +34,8 @@ export const Workouts: CollectionConfig = {
       },
       fields: [
         {
-          name: 'exercise',
-          type: 'relationship',
-          relationTo: 'exercises',
+          name: 'name',
+          type: 'text',
           required: true,
         },
         {
@@ -90,21 +47,10 @@ export const Workouts: CollectionConfig = {
         },
         {
           name: 'reps',
-          type: 'text',
-          required: true,
-          admin: {
-            description: 'Number of reps per set (e.g., "10", "8-12", "Until failure")',
-          },
-        },
-        {
-          name: 'restBetweenSets',
           type: 'number',
           required: true,
-          min: 0,
-          max: 300,
-          admin: {
-            description: 'Rest time between sets in seconds',
-          },
+          min: 1,
+          max: 100,
         },
         {
           name: 'notes',
@@ -118,11 +64,6 @@ export const Workouts: CollectionConfig = {
       admin: {
         description: 'Additional notes or instructions for the workout',
       },
-    },
-    {
-      name: 'featuredImage',
-      type: 'upload',
-      relationTo: 'media',
     },
     {
       name: 'createdBy',
@@ -143,4 +84,4 @@ export const Workouts: CollectionConfig = {
       },
     },
   ],
-}
+};
