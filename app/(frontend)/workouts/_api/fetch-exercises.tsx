@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useQuery } from '@tanstack/react-query';
 // import { Separator } from '@/components/ui/separator';
 
 interface Exercise {
@@ -49,9 +50,9 @@ const muscleGroups = [
 const getDifficultyColor = (difficulty: string) => {
   switch (difficulty) {
     case 'beginner':
-      return 'bg-green-100 text-green-800';
+      return 'bg-tertiary';
     case 'intermediate':
-      return 'bg-blue-100 text-blue-800';
+      return 'bg-quinary';
     case 'expert':
       return 'bg-red-100 text-red-800';
     default:
@@ -65,11 +66,7 @@ export function ExerciseApiFetch({
   onSelectExercise: (exercise: Exercise) => void;
 }) {
   // todo - manipulate url !
-  // add react query !!
-  // wrap this component in suspense and error boundary
-  // https://api.api-ninjas.com/v1/exercises?muscle=biceps
   const [selectedMuscle, setSelectedMuscle] = useState<string>('');
-  const [exercises, setExercises] = useState<Exercise[]>([]);
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
   const [filteredExercises, setFilteredExercises] = useState<Exercise[]>([]);
 
@@ -79,19 +76,25 @@ export function ExerciseApiFetch({
   const [selectedSort, setSelectedSort] = useState<string>('name-asc');
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  useEffect(() => {
-    if (selectedMuscle) {
-      fetch(`https://api.api-ninjas.com/v1/exercises?muscle=${selectedMuscle}`, {
-        headers: {
-          'X-Api-Key': process.env.NEXT_PUBLIC_NINJAS_API_KEY || '',
-        },
-      })
-        .then(response => response.json())
-        .then(data => setExercises(data))
-        .catch(error => console.error(error));
-    }
-  }, [selectedMuscle]);
+  // todo: create api layer and service layer  - hook ?
+  const { data, isLoading, error } = useQuery({
+    // key factory !
+    queryKey: ['exercises', selectedMuscle],
+    queryFn: async () => {
+      const response = await fetch(
+        `https://api.api-ninjas.com/v1/exercises?muscle=${selectedMuscle}`,
+        {
+          headers: {
+            'X-Api-Key': process.env.NEXT_PUBLIC_NINJAS_API_KEY || '',
+          },
+        }
+      );
+      return response.json();
+    },
+    enabled: !!selectedMuscle,
+  });
 
+  console.log(data);
   console.log(selectedMuscle);
 
   const handleMuscleSelect = (muscle: string) => {
@@ -147,9 +150,7 @@ export function ExerciseApiFetch({
           <CollapsibleContent className="px-4 pb-4 space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="equipment-filter" className="text-sm">
-                  Equipment
-                </Label>
+                <Label htmlFor="equipment-filter">Equipment</Label>
                 <Select value={selectedEquipment} onValueChange={setSelectedEquipment}>
                   <SelectTrigger id="equipment-filter" className="mt-1">
                     <SelectValue placeholder="All equipment" />
@@ -167,15 +168,13 @@ export function ExerciseApiFetch({
                 </Select>
               </div>
               <div>
-                <Label htmlFor="difficulty-filter" className="text-sm">
-                  Difficulty
-                </Label>
+                <Label htmlFor="difficulty-filter">Difficulty</Label>
                 <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
                   <SelectTrigger id="difficulty-filter" className="mt-1">
                     <SelectValue placeholder="All levels" />
                   </SelectTrigger>
                   <SelectContent>
-                    {[].map(difficulty => (
+                    {['beginner', 'intermediate', 'expert', 'all'].map(difficulty => (
                       <SelectItem key={difficulty} value={difficulty}>
                         {difficulty === 'all'
                           ? 'All levels'
@@ -188,7 +187,7 @@ export function ExerciseApiFetch({
             </div>
 
             <div>
-              <Label className="text-sm">Sort By</Label>
+              <Label>Sort By</Label>
               <RadioGroup
                 value={selectedSort}
                 onValueChange={setSelectedSort}
@@ -198,7 +197,7 @@ export function ExerciseApiFetch({
                   <Label
                     key={option.value}
                     htmlFor={option.value}
-                    className={`flex items-center justify-center border rounded-md p-2 cursor-pointer text-sm ${
+                    className={`flex items-center justify-center border rounded-md p-2 cursor-pointer ${
                       selectedSort === option.value ? 'bg-primary/10 border-primary' : ''
                     }`}
                   >
@@ -211,14 +210,15 @@ export function ExerciseApiFetch({
           </CollapsibleContent>
         </Collapsible>
       )}
-      {/*{isLoading ? (*/}
-      {/*  <div className="flex items-center justify-center py-8">*/}
-      {/*    <Loader2 className="h-8 w-8 animate-spin text-primary" />*/}
-      {/*    <span className="ml-2">Loading exercises...</span>*/}
-      {/*  </div>*/}
-      {/*) : */}
 
-      {selectedExercise ? (
+      {error && <p className="text-red-500">Error fetching exercises: {error.message}</p>}
+
+      {isLoading ? (
+        <div className="flex items-center justify-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <span className="ml-2">Loading exercises...</span>
+        </div>
+      ) : selectedExercise ? (
         <div className="space-y-4">
           <Button
             variant="ghost"
@@ -253,11 +253,11 @@ export function ExerciseApiFetch({
                 </div>
               </div>
 
-              {/*<Separator />*/}
+              <hr />
 
               <div>
                 <h4 className="font-medium mb-2">Instructions</h4>
-                <p className="text-sm text-muted-foreground whitespace-pre-line">
+                <p className="text-muted-foreground whitespace-pre-line">
                   {selectedExercise.instructions}
                 </p>
               </div>
@@ -268,10 +268,10 @@ export function ExerciseApiFetch({
             </CardContent>
           </Card>
         </div>
-      ) : exercises.length > 0 ? (
+      ) : data?.length > 0 ? (
         <ScrollArea className="h-[400px] pr-4">
           <div className="space-y-2">
-            {exercises.map((exercise, index) => (
+            {data.map((exercise, index) => (
               <Card key={index} className="cursor-pointer hover:bg-accent/50 transition-colors">
                 <CardContent
                   className="p-3 flex items-center justify-between"

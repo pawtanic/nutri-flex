@@ -6,6 +6,7 @@ import './globals.css';
 import Navigation from '@/components/navigation';
 import { DateProvider } from '@/app/(frontend)/context/date-context';
 import { Toaster } from 'sonner';
+import Providers from './providers';
 
 const inter = Nunito({ weight: '400', subsets: ['latin'], display: 'swap' });
 
@@ -22,17 +23,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/*<ThemeProvider attribute="class" defaultTheme="light">*/}
-        <DateProvider>
-          <div className="flex flex-col min-h-screen">
-            <Suspense fallback={<div>Loading...</div>}>
-              <main className="flex-1">{children}</main>
-            </Suspense>
-            <Navigation />
-          </div>
-          <Toaster />
-        </DateProvider>
-        {/*</ThemeProvider>*/}
+        <Providers>
+          <DateProvider>
+            <div className="flex flex-col min-h-screen">
+              <Suspense fallback={<div>Loading from layout component ...</div>}>
+                <main className="flex-1">{children}</main>
+              </Suspense>
+              <Navigation />
+            </div>
+            <Toaster />
+          </DateProvider>
+        </Providers>
       </body>
     </html>
   );

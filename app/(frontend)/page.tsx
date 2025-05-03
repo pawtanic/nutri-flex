@@ -12,7 +12,6 @@ import {
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import { WorkoutSummary } from '@/components/workout/workout-summary';
 import { NutritionSummary } from '@/components/nutrition-summary';
 import { ProgressChart } from '@/components/progress-chart';
 import { StreakCard } from '@/components/streak-card';
@@ -23,6 +22,7 @@ import Image from 'next/image';
 import { capitalize } from '@/app/(frontend)/utils/helpers';
 import { periodValue, tabsValues } from '@/app/(frontend)/utils/constants';
 import { RoutesConfig } from '@/components/navigation';
+import { WorkoutSummary } from '@/app/(frontend)/workouts/_components/workout-summary';
 
 export default function Home() {
   const [selectedTab, setSelectedTab] = useState(tabsValues.overview);

@@ -7,7 +7,12 @@ interface UseTabWithUrlOptions {
   paramName?: string;
 }
 
-export function useTabWithUrl({ defaultTab = 'default', paramName = 'tab' }: UseTabWithUrlOptions = {}) {
+// todo : may need to be changed for more generic
+
+export function useTabWithUrl({
+  defaultTab = 'default',
+  paramName = 'tab',
+}: UseTabWithUrlOptions = {}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tab = searchParams.get(paramName) ?? defaultTab;
