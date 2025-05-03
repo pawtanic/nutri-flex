@@ -69,6 +69,7 @@ export function ManualMealForm() {
       <AuthRequiredButton
         successMessageText="Meal saved successfully!"
         errorMessageText="Failed to save meal. Please try again."
+        successMessageDescription="'You can now view your meal in 'Nutrition' page'"
         loadingText="Saving meal..."
         onAuthenticatedClick={handleSaveMeal}
         className="w-full"

@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 
 const useAuth = () => {
   // const { isUserAuthenticated, openLoginModal } = useContext(AuthContext);
-  const isUserAuthenticated = true;
+  const isUserAuthenticated = false;
   const promptLogin = () => {
     // e.g., openLoginModal();
     alert('Please log in to perform this action.');
@@ -14,24 +14,13 @@ const useAuth = () => {
 };
 
 interface AuthRequiredButtonProps extends Omit<ButtonProps, 'onClick'> {
-  /**
-   * The action to perform when the button is clicked and the user IS authenticated.
-   * Should return a Promise if it's an async operation to handle loading state automatically.
-   */
   onAuthenticatedClick: () => Promise<unknown> | unknown;
-  /**
-   * Optional: Custom content to display while the authenticated action is loading.
-   * Defaults to a spinner and "Loading...".
-   */
   loadingContent?: React.ReactNode;
-  /**
-   * Optional: Action to perform if the user is NOT authenticated.
-   * Defaults to calling `promptLogin` from the `useAuth` hook.
-   */
   onUnauthenticatedClick?: () => void;
   loadingText?: string;
   successMessageText: string;
   errorMessageText: string;
+  successMessageDescription: string;
 }
 
 export function AuthRequiredButton({
@@ -42,6 +31,7 @@ export function AuthRequiredButton({
   className,
   loadingText,
   successMessageText,
+  successMessageDescription,
   errorMessageText,
   ...props
 }: AuthRequiredButtonProps) {
@@ -58,7 +48,7 @@ export function AuthRequiredButton({
         toast(successMessageText, {
           // todo: create a success class and variable success clr
           className: 'bg-green-50 border-green-200 text-green-900',
-          description: 'You can now view your meal in nutrition page',
+          description: successMessageDescription,
           position: 'top-center',
           icon: (
             <div className="rounded-full p-1 bg-green-700">

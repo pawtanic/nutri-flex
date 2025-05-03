@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Dumbbell } from 'lucide-react';
 import { Exercise } from '@/app/(frontend)/api/public-api';
 import { capitalize, getDifficultyColor } from '@/app/(frontend)/utils/helpers';
+import { AuthRequiredButton } from '@/components/common/auth-button/auth-button';
 
 interface ExerciseDetailProps {
   exercise: Exercise;
@@ -13,19 +14,10 @@ interface ExerciseDetailProps {
   onAddExercise: (exercise: Exercise) => void;
 }
 
-export function ExerciseDetail({
-  exercise,
-  onBack,
-  onAddExercise,
-}: ExerciseDetailProps) {
+export function ExerciseDetail({ exercise, onBack, onAddExercise }: ExerciseDetailProps) {
   return (
     <div className="space-y-4">
-      <Button
-        variant="ghost"
-        size="sm"
-        className="pl-0"
-        onClick={onBack}
-      >
+      <Button variant="ghost" size="sm" className="pl-0" onClick={onBack}>
         <ArrowLeft className="h-4 w-4 mr-1" />
         Back to exercises
       </Button>
@@ -35,16 +27,12 @@ export function ExerciseDetail({
           <div>
             <h3 className="text-xl font-bold">{exercise.name}</h3>
             <div className="flex flex-wrap gap-2 mt-2">
-              <Badge
-                variant="outline"
-                className={getDifficultyColor(exercise.difficulty)}
-              >
+              <Badge variant="outline" className={getDifficultyColor(exercise.difficulty)}>
                 {capitalize(exercise.difficulty)}
               </Badge>
 
               <Badge variant="outline">
-                {exercise.equipment === 'barbell' ||
-                exercise.equipment === 'dumbbell' ? (
+                {exercise.equipment === 'barbell' || exercise.equipment === 'dumbbell' ? (
                   <Dumbbell className="h-4 w-4 mr-1" />
                 ) : (
                   ''
@@ -60,14 +48,18 @@ export function ExerciseDetail({
 
           <div>
             <h4 className="font-medium mb-2">Instructions</h4>
-            <p className="text-muted-foreground whitespace-pre-line">
-              {exercise.instructions}
-            </p>
+            <p className="text-muted-foreground whitespace-pre-line">{exercise.instructions}</p>
           </div>
-
-          <Button className="w-full" onClick={() => onAddExercise(exercise)}>
+          <AuthRequiredButton
+            loadingText="Saving..."
+            successMessageText="Exercise saved successfully!"
+            successMessageDescription="You can now view your added exercise in the 'Workouts' page."
+            errorMessageText="Failed to save exercise. Please try again."
+            className="w-full"
+            onAuthenticatedClick={() => onAddExercise(exercise)}
+          >
             Add This Exercise
-          </Button>
+          </AuthRequiredButton>
         </CardContent>
       </Card>
     </div>

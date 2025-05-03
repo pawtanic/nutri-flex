@@ -162,6 +162,7 @@ function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
         <AuthRequiredButton
           loadingText="Saving workout..."
           successMessageText="Workout saved successfully!"
+          successMessageDescription="You can now view your added workout in the 'Workouts' page."
           errorMessageText="Failed to save workout. Please try again."
           className="w-full"
           onAuthenticatedClick={() => console.log('save')}
