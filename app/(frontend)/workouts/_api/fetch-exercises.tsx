@@ -16,57 +16,17 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useQuery } from '@tanstack/react-query';
-// import { Separator } from '@/components/ui/separator';
+import { Exercise } from '@/app/(frontend)/api/public-api';
+import { MuscleGroup, useFetchExerciseByMuscleGroup } from '@/hooks/fetchExercises';
+import { muscleGroups } from '@/app/(frontend)/utils/constants';
+import { capitalize, getDifficultyColor } from '@/app/(frontend)/utils/helpers';
 
-interface Exercise {
-  name: string;
-  type: string;
-  muscle: string;
-  equipment: string;
-  difficulty: string;
-  instructions: string;
+interface ExerciseApiFetchProps {
+  onSelectExercise: (exercise: Exercise) => void;
 }
 
-const muscleGroups = [
-  'abdominals',
-  'abductors',
-  'adductors',
-  'biceps',
-  'calves',
-  'chest',
-  'forearms',
-  'glutes',
-  'hamstrings',
-  'lats',
-  'lower_back',
-  'middle_back',
-  'neck',
-  'quadriceps',
-  'traps',
-  'triceps',
-];
-
-const getDifficultyColor = (difficulty: string) => {
-  switch (difficulty) {
-    case 'beginner':
-      return 'bg-tertiary';
-    case 'intermediate':
-      return 'bg-quinary';
-    case 'expert':
-      return 'bg-red-100 text-red-800';
-    default:
-      return 'bg-gray-100 text-gray-800';
-  }
-};
-
-export function ExerciseApiFetch({
-  onSelectExercise,
-}: {
-  onSelectExercise: (exercise: Exercise) => void;
-}) {
-  // todo - manipulate url !
-  const [selectedMuscle, setSelectedMuscle] = useState<string>('');
+export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
+  const [selectedMuscle, setSelectedMuscle] = useState<MuscleGroup>('');
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
   const [filteredExercises, setFilteredExercises] = useState<Exercise[]>([]);
 
@@ -76,28 +36,10 @@ export function ExerciseApiFetch({
   const [selectedSort, setSelectedSort] = useState<string>('name-asc');
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  // todo: create api layer and service layer  - hook ?
-  const { data, isLoading, error } = useQuery({
-    // key factory !
-    queryKey: ['exercises', selectedMuscle],
-    queryFn: async () => {
-      const response = await fetch(
-        `https://api.api-ninjas.com/v1/exercises?muscle=${selectedMuscle}`,
-        {
-          headers: {
-            'X-Api-Key': process.env.NEXT_PUBLIC_NINJAS_API_KEY || '',
-          },
-        }
-      );
-      return response.json();
-    },
-    enabled: !!selectedMuscle,
-  });
+  // Use the exerciseApi and exerciseKeys from the public API layer
+  const { data, isLoading, error } = useFetchExerciseByMuscleGroup({ selectedMuscle });
 
-  console.log(data);
-  console.log(selectedMuscle);
-
-  const handleMuscleSelect = (muscle: string) => {
+  const handleMuscleSelect = (muscle: MuscleGroup) => {
     setSelectedMuscle(muscle);
     setSelectedExercise(null);
   };
@@ -110,10 +52,6 @@ export function ExerciseApiFetch({
     if (selectedExercise) {
       onSelectExercise(selectedExercise);
     }
-  };
-
-  const getEquipmentIcon = (equipment: string) => {
-    return <Dumbbell className="h-4 w-4 mr-1" />;
   };
 
   return (
@@ -235,21 +173,27 @@ export function ExerciseApiFetch({
               <div>
                 <h3 className="text-xl font-bold">{selectedExercise.name}</h3>
                 <div className="flex flex-wrap gap-2 mt-2">
+                  {/*component*/}
                   <Badge
                     variant="outline"
                     className={getDifficultyColor(selectedExercise.difficulty)}
                   >
-                    {selectedExercise.difficulty.charAt(0).toUpperCase() +
-                      selectedExercise.difficulty.slice(1)}
+                    {capitalize(selectedExercise.difficulty)}
                   </Badge>
+
+                  {/*component*/}
                   <Badge variant="outline">
-                    {getEquipmentIcon(selectedExercise.equipment)}
-                    {selectedExercise.equipment.charAt(0).toUpperCase() +
-                      selectedExercise.equipment.slice(1).replace('_', ' ')}
+                    {selectedExercise.equipment === 'barbell' ||
+                    selectedExercise.equipment === 'dumbbell' ? (
+                      <Dumbbell className="h-4 w-4 mr-1" />
+                    ) : (
+                      ''
+                    )}
+                    {capitalize(selectedExercise.equipment)}
                   </Badge>
-                  <Badge variant="outline">
-                    {selectedExercise.type.charAt(0).toUpperCase() + selectedExercise.type.slice(1)}
-                  </Badge>
+
+                  {/*component*/}
+                  <Badge variant="outline">{capitalize(selectedExercise.type)}</Badge>
                 </div>
               </div>
 
@@ -268,7 +212,7 @@ export function ExerciseApiFetch({
             </CardContent>
           </Card>
         </div>
-      ) : data?.length > 0 ? (
+      ) : data && data.length > 0 ? (
         <ScrollArea className="h-[400px] pr-4">
           <div className="space-y-2">
             {data.map((exercise, index) => (
