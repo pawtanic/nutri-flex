@@ -7,13 +7,12 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
 import { ExerciseApiFetch } from '@/app/(frontend)/workouts/_api/fetch-exercises';
 import { RoutesConfig } from '@/components/navigation';
 import { DateHeader } from '@/components/date-header';
 import { Card, CardContent } from '@/components/ui/card';
 import { router } from 'next/client';
+import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 
 interface Exercise {
   name: string;
@@ -28,6 +27,7 @@ interface Exercise {
 
 export default function AddWorkoutPage() {
   const [exercises, setExercises] = useState([{ name: '', sets: '', reps: '' }]);
+  const { tab, setTab } = useTabWithUrl({ defaultTab: 'manual' });
 
   const addExercise = () => {
     setExercises([...exercises, { name: '', sets: '', reps: '' }]);
@@ -65,7 +65,7 @@ export default function AddWorkoutPage() {
 
       <DateHeader title="" />
 
-      <Tabs defaultValue="manual" className="mb-6">
+      <Tabs value={tab} onValueChange={setTab} defaultValue="manual" className="mb-6">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="manual">Manual</TabsTrigger>
           <TabsTrigger value="api">Exercise Library</TabsTrigger>

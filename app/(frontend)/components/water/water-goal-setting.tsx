@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calculator, Scale, User } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 
 interface WaterGoalSettingProps {
   currentGoal: number;
@@ -24,10 +24,7 @@ export function WaterGoalSetting({
 }: WaterGoalSettingProps) {
   const [weight, setWeight] = useState(70); // kg
   const [activity, setActivity] = useState('moderate');
-
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const tab = searchParams.get('tab') ?? 'manual';
+  const { tab, setTab } = useTabWithUrl({ defaultTab: 'manual' });
 
   const handleSliderChange = (value: number[]) => {
     const glassesCount = Math.round(value[0] / 250); // Convert ml to glasses and round
@@ -51,11 +48,7 @@ export function WaterGoalSetting({
         <CardTitle className="text-lg">Daily Water Goal</CardTitle>
       </CardHeader>
       <CardContent>
-        <Tabs
-          value={tab}
-          onValueChange={value => router.push(`/water?tab=${value}`)}
-          defaultValue="manual"
-        >
+        <Tabs value={tab} onValueChange={setTab} defaultValue="manual">
           <TabsList className="grid w-full grid-cols-2 mb-6">
             <TabsTrigger value="manual" className="flex items-center">
               <User className="h-4 w-4 mr-2" />

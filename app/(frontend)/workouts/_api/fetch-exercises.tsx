@@ -80,12 +80,10 @@ export function ExerciseApiFetch({
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   useEffect(() => {
-    // fetch here
     if (selectedMuscle) {
       fetch(`https://api.api-ninjas.com/v1/exercises?muscle=${selectedMuscle}`, {
         headers: {
-          'X-Api-Key': 'OepPyl0aMjklj+hmFoM41A==8JYMLMs9J130XMtg',
-          // 'X-Api-Key': process.env.NEXT_PUBLIC_API_NINJAS_API_KEY || '',
+          'X-Api-Key': process.env.NEXT_PUBLIC_NINJAS_API_KEY || '',
         },
       })
         .then(response => response.json())

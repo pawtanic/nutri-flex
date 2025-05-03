@@ -10,8 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDate } from '@/app/(frontend)/context/date-context';
 import { linkAkaBtnStyles } from '@/app/(frontend)/utils/constants';
 import { RoutesConfig } from '@/components/navigation';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { WorkoutTemplates } from '@/app/(frontend)/workouts/_components/workout-templates';
+import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 
 export default function WorkoutsPageClient({
   initialWorkouts = [],
@@ -20,6 +20,7 @@ export default function WorkoutsPageClient({
 }) {
   const { selectedDate } = useDate();
   const [workouts, setWorkouts] = useState(initialWorkouts);
+  const { tab, setTab } = useTabWithUrl({ defaultTab: initialTab });
   const [currentWorkout, setCurrentWorkout] = useState(() => {
     if (workouts.length > 0) {
       const [workout] = workouts.filter(
@@ -31,10 +32,6 @@ export default function WorkoutsPageClient({
       return { name: '', exercises: [] };
     }
   });
-
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const tab = searchParams.get('tab') || initialTab;
 
   const hasWorkouts = workouts.length > 0;
 
@@ -48,12 +45,7 @@ export default function WorkoutsPageClient({
   return (
     <div className="container max-w-md mx-auto pb-20 pt-6 px-4">
       <DateHeader title="Workouts" />
-      <Tabs
-        value={tab}
-        onValueChange={tab => router.push(`?tab=${tab}`)}
-        defaultValue={initialTab}
-        className="mb-6"
-      >
+      <Tabs value={tab} onValueChange={setTab} defaultValue={initialTab} className="mb-6">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="workout">Workout</TabsTrigger>
           <TabsTrigger value="templates">Templates</TabsTrigger>
