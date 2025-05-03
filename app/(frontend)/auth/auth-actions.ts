@@ -11,6 +11,8 @@ export async function loginAction(formData: FormData) {
     password: formData.get('password'),
   });
 
+  console.log('result', result);
+
   if (!result.success) {
     return {
       success: false,

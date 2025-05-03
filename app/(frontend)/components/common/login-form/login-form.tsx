@@ -18,6 +18,9 @@ const initialState = {
 export default function LoginForm({ onTabChange }: { onTabChange: () => void }) {
   const [state, action, isPending] = useActionState(loginAction, initialState);
 
+  console.log('state', state);
+  console.log(isPending);
+
   return (
     <div className="space-y-4">
       <form action={action} className="space-y-4">
@@ -28,7 +31,6 @@ export default function LoginForm({ onTabChange }: { onTabChange: () => void }) 
             name="email"
             type="email"
             autoComplete="email"
-            required
             aria-invalid={!!state?.errors?.email}
             aria-describedby={state?.errors?.email ? 'email-error' : undefined}
           />
@@ -46,7 +48,6 @@ export default function LoginForm({ onTabChange }: { onTabChange: () => void }) 
             name="password"
             type="password"
             autoComplete="current-password"
-            required
             aria-invalid={!!state?.errors?.password}
             aria-describedby={state?.errors?.password ? 'password-error' : undefined}
           />
