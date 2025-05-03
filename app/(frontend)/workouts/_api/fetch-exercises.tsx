@@ -27,15 +27,19 @@ interface ExerciseApiFetchProps {
   onSelectExercise: (exercise: Exercise) => void;
 }
 
+type SortOptions = 'name-asc' | 'name-desc' | 'difficulty-asc' | 'difficulty-desc';
+type EquipmentOptions = 'all' | 'barbell' | 'dumbbell';
+type DifficultyOptions = 'beginner' | 'intermediate' | 'expert' | 'all';
+
 export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
   const [selectedMuscle, setSelectedMuscle] = useState<MuscleGroup>('');
   const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
   const [filteredExercises, setFilteredExercises] = useState<Exercise[]>([]);
 
   // Add filter and sort states
-  const [selectedEquipment, setSelectedEquipment] = useState<string>('all');
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
-  const [selectedSort, setSelectedSort] = useState<string>('name-asc');
+  const [selectedEquipment, setSelectedEquipment] = useState<EquipmentOptions>('all');
+  const [selectedDifficulty, setSelectedDifficulty] = useState<DifficultyOptions>('all');
+  const [selectedSort, setSelectedSort] = useState<SortOptions>('name-asc');
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   // Use the exerciseApi and exerciseKeys from the public API layer
@@ -90,17 +94,17 @@ export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="equipment-filter">Equipment</Label>
-                <Select value={selectedEquipment} onValueChange={setSelectedEquipment}>
+                <Select
+                  value={selectedEquipment}
+                  onValueChange={setSelectedEquipment as (value: string) => void}
+                >
                   <SelectTrigger id="equipment-filter" className="mt-1">
                     <SelectValue placeholder="All equipment" />
                   </SelectTrigger>
                   <SelectContent>
                     {['all', 'barbell', 'dumbbell'].map(equipment => (
                       <SelectItem key={equipment} value={equipment}>
-                        {equipment === 'all'
-                          ? 'All equipment'
-                          : equipment.charAt(0).toUpperCase() +
-                            equipment.slice(1).replace('_', ' ')}
+                        {equipment === 'all' ? 'All equipment' : capitalize(equipment)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -108,16 +112,17 @@ export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
               </div>
               <div>
                 <Label htmlFor="difficulty-filter">Difficulty</Label>
-                <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
+                <Select
+                  value={selectedDifficulty}
+                  onValueChange={setSelectedDifficulty as (value: string) => void}
+                >
                   <SelectTrigger id="difficulty-filter" className="mt-1">
                     <SelectValue placeholder="All levels" />
                   </SelectTrigger>
                   <SelectContent>
                     {['beginner', 'intermediate', 'expert', 'all'].map(difficulty => (
                       <SelectItem key={difficulty} value={difficulty}>
-                        {difficulty === 'all'
-                          ? 'All levels'
-                          : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+                        {difficulty === 'all' ? 'All levels' : capitalize(difficulty)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -129,7 +134,7 @@ export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
               <Label>Sort By</Label>
               <RadioGroup
                 value={selectedSort}
-                onValueChange={setSelectedSort}
+                onValueChange={setSelectedSort as (value: string) => void}
                 className="grid grid-cols-2 gap-2 mt-1"
               >
                 {[
