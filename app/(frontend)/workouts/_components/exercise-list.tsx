@@ -37,8 +37,8 @@ export function ExerciseList({
 
   if (!selectedMuscle) {
     return (
-      <div className="text-center py-8">
-        <Dumbbell className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
+      <div className="text-center py-4">
+        <Dumbbell className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
         <p className="text-muted-foreground">Select a muscle group to see exercises</p>
       </div>
     );

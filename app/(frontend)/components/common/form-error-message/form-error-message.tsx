@@ -1,11 +1,11 @@
 import React from 'react';
 
 interface FormErrorMessageProps {
-  errorMessages: string;
+  errorMessage: string;
 }
 
-function FormErrorMessage({ errorMessages }: FormErrorMessageProps) {
-  return <p className="col-span-2 text-sm text-red-500 mt-2">{errorMessages}</p>;
+function FormErrorMessage({ errorMessage }: FormErrorMessageProps) {
+  return <p className="col-span-2 text-sm text-red-500 mt-2">{errorMessage}</p>;
 }
 
 export default FormErrorMessage;

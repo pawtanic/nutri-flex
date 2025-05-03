@@ -17,12 +17,9 @@ interface MuscleGroupSelectorProps {
   onSelectMuscle: (muscle: MuscleGroup) => void;
 }
 
-export function MuscleGroupSelector({ 
-  selectedMuscle, 
-  onSelectMuscle 
-}: MuscleGroupSelectorProps) {
+export function MuscleGroupSelector({ selectedMuscle, onSelectMuscle }: MuscleGroupSelectorProps) {
   return (
-    <div>
+    <div className="container max-w-md mx-auto pt-6 px-4">
       <Label htmlFor="muscle-group">Select Muscle Group</Label>
       <Select value={selectedMuscle} onValueChange={onSelectMuscle}>
         <SelectTrigger id="muscle-group" className="mt-1 shadow border-none">
