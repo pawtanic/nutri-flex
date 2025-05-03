@@ -20,6 +20,8 @@ import { Exercise } from '@/app/(frontend)/api/public-api';
 import { MuscleGroup, useFetchExerciseByMuscleGroup } from '@/hooks/fetchExercises';
 import { muscleGroups } from '@/app/(frontend)/utils/constants';
 import { capitalize, getDifficultyColor } from '@/app/(frontend)/utils/helpers';
+import WarningAlert from '@/components/common/WarningAlert';
+import Link from 'next/link';
 
 interface ExerciseApiFetchProps {
   onSelectExercise: (exercise: Exercise) => void;
@@ -59,21 +61,20 @@ export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
       <div>
         <Label htmlFor="muscle-group">Select Muscle Group</Label>
         <Select value={selectedMuscle} onValueChange={handleMuscleSelect}>
-          <SelectTrigger id="muscle-group" className="mt-1">
+          <SelectTrigger id="muscle-group" className="mt-1 shadow border-none">
             <SelectValue placeholder="Choose a muscle group" />
           </SelectTrigger>
           <SelectContent>
             {muscleGroups?.map(muscle => (
               <SelectItem key={muscle} value={muscle}>
-                {muscle.charAt(0).toUpperCase() + muscle.slice(1).replace('_', ' ')}
+                {capitalize(muscle)}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
-
       {selectedMuscle && !selectedExercise && (
-        <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen} className="border rounded-md">
+        <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen} className="rounded-md shadow">
           <CollapsibleTrigger asChild>
             <Button variant="ghost" className="flex w-full justify-between p-4 h-auto">
               <div className="flex items-center">
@@ -94,7 +95,7 @@ export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
                     <SelectValue placeholder="All equipment" />
                   </SelectTrigger>
                   <SelectContent>
-                    {[].map(equipment => (
+                    {['all', 'barbell', 'dumbbell'].map(equipment => (
                       <SelectItem key={equipment} value={equipment}>
                         {equipment === 'all'
                           ? 'All equipment'
@@ -131,12 +132,17 @@ export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
                 onValueChange={setSelectedSort}
                 className="grid grid-cols-2 gap-2 mt-1"
               >
-                {[].map(option => (
+                {[
+                  { value: 'name-asc', label: 'Name (A-Z)' },
+                  { value: 'name-desc', label: 'Name (Z-A)' },
+                  { value: 'difficulty-asc', label: 'Difficulty (Low-High)' },
+                  { value: 'difficulty-desc', label: 'Difficulty (High-Low)' },
+                ].map(option => (
                   <Label
                     key={option.value}
                     htmlFor={option.value}
                     className={`flex items-center justify-center border rounded-md p-2 cursor-pointer ${
-                      selectedSort === option.value ? 'bg-primary/10 border-primary' : ''
+                      selectedSort === option.value ? 'bg-primary text-white' : ''
                     }`}
                   >
                     <RadioGroupItem value={option.value} id={option.value} className="sr-only" />
@@ -148,9 +154,7 @@ export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
           </CollapsibleContent>
         </Collapsible>
       )}
-
       {error && <p className="text-red-500">Error fetching exercises: {error.message}</p>}
-
       {isLoading ? (
         <div className="flex items-center justify-center py-8">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -168,7 +172,7 @@ export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
             Back to exercises
           </Button>
 
-          <Card>
+          <Card className="shadow-md">
             <CardContent className="p-4 space-y-4">
               <div>
                 <h3 className="text-xl font-bold">{selectedExercise.name}</h3>
@@ -213,10 +217,13 @@ export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
           </Card>
         </div>
       ) : data && data.length > 0 ? (
-        <ScrollArea className="h-[400px] pr-4">
+        <ScrollArea className="h-[400px]">
           <div className="space-y-2">
             {data.map((exercise, index) => (
-              <Card key={index} className="cursor-pointer hover:bg-accent/50 transition-colors">
+              <Card
+                key={index}
+                className="cursor-pointer hover:bg-accent/50 transition-colors shadow"
+              >
                 <CardContent
                   className="p-3 flex items-center justify-between"
                   onClick={() => handleExerciseSelect(exercise)}
@@ -232,7 +239,7 @@ export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
                       </Badge>
                     </div>
                   </div>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                  <ChevronRight className="h-5 w-5 text-muted-foreground mr-2" />
                 </CardContent>
               </Card>
             ))}
@@ -248,6 +255,11 @@ export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
           <p className="text-muted-foreground">Select a muscle group to see exercises</p>
         </div>
       )}
+      <WarningAlert description="The results rely on free data from Ninja API">
+        <Link href="https://api-ninjas.com/api/exercises" className="ml-2 underline">
+          Learn more
+        </Link>
+      </WarningAlert>
     </div>
   );
 }
