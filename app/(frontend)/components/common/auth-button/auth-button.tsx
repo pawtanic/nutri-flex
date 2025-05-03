@@ -30,6 +30,8 @@ interface AuthRequiredButtonProps extends Omit<ButtonProps, 'onClick'> {
    */
   onUnauthenticatedClick?: () => void;
   loadingText?: string;
+  successMessageText: string;
+  errorMessageText: string;
 }
 
 export function AuthRequiredButton({
@@ -39,6 +41,8 @@ export function AuthRequiredButton({
   disabled = false,
   className,
   loadingText,
+  successMessageText,
+  errorMessageText,
   ...props
 }: AuthRequiredButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +55,7 @@ export function AuthRequiredButton({
         await new Promise(resolve => setTimeout(resolve, 1000));
         await onAuthenticatedClick();
         // create a success toast component/hook
-        toast('Meal saved successfully!', {
+        toast(successMessageText, {
           // todo: create a success class and variable success clr
           className: 'bg-green-50 border-green-200 text-green-900',
           description: 'You can now view your meal in nutrition page',
@@ -65,7 +69,7 @@ export function AuthRequiredButton({
       } catch (error: unknown) {
         if (error instanceof Error) {
           // create a success toast component/hook
-          toast('We could not save your meal.', {
+          toast(errorMessageText, {
             description: error.message || 'Unknown error occurred. Please try again later',
             position: 'top-center',
             className: 'bg-red-50 border-red-200',

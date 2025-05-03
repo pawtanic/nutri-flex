@@ -9,6 +9,7 @@ export default async function WorkoutsPage({
   searchParams: { tab?: string };
 }) {
   // Fetch all necessary data on the server
+  // todo: pass generic ?
   const workoutsData = await fetchWorkouts();
 
   console.log(params);

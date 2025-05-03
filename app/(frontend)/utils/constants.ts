@@ -36,3 +36,36 @@ export const muscleGroups = [
   'traps',
   'triceps',
 ] as const;
+
+export const EQUIPMENT_OPTIONS = {
+  ALL: 'all',
+  BARBELL: 'barbell',
+  DUMBBELL: 'dumbbell',
+} as const;
+
+export type EquipmentOption = keyof typeof EQUIPMENT_OPTIONS;
+
+export const DIFFICULTY_OPTIONS = {
+  BEGINNER: 'beginner',
+  INTERMEDIATE: 'intermediate',
+  EXPERT: 'expert',
+  ALL: 'all',
+} as const;
+
+export type DifficultyOption = keyof typeof DIFFICULTY_OPTIONS;
+
+export const SORT_OPTIONS = {
+  NAME_ASC: 'name-asc',
+  NAME_DESC: 'name-desc',
+  DIFFICULTY_ASC: 'difficulty-asc',
+  DIFFICULTY_DESC: 'difficulty-desc',
+} as const;
+
+export type SortOption = keyof typeof SORT_OPTIONS;
+
+export const SORT_OPTION_LABELS = {
+  [SORT_OPTIONS.NAME_ASC]: 'Name (A-Z)',
+  [SORT_OPTIONS.NAME_DESC]: 'Name (Z-A)',
+  [SORT_OPTIONS.DIFFICULTY_ASC]: 'Difficulty (Low-High)',
+  [SORT_OPTIONS.DIFFICULTY_DESC]: 'Difficulty (High-Low)',
+};
