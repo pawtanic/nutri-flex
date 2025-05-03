@@ -7,6 +7,7 @@ import Navigation from '@/components/navigation';
 import { DateProvider } from '@/app/(frontend)/context/date-context';
 import { Toaster } from 'sonner';
 import Providers from './providers';
+import { AuthModalProvider } from '@/app/(frontend)/context/auth-modal-context';
 
 const inter = Nunito({ weight: '400', subsets: ['latin'], display: 'swap' });
 
@@ -25,13 +26,15 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <DateProvider>
-            <div className="flex flex-col min-h-screen">
-              <Suspense fallback={<div>Loading from layout component ...</div>}>
-                <main className="flex-1">{children}</main>
-              </Suspense>
-              <Navigation />
-            </div>
-            <Toaster />
+            <AuthModalProvider>
+              <div className="flex flex-col min-h-screen">
+                <Suspense fallback={<div>Loading from layout component ...</div>}>
+                  <main className="flex-1">{children}</main>
+                </Suspense>
+                <Navigation />
+              </div>
+              <Toaster />
+            </AuthModalProvider>
           </DateProvider>
         </Providers>
       </body>
