@@ -78,9 +78,16 @@ export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
         </Select>
       </div>
       {selectedMuscle && !selectedExercise && (
-        <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen} className="rounded-md shadow">
+        <Collapsible
+          open={filtersOpen}
+          onOpenChange={setFiltersOpen}
+          className="rounded-md shadow bg-white"
+        >
           <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="flex w-full justify-between p-4 h-auto">
+            <Button
+              variant="ghost"
+              className={`flex w-full justify-between p-4 h-auto ${filtersOpen ? 'hover:bg-white' : ''}`}
+            >
               <div className="flex items-center">
                 <Filter className="h-4 w-4 mr-2" />
                 <span>Filters & Sorting</span>
@@ -135,7 +142,7 @@ export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
               <RadioGroup
                 value={selectedSort}
                 onValueChange={setSelectedSort as (value: string) => void}
-                className="grid grid-cols-2 gap-2 mt-1"
+                className="grid grid-cols-2 gap-4 mt-1"
               >
                 {[
                   { value: 'name-asc', label: 'Name (A-Z)' },
@@ -143,16 +150,12 @@ export function ExerciseApiFetch({ onSelectExercise }: ExerciseApiFetchProps) {
                   { value: 'difficulty-asc', label: 'Difficulty (Low-High)' },
                   { value: 'difficulty-desc', label: 'Difficulty (High-Low)' },
                 ].map(option => (
-                  <Label
-                    key={option.value}
-                    htmlFor={option.value}
-                    className={`flex items-center justify-center border rounded-md p-2 cursor-pointer ${
-                      selectedSort === option.value ? 'bg-primary text-white' : ''
-                    }`}
-                  >
-                    <RadioGroupItem value={option.value} id={option.value} className="sr-only" />
-                    {option.label}
-                  </Label>
+                  <div key={option.value} className="flex items-center space-x-2">
+                    <RadioGroupItem value={option.value} id={option.value} />
+                    <Label htmlFor={option.value} className="cursor-pointer">
+                      {option.label}
+                    </Label>
+                  </div>
                 ))}
               </RadioGroup>
             </div>
