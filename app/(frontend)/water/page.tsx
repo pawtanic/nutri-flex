@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { WaterIntakeHistory } from '@/components/water/water-intake-history';
-import { WaterGoalSetting } from '@/components/water/water-goal-setting';
-import { WaterQuickAdd } from '@/components/water/water-quick-add';
+import { WaterIntakeHistory } from '@/app/(frontend)/water/_components/water-intake-history';
+import { WaterGoalSetting } from '@/app/(frontend)/water/_components/water-goal-setting';
+import { WaterQuickAdd } from '@/app/(frontend)/water/_components/water-quick-add';
 import { DateHeader } from '@/components/date-header';
-import { CircularWaterTracker } from '@/components/water/circular-water-tracker';
+import { CircularWaterTracker } from '@/app/(frontend)/water/_components/circular-water-tracker';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function WaterPage() {

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { RoutesConfig } from '@/components/navigation';
+import { RoutesConfig } from '@/components/common/navigation/navigation';
 import { DateHeader } from '@/components/date-header';
 import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 import { ExerciseSelector } from '@/app/(frontend)/workouts/_components/exercise-selector';

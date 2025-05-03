@@ -7,7 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Quagga from '@ericblade/quagga2';
 import { Macro } from '@/app/(frontend)/nutrition/add/page';
 import Link from 'next/link';
-import { RoutesConfig } from '@/components/navigation';
+import { RoutesConfig } from '@/components/common/navigation/navigation';
 import { linkAkaBtnStyles } from '@/app/(frontend)/utils/constants';
 
 export const getNutrients = (scannedProduct: any): Macro => {

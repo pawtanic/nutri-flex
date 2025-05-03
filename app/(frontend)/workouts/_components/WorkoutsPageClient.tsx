@@ -9,7 +9,7 @@ import { DateHeader } from '@/components/date-header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDate } from '@/app/(frontend)/context/date-context';
 import { linkAkaBtnStyles } from '@/app/(frontend)/utils/constants';
-import { RoutesConfig } from '@/components/navigation';
+import { RoutesConfig } from '@/components/common/navigation/navigation';
 import { WorkoutTemplates } from '@/app/(frontend)/workouts/_components/workout-templates';
 import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 

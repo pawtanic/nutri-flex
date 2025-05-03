@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { BarcodeScanner } from '@/components/product-scan/barcode-scanner';
-import { BarcodeProductDisplay } from '@/components/product-scan/scanned-product-output';
-import WarningAlert from '@/components/common/WarningAlert';
+import { BarcodeScanner } from '@/app/(frontend)/nutrition/_components/product-scan/barcode-scanner';
+import { BarcodeProductDisplay } from '@/app/(frontend)/nutrition/_components/product-scan/scanned-product-output';
+import WarningAlert from '@/components/common/warning-alert/warning-alert';
 import Link from 'next/link';
 import { Macro } from './meal-types';
 

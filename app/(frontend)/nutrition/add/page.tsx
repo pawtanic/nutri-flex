@@ -1,10 +1,10 @@
 'use client';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { RecipeGenerator } from '@/components/recipe/recipe-generator';
-import { PageHeader } from '@/components/common/page-header';
-import { ManualMealForm } from '@/components/meal/manual-meal-form';
-import { ScannedProductForm } from '@/components/meal/scanned-product-form';
+import { RecipeGenerator } from '@/app/(frontend)/nutrition/_components/recipe/recipe-generator';
+import { PageHeader } from '@/components/common/header/page-header';
+import { ManualMealForm } from '@/app/(frontend)/nutrition/_components/meal/manual-meal-form';
+import { ScannedProductForm } from '@/app/(frontend)/nutrition/_components/meal/scanned-product-form';
 import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 
 export default function AddMealPage() {

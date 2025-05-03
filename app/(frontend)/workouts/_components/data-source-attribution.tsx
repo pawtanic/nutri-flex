@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import WarningAlert from '@/components/common/WarningAlert';
+import WarningAlert from '@/components/common/warning-alert/warning-alert';
 
 export function DataSourceAttribution() {
   return (

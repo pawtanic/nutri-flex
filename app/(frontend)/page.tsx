@@ -12,7 +12,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import { NutritionSummary } from '@/components/nutrition-summary';
+import { NutritionSummary } from '@/app/(frontend)/nutrition/_components/nutrition-summary';
 import { ProgressChart } from '@/components/progress-chart';
 import { StreakCard } from '@/components/streak-card';
 import { GoalProgress } from '@/components/goal-progress';
@@ -21,7 +21,7 @@ import { WeeklyCalendar } from '@/components/weekly-calendar';
 import Image from 'next/image';
 import { capitalize } from '@/app/(frontend)/utils/helpers';
 import { periodValue, tabsValues } from '@/app/(frontend)/utils/constants';
-import { RoutesConfig } from '@/components/navigation';
+import { RoutesConfig } from '@/components/common/navigation/navigation';
 import { WorkoutSummary } from '@/app/(frontend)/workouts/_components/workout-summary';
 
 export default function Home() {
