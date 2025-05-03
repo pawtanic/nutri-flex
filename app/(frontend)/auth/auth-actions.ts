@@ -21,7 +21,7 @@ export async function loginAction(formData: FormData) {
   }
 
   try {
-    // Authenticate with Payload CMS
+    // Authenticate with Payload CMS - add api method here
     const response = await fetch(`${process.env.PAYLOAD_API_URL}/api/users/login`, {
       method: 'POST',
       headers: {

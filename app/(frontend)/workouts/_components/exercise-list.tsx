@@ -2,14 +2,14 @@
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Loader2, Dumbbell } from 'lucide-react';
-import { Exercise } from '@/app/(frontend)/api/public-api';
+import { ApiExercise } from '@/app/(frontend)/api/public-api';
 import { ExerciseCard } from './exercise-card';
 
 interface ExerciseListProps {
-  exercises: Exercise[];
+  exercises: ApiExercise[];
   isLoading: boolean;
   selectedMuscle: string;
-  onSelectExercise: (exercise: Exercise) => void;
+  onSelectExercise: (exercise: ApiExercise) => void;
 }
 
 export function ExerciseList({
@@ -48,11 +48,7 @@ export function ExerciseList({
     <ScrollArea className="h-[400px]">
       <div className="space-y-2">
         {exercises.map((exercise, index) => (
-          <ExerciseCard
-            key={index}
-            exercise={exercise}
-            onSelect={onSelectExercise}
-          />
+          <ExerciseCard key={index} exercise={exercise} onSelect={onSelectExercise} />
         ))}
       </div>
     </ScrollArea>

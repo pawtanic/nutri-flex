@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Exercise } from '@/app/(frontend)/api/public-api';
+import { ApiExercise } from '@/app/(frontend)/api/public-api';
 import { MuscleGroup, useFetchExerciseByMuscleGroup } from '@/hooks/fetchExercises';
 import {
   EQUIPMENT_OPTIONS,
@@ -31,7 +31,7 @@ interface FilterState {
 export function ExerciseSelector() {
   // Selection state
   const [selectedMuscle, setSelectedMuscle] = useState<MuscleGroup>('');
-  const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null);
+  const [selectedExercise, setSelectedExercise] = useState<ApiExercise | null>(null);
 
   // Filter state
   const [filterState, setFilterState] = useState<FilterState>({
@@ -42,7 +42,7 @@ export function ExerciseSelector() {
   });
 
   // Filtered exercises
-  const [filteredExercises, setFilteredExercises] = useState<Exercise[]>([]);
+  const [filteredExercises, setFilteredExercises] = useState<ApiExercise[]>([]);
 
   // Fetch exercises
   const { data, isLoading, error } = useFetchExerciseByMuscleGroup({ selectedMuscle });
@@ -99,7 +99,7 @@ export function ExerciseSelector() {
     setSelectedExercise(null);
   };
 
-  const selectExercise = (exercise: Exercise) => {
+  const selectExercise = (exercise: ApiExercise) => {
     setSelectedExercise(exercise);
   };
 

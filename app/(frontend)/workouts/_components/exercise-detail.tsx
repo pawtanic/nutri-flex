@@ -4,14 +4,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Dumbbell } from 'lucide-react';
-import { Exercise } from '@/app/(frontend)/api/public-api';
+import { ApiExercise } from '@/app/(frontend)/api/public-api';
 import { capitalize, getDifficultyColor } from '@/app/(frontend)/utils/helpers';
 import { AuthRequiredButton } from '@/components/common/auth-button/auth-button';
 
 interface ExerciseDetailProps {
-  exercise: Exercise;
+  exercise: ApiExercise;
   onBack: () => void;
-  onAddExercise: (exercise: Exercise) => void;
+  onAddExercise: (exercise: ApiExercise) => void;
 }
 
 export function ExerciseDetail({ exercise, onBack, onAddExercise }: ExerciseDetailProps) {

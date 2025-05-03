@@ -28,7 +28,7 @@ const ninjasApiClient = new ApiClient(NINJAS_API_BASE_URL, {
   'X-Api-Key': process.env.NEXT_PUBLIC_NINJAS_API_KEY || '',
 });
 
-export interface Exercise {
+export interface ApiExercise {
   name: string;
   type: string;
   muscle: string;
@@ -43,8 +43,8 @@ export const exerciseKeys = {
 };
 
 export const exerciseApi = {
-  getByMuscle: async (muscle: string): Promise<Exercise[]> => {
-    const response = await ninjasApiClient.get<Exercise[]>(`/exercises?muscle=${muscle}`);
+  getByMuscle: async (muscle: string): Promise<ApiExercise[]> => {
+    const response = await ninjasApiClient.get<ApiExercise[]>(`/exercises?muscle=${muscle}`);
     return response.data;
   },
 };

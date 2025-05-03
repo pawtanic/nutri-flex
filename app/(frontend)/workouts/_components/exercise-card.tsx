@@ -3,12 +3,12 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ChevronRight } from 'lucide-react';
-import { Exercise } from '@/app/(frontend)/api/public-api';
+import { ApiExercise } from '@/app/(frontend)/api/public-api';
 import { getDifficultyColor } from '@/app/(frontend)/utils/helpers';
 
 interface ExerciseCardProps {
-  exercise: Exercise;
-  onSelect: (exercise: Exercise) => void;
+  exercise: ApiExercise;
+  onSelect: (exercise: ApiExercise) => void;
 }
 
 export function ExerciseCard({ exercise, onSelect }: ExerciseCardProps) {

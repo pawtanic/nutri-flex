@@ -49,7 +49,7 @@ export const AuthModalProvider = ({ children }: { children: ReactNode }) => {
         //     <button onClick={hideAuthModal}>Cancel</button>
         //   </div>
         // </Modal>
-        <AuthModal isOpen={isModalOpen} onClose={hideAuthModal} />
+        <AuthModal isOpen={isModalOpen} onCloseAction={hideAuthModal} />
       )}
     </AuthModalContext.Provider>
   );

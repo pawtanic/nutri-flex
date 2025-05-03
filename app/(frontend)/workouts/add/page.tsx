@@ -11,10 +11,10 @@ import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 import { ExerciseSelector } from '@/app/(frontend)/workouts/_components/exercise-selector';
 import { Wrapper } from '@/components/layout/Wrapper';
 import { WorkoutForm } from '@/app/(frontend)/workouts/_components/workout-form';
-import { Exercise } from '@/app/(frontend)/api/public-api';
+import { ApiExercise } from '@/app/(frontend)/api/public-api';
 
 export default function AddWorkoutPage() {
-  const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [exercises, setExercises] = useState<ApiExercise[]>([]);
   const { tab, setTab } = useTabWithUrl({ defaultTab: 'manual' });
 
   return (
@@ -27,7 +27,7 @@ export default function AddWorkoutPage() {
         </Link>
         <h1 className="text-2xl font-bold">Add Workout</h1>
       </div>
-      <DateHeader title="" />
+      <DateHeader />
       <Tabs value={tab} onValueChange={setTab} defaultValue="manual" className="mb-6">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="manual">Manual</TabsTrigger>
