@@ -29,20 +29,20 @@ interface ExerciseSelectorProps {
 }
 
 export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) {
-  const [storedValue, setValue] = useLocalStorage('selectedMuscleGroup', '');
+  const [storedMuscleGroup, setStoredMuscleGroup] = useLocalStorage('selectedMuscleGroup', '');
   const { updateParams, getParams } = useUrlParams();
-  const selectedMuscle = (getParams().muscle as MuscleGroup) || (storedValue as MuscleGroup);
+  const selectedMuscleFromParams = getParams().muscle as MuscleGroup;
+  // TODO: store tabs value in constants
+  const isApiTab = getParams().tab === 'api';
+  const selectedMuscle = selectedMuscleFromParams || (storedMuscleGroup as MuscleGroup);
   const [selectedExercise, setSelectedExercise] = useState<ApiExercise | null>(null);
 
   useEffect(() => {
-    if (getParams().tab !== 'api') {
-      return;
-    }
+    if (!isApiTab) return;
+    const shouldUpdateParams = storedMuscleGroup && !selectedMuscleFromParams;
 
-    if (storedValue && !getParams().muscle) {
-      updateParams({ muscle: storedValue });
-    }
-  }, [storedValue, updateParams, getParams]);
+    if (shouldUpdateParams) updateParams({ muscle: storedMuscleGroup });
+  }, [storedMuscleGroup, updateParams, isApiTab, getParams, selectedMuscleFromParams]);
 
   const { data, isLoading, error } = useFetchExerciseByMuscleGroup({
     selectedMuscle,
@@ -60,16 +60,16 @@ export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) 
 
   // Apply filters when data or filter state changes
   useEffect(() => {
-    if (data) {
-      const result = applyFiltersAndSort(data, filterState);
-      setFilteredExercises(result);
-    }
+    if (!data) return;
+
+    const result = applyFiltersAndSort(data, filterState);
+    setFilteredExercises(result);
   }, [data, filterState]);
 
   const selectMuscleGroup = (muscle: MuscleGroup) => {
     updateParams({ muscle });
     setSelectedExercise(null);
-    setValue(muscle);
+    setStoredMuscleGroup(muscle);
   };
 
   const selectExercise = (exercise: ApiExercise) => {
@@ -100,10 +100,9 @@ export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) 
     const updatedFilterState = { ...filterState, ...newState };
     setFilterState(updatedFilterState);
 
-    if (data) {
-      const result = applyFiltersAndSort(data, updatedFilterState);
-      setFilteredExercises(result);
-    }
+    if (!data) return;
+    const result = applyFiltersAndSort(data, updatedFilterState);
+    setFilteredExercises(result);
   };
 
   const handleSort = () => {
