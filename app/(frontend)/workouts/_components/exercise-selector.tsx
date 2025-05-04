@@ -2,7 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { ApiExercise } from '@/app/(frontend)/api/public-api';
-import { MuscleGroup, useFetchExerciseByMuscleGroup } from '@/hooks/fetchExercises';
+import {
+  MuscleGroup,
+  useFetchExerciseByMuscleGroup,
+} from '@/hooks/use-fetch-exercise-by-muscle-group';
 import {
   EQUIPMENT_OPTIONS,
   DIFFICULTY_OPTIONS,
@@ -19,6 +22,10 @@ import { Exercise } from './workout-form';
 import { showSuccessToast } from '@/app/(frontend)/utils/helpers';
 import WarningAlert from '@/components/common/warning-alert/warning-alert';
 import Link from 'next/link';
+import { RoutesConfig } from '@/components/common/navigation/navigation';
+import { useRouter } from 'next/navigation';
+import { useUrlParams } from '@/hooks/useUrlParams';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 interface ExerciseSelectorProps {
   setExercisesAction: React.Dispatch<React.SetStateAction<Exercise[]>>;
@@ -32,9 +39,20 @@ interface FilterState {
 }
 
 export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) {
-  const [selectedMuscle, setSelectedMuscle] = useState<MuscleGroup>('');
+  const [storedValue, setValue] = useLocalStorage('selectedMuscleGroup', '');
+  const { updateParams, getParams } = useUrlParams();
+  const urlMuscle = (getParams().muscle as MuscleGroup) || (storedValue as MuscleGroup);
+  const [selectedMuscle, setSelectedMuscle] = useState<MuscleGroup>(urlMuscle);
   const [selectedExercise, setSelectedExercise] = useState<ApiExercise | null>(null);
-  const { data, isLoading, error } = useFetchExerciseByMuscleGroup({ selectedMuscle });
+
+  useEffect(() => {
+    if (storedValue) updateParams({ muscle: storedValue });
+  }, [storedValue, updateParams]);
+
+  const { data, isLoading, error } = useFetchExerciseByMuscleGroup({
+    selectedMuscle: selectedMuscle,
+  });
+  const router = useRouter();
 
   const [filterState, setFilterState] = useState<FilterState>({
     equipment: EQUIPMENT_OPTIONS.ALL,
@@ -94,6 +112,8 @@ export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) 
   const selectMuscleGroup = (muscle: MuscleGroup) => {
     setSelectedMuscle(muscle);
     setSelectedExercise(null);
+    updateParams({ muscle });
+    setValue(muscle);
   };
 
   const selectExercise = (exercise: ApiExercise) => {
@@ -102,26 +122,29 @@ export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) 
   console.log(selectedExercise);
   const addSelectedExercise = () => {
     if (selectedExercise) {
-      // Transform API exercise to the Exercise format used by WorkoutForm
       const formattedExercise: Exercise = {
         exerciseName: selectedExercise.name,
-        sets: 3, // Default values
-        reps: 10, // Default values
+        sets: 1,
+        reps: 1,
       };
 
       setExercisesAction(prevExercises => [...prevExercises, formattedExercise]);
-
-      // Reset selection
       setSelectedExercise(null);
-
-      // show success toast
-      showSuccessToast('Success', 'The exercise has been added to your workout');
+      showSuccessToast({
+        title: 'Success',
+        description:
+          'The exercise has been added to your workout, please adjust the sets and reps as needed.',
+        duration: 5000,
+      });
     }
+    router.push(RoutesConfig.addWorkout);
   };
 
   const handleFilterChange = (newState: Partial<FilterState>) => {
     setFilterState(prevState => ({ ...prevState, ...newState }));
   };
+
+  const showFilterPanel = selectedMuscle && !selectedExercise && data && data.length > 0;
 
   return (
     <div className="space-y-4">
@@ -130,7 +153,7 @@ export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) 
         selectedMuscle={selectedMuscle}
         onSelectMuscleAction={selectMuscleGroup}
       />
-      {selectedMuscle && !selectedExercise && (
+      {showFilterPanel && (
         <ExerciseFilterPanel
           filterState={filterState}
           onFilterChange={handleFilterChange}

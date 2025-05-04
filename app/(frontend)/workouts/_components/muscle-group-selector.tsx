@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { MuscleGroup } from '@/hooks/fetchExercises';
+import { MuscleGroup } from '@/hooks/use-fetch-exercise-by-muscle-group';
 import { muscleGroups } from '@/app/(frontend)/utils/constants';
 import { capitalize } from '@/app/(frontend)/utils/helpers';
 

@@ -36,10 +36,13 @@ export function AuthRequiredButton({
 
     try {
       await onAuthenticatedClick();
-      showSuccessToast(successMessageText, successMessageDescription);
+      showSuccessToast({ title: successMessageText, description: successMessageDescription });
     } catch (error: unknown) {
       if (error instanceof Error) {
-        showErrorToast(errorMessageText, error.message || 'Unknown error occurred');
+        showErrorToast({
+          title: errorMessageText,
+          description: error.message || 'Unknown error occurred',
+        });
       }
     }
   };

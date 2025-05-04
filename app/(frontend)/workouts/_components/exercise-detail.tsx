@@ -24,7 +24,6 @@ export function ExerciseDetail({
         <ArrowLeft className="h-4 w-4 mr-1" />
         Back to exercises
       </Button>
-
       <Card className="shadow-md">
         <CardContent className="p-4 space-y-4">
           <div>
@@ -33,7 +32,6 @@ export function ExerciseDetail({
               <Badge variant="outline" className={getDifficultyColor(exercise.difficulty)}>
                 {capitalize(exercise.difficulty)}
               </Badge>
-
               <Badge variant="outline">
                 {exercise.equipment === 'barbell' || exercise.equipment === 'dumbbell' ? (
                   <Dumbbell className="h-4 w-4 mr-1" />

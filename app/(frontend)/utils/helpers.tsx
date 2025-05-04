@@ -19,9 +19,16 @@ export const getDifficultyColor = (difficulty: string) => {
   }
 };
 
-export const showSuccessToast = (title: string, description: string) => {
+interface ToastOptions {
+  title: string;
+  description?: string;
+  duration?: number;
+}
+
+export const showSuccessToast = ({ title, description, duration }: ToastOptions) => {
   toast(title, {
     className: 'bg-green-50 border-green-200 text-green-900',
+    duration: duration || 3000,
     description,
     position: 'top-center',
     icon: (
@@ -32,7 +39,12 @@ export const showSuccessToast = (title: string, description: string) => {
   });
 };
 
-export const showErrorToast = (title: string, description: string) => {
+interface ErrorToastOptions {
+  title: string;
+  description: string;
+}
+
+export const showErrorToast = ({ title, description }: ErrorToastOptions) => {
   toast(title, {
     description,
     position: 'top-center',
