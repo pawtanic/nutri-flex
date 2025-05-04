@@ -87,7 +87,9 @@ export interface Config {
     recipes: RecipesSelect<false> | RecipesSelect<true>;
     mealPlans: MealPlansSelect<false> | MealPlansSelect<true>;
     userProfiles: UserProfilesSelect<false> | UserProfilesSelect<true>;
-    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
+    'payload-locked-documents':
+      | PayloadLockedDocumentsSelect<false>
+      | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
@@ -184,7 +186,17 @@ export interface Exercise {
   };
   muscleGroups: ('chest' | 'back' | 'shoulders' | 'arms' | 'legs' | 'core' | 'fullBody')[];
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  equipment?: ('none' | 'dumbbells' | 'barbell' | 'kettlebell' | 'resistanceBands' | 'machine' | 'bodyweight')[] | null;
+  equipment?:
+    | (
+        | 'none'
+        | 'dumbbells'
+        | 'barbell'
+        | 'kettlebell'
+        | 'resistanceBands'
+        | 'machine'
+        | 'bodyweight'
+      )[]
+    | null;
   demonstrationImage?: (string | null) | Media;
   /**
    * URL to a video demonstration (e.g., YouTube link)
@@ -258,7 +270,16 @@ export interface Recipe {
   description: string;
   category: 'breakfast' | 'lunch' | 'dinner' | 'snack' | 'preWorkout' | 'postWorkout' | 'dessert';
   dietaryPreferences?:
-    | ('vegetarian' | 'vegan' | 'glutenFree' | 'dairyFree' | 'keto' | 'paleo' | 'lowCarb' | 'highProtein')[]
+    | (
+        | 'vegetarian'
+        | 'vegan'
+        | 'glutenFree'
+        | 'dairyFree'
+        | 'keto'
+        | 'paleo'
+        | 'lowCarb'
+        | 'highProtein'
+      )[]
     | null;
   /**
    * Preparation time in minutes
@@ -377,7 +398,16 @@ export interface MealPlan {
     fat?: number | null;
   };
   dietaryPreferences?:
-    | ('vegetarian' | 'vegan' | 'glutenFree' | 'dairyFree' | 'keto' | 'paleo' | 'lowCarb' | 'highProtein')[]
+    | (
+        | 'vegetarian'
+        | 'vegan'
+        | 'glutenFree'
+        | 'dairyFree'
+        | 'keto'
+        | 'paleo'
+        | 'lowCarb'
+        | 'highProtein'
+      )[]
     | null;
   days: {
     /**
@@ -485,7 +515,16 @@ export interface UserProfile {
       | null;
   };
   dietaryPreferences?:
-    | ('vegetarian' | 'vegan' | 'glutenFree' | 'dairyFree' | 'keto' | 'paleo' | 'lowCarb' | 'highProtein')[]
+    | (
+        | 'vegetarian'
+        | 'vegan'
+        | 'glutenFree'
+        | 'dairyFree'
+        | 'keto'
+        | 'paleo'
+        | 'lowCarb'
+        | 'highProtein'
+      )[]
     | null;
   allergies?:
     | {
@@ -501,7 +540,15 @@ export interface UserProfile {
     preferredWorkoutTime?: ('morning' | 'afternoon' | 'evening') | null;
     workoutDuration?: ('lessThan30' | '30to45' | '45to60' | '60to90' | 'moreThan90') | null;
     preferredExerciseTypes?:
-      | ('strengthTraining' | 'cardio' | 'hiit' | 'yoga' | 'pilates' | 'calisthenics' | 'crossfit')[]
+      | (
+          | 'strengthTraining'
+          | 'cardio'
+          | 'hiit'
+          | 'yoga'
+          | 'pilates'
+          | 'calisthenics'
+          | 'crossfit'
+        )[]
       | null;
   };
   favoriteWorkouts?: (string | Workout)[] | null;
@@ -842,7 +889,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface Auth {
   [k: string]: unknown;
 }
-
 
 declare module 'payload' {
   export interface GeneratedTypes extends Config {}

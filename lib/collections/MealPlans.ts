@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload';
 
 export const MealPlans: CollectionConfig = {
   slug: 'mealPlans',
@@ -191,11 +191,11 @@ export const MealPlans: CollectionConfig = {
         beforeChange: [
           ({ req, operation }) => {
             if (operation === 'create') {
-              return req.user.id;
+              return req?.user?.id;
             }
           },
         ],
       },
     },
   ],
-}
+};

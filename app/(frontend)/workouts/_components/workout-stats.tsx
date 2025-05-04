@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Dumbbell, Heart, Zap, Calendar, TrendingUp, Clock } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dumbbell, Heart, Zap, Calendar, TrendingUp, Clock } from 'lucide-react';
 
 interface WorkoutStatsProps {
-  period: string
-  workoutType: string
+  period: string;
+  workoutType: string;
 }
 
 export function WorkoutStats({ period, workoutType }: WorkoutStatsProps) {
@@ -13,11 +13,11 @@ export function WorkoutStats({ period, workoutType }: WorkoutStatsProps) {
   const stats = {
     totalWorkouts: 15,
     averagePerWeek: 3.5,
-    mostFrequentType: "Strength",
+    mostFrequentType: 'Strength',
     longestStreak: 5,
-    totalDuration: "18h 30m",
-    improvement: "+12%",
-  }
+    totalDuration: '18h 30m',
+    improvement: '+12%',
+  };
 
   return (
     <div className="space-y-4">
@@ -74,7 +74,7 @@ export function WorkoutStats({ period, workoutType }: WorkoutStatsProps) {
                 <span>60%</span>
               </div>
               <div className="h-2 bg-muted rounded-full overflow-hidden">
-                <div className="h-full bg-workout" style={{ width: "60%" }}></div>
+                <div className="h-full bg-workout" style={{ width: '60%' }}></div>
               </div>
             </div>
             <div>
@@ -86,7 +86,7 @@ export function WorkoutStats({ period, workoutType }: WorkoutStatsProps) {
                 <span>30%</span>
               </div>
               <div className="h-2 bg-muted rounded-full overflow-hidden">
-                <div className="h-full bg-workout" style={{ width: "30%" }}></div>
+                <div className="h-full bg-workout" style={{ width: '30%' }}></div>
               </div>
             </div>
             <div>
@@ -98,7 +98,7 @@ export function WorkoutStats({ period, workoutType }: WorkoutStatsProps) {
                 <span>10%</span>
               </div>
               <div className="h-2 bg-muted rounded-full overflow-hidden">
-                <div className="h-full bg-workout" style={{ width: "10%" }}></div>
+                <div className="h-full bg-workout" style={{ width: '10%' }}></div>
               </div>
             </div>
           </div>
@@ -111,7 +111,7 @@ export function WorkoutStats({ period, workoutType }: WorkoutStatsProps) {
         </CardHeader>
         <CardContent className="p-4">
           <div className="h-40 flex items-end justify-between px-2">
-            {["Jan", "Feb", "Mar", "Apr", "May"].map((month, i) => (
+            {['Jan', 'Feb', 'Mar', 'Apr', 'May'].map((month, i) => (
               <div key={i} className="flex flex-col items-center">
                 <div
                   className="w-8 bg-workout rounded-t-md"
@@ -127,5 +127,5 @@ export function WorkoutStats({ period, workoutType }: WorkoutStatsProps) {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

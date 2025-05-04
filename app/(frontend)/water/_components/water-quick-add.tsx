@@ -6,10 +6,10 @@ import { Droplet, GlassWater } from 'lucide-react';
 import { Bottle } from '@/components/icons';
 
 interface WaterQuickAddProps {
-  onAddWater: (amount: number) => void;
+  onAddWaterAction: (amount: number) => void;
 }
 
-export function WaterQuickAdd({ onAddWater }: WaterQuickAddProps) {
+export function WaterQuickAdd({ onAddWaterAction }: WaterQuickAddProps) {
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -21,7 +21,7 @@ export function WaterQuickAdd({ onAddWater }: WaterQuickAddProps) {
           <Button
             variant="outline"
             className="flex flex-col h-auto py-4 border-blue-200 hover:bg-blue-50 hover:text-blue-700"
-            onClick={() => onAddWater(1)}
+            onClick={() => onAddWaterAction(1)}
           >
             <GlassWater className="h-6 w-6 mb-2 text-blue-500" />
             <span className="text-sm font-medium">Glass</span>
@@ -30,9 +30,10 @@ export function WaterQuickAdd({ onAddWater }: WaterQuickAddProps) {
           <Button
             variant="outline"
             className="flex flex-col h-auto py-4 border-blue-200 hover:bg-blue-50 hover:text-blue-700"
-            onClick={() => onAddWater(2)}
+            onClick={() => onAddWaterAction(2)}
           >
-            <Bottle className="h-6 w-6 mb-2 text-blue-500" />
+            <Bottle />
+            {/*<Bottle className="h-6 w-6 mb-2 text-blue-500" />*/}
             <span className="text-sm font-medium">Bottle</span>
             <span className="text-xs text-muted-foreground">500ml</span>
           </Button>
@@ -40,7 +41,7 @@ export function WaterQuickAdd({ onAddWater }: WaterQuickAddProps) {
           <Button
             variant="outline"
             className="flex flex-col h-auto py-4 border-blue-200 hover:bg-blue-50 hover:text-blue-700"
-            onClick={() => onAddWater(4)}
+            onClick={() => onAddWaterAction(4)}
           >
             <Droplet className="h-6 w-6 mb-2 text-blue-500" />
             <span className="text-sm font-medium">Large</span>

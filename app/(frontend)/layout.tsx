@@ -3,9 +3,11 @@ import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
 import './globals.css';
 // import { ThemeProvider } from "@/components/theme-provider"
-import Navigation from '@/components/navigation';
+import Navigation from '@/components/common/navigation/navigation';
 import { DateProvider } from '@/app/(frontend)/context/date-context';
 import { Toaster } from 'sonner';
+import Providers from './providers';
+import { AuthModalProvider } from '@/app/(frontend)/context/auth-modal-context';
 
 const inter = Nunito({ weight: '400', subsets: ['latin'], display: 'swap' });
 
@@ -22,17 +24,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/*<ThemeProvider attribute="class" defaultTheme="light">*/}
-        <DateProvider>
-          <div className="flex flex-col min-h-screen">
-            <Suspense fallback={<div>Loading...</div>}>
-              <main className="flex-1">{children}</main>
-            </Suspense>
-            <Navigation />
-          </div>
-          <Toaster />
-        </DateProvider>
-        {/*</ThemeProvider>*/}
+        <Providers>
+          <DateProvider>
+            <AuthModalProvider>
+              <div className="flex flex-col min-h-screen">
+                <Suspense fallback={<div>Loading from layout component ...</div>}>
+                  <main className="flex-1">{children}</main>
+                </Suspense>
+                <Navigation />
+              </div>
+              <Toaster />
+            </AuthModalProvider>
+          </DateProvider>
+        </Providers>
       </body>
     </html>
   );

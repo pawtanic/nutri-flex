@@ -17,7 +17,7 @@ import { cn } from '@/app/(frontend)/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useRouter } from 'next/navigation';
 import { useDate } from '@/app/(frontend)/context/date-context';
-import { RoutesConfig } from '@/components/navigation';
+import { RoutesConfig } from '@/components/common/navigation/navigation';
 
 // Sample workout data - in a real app, this would come from your database
 const workoutData = [

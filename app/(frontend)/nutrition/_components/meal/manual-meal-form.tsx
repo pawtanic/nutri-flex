@@ -46,7 +46,7 @@ export function ManualMealForm() {
         label="Total Protein"
         value={macros.protein}
         max={50}
-        rangeColor="bg-tertiary"
+        rangeColor="bg-quaternary"
         onChange={value => handleMacroChange('protein', value)}
       />
 
@@ -62,11 +62,14 @@ export function ManualMealForm() {
         label="Total Fat"
         value={macros.fat}
         max={50}
-        rangeColor="bg-quaternary"
+        rangeColor="bg-tertiary"
         onChange={value => handleMacroChange('fat', value)}
       />
 
       <AuthRequiredButton
+        successMessageText="Meal saved successfully!"
+        errorMessageText="Failed to save meal. Please try again."
+        successMessageDescription="'You can now view your meal in 'Nutrition' page'"
         loadingText="Saving meal..."
         onAuthenticatedClick={handleSaveMeal}
         className="w-full"

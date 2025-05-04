@@ -1,24 +1,28 @@
-"use client"
+'use client';
 
-import { createContext, useContext, useState, type ReactNode } from "react"
+import { createContext, use, useState, type ReactNode } from 'react';
 
 type DateContextType = {
-  selectedDate: Date
-  setSelectedDate: (date: Date) => void
-}
+  selectedDate: Date;
+  setSelectedDate: (date: Date) => void;
+};
 
-const DateContext = createContext<DateContextType | undefined>(undefined)
+const DateContext = createContext<DateContextType | undefined>(undefined);
 
 export function DateProvider({ children }: { children: ReactNode }) {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
-  return <DateContext.Provider value={{ selectedDate, setSelectedDate }}>{children}</DateContext.Provider>
+  return (
+    <DateContext.Provider value={{ selectedDate, setSelectedDate }}>
+      {children}
+    </DateContext.Provider>
+  );
 }
 
 export function useDate() {
-  const context = useContext(DateContext)
+  const context = use(DateContext);
   if (context === undefined) {
-    throw new Error("useDate must be used within a DateProvider")
+    throw new Error('useDate must be used within a DateProvider');
   }
-  return context
+  return context;
 }

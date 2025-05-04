@@ -17,6 +17,7 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Copy, Save } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Workout } from '@/app/(frontend)/workouts/_components/WorkoutsPageClient';
 
 // Sample template data - in a real app, this would come from your database
 const initialTemplates = [
@@ -67,11 +68,12 @@ const initialTemplates = [
 ];
 
 interface WorkoutTemplatesProps {
-  onUseTemplate: (template: any) => void;
+  initialTemplates: Workout[];
+  onUseTemplateAction: (template: any) => void;
   currentWorkout: any;
 }
 
-export function WorkoutTemplates({ onUseTemplate, currentWorkout }: WorkoutTemplatesProps) {
+export function WorkoutTemplates({ onUseTemplateAction, currentWorkout }: WorkoutTemplatesProps) {
   const [templates, setTemplates] = useState(initialTemplates);
   const [newTemplateName, setNewTemplateName] = useState('');
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
@@ -113,7 +115,7 @@ export function WorkoutTemplates({ onUseTemplate, currentWorkout }: WorkoutTempl
   };
 
   const handleUseTemplate = (template: any) => {
-    onUseTemplate(template);
+    onUseTemplateAction(template);
     toast({
       title: 'Template applied',
       description: `"${template.name}" has been applied to your workout`,

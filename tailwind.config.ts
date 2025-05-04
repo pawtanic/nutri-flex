@@ -29,6 +29,7 @@ const config = {
         tertiary: 'hsl(var(--tertiary))',
         quaternary: 'hsl(var(--quaternary))',
         quinary: 'hsl(var(--quinary))',
+        calories: 'hsl(var(--calories))',
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',

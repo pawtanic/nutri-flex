@@ -6,10 +6,10 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/app/(frontend)/lib/utils';
 
 export const RoutesConfig = {
-  workout: '/workouts',
-  addWorkout: '/workouts/add',
+  workout: '/workouts?tab=workout',
+  addWorkout: '/workouts/add?tab=manual',
   nutrition: '/nutrition',
-  addNutrition: '/nutrition/add',
+  addNutrition: '/nutrition/add?tab=manual',
   water: '/water',
   history: '/history',
 } as const;

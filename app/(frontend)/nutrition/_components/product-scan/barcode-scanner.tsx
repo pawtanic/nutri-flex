@@ -5,12 +5,11 @@ import { Camera, XCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import Quagga from '@ericblade/quagga2';
-import { Macro } from '@/app/(frontend)/nutrition/add/page';
 import Link from 'next/link';
-import { RoutesConfig } from '@/components/navigation';
+import { RoutesConfig } from '@/components/common/navigation/navigation';
 import { linkAkaBtnStyles } from '@/app/(frontend)/utils/constants';
 
-export const getNutrients = (scannedProduct: any): Macro => {
+export const getNutrients = (scannedProduct: any) => {
   // Handle both nutriments and nutriments_estimated
   const nutrients = scannedProduct.nutriments || scannedProduct.nutriments_estimated || {};
   const productName = scannedProduct.product_name || 'Unknown Product';
@@ -30,7 +29,7 @@ export const getNutrients = (scannedProduct: any): Macro => {
 const BASE_URL = 'https://world.openfoodfacts.org/api/v3/product/';
 
 interface BarcodeScannerProps {
-  onScannedProductMacroAction: (value: Macro | null) => void;
+  onScannedProductMacroAction: (value: any | null) => void;
 }
 
 export function BarcodeScanner({ onScannedProductMacroAction }: BarcodeScannerProps) {
@@ -234,7 +233,7 @@ function BarcodeError({ error, onHandleError }: BarcodeErrorProps) {
       <Button className="mt-2 mr-2" onClick={onHandleError}>
         Try Again
       </Button>
-      <Link href={`${RoutesConfig.addNutrition}?tab=manual`} className={linkAkaBtnStyles}>
+      <Link href={RoutesConfig.addNutrition} className={linkAkaBtnStyles}>
         Add manually
       </Link>
     </Alert>

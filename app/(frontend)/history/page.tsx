@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DateHeader } from '@/components/date-header';
-import { WorkoutHistoryCalendar } from '@/components/workout/workout-history-calendar';
-import { WorkoutStats } from '@/components/workout/workout-stats';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Select,
@@ -14,6 +12,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import { WorkoutHistoryCalendar } from '@/app/(frontend)/workouts/_components/workout-history-calendar';
+import { WorkoutStats } from '@/app/(frontend)/workouts/_components/workout-stats';
 
 export default function HistoryPage() {
   const [selectedPeriod, setSelectedPeriod] = useState('month');

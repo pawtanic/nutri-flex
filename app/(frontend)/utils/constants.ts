@@ -17,3 +17,56 @@ export const tabsValues = {
 } as const;
 
 export type Tabs = keyof typeof tabsValues;
+
+export const muscleGroups = [
+  'abdominals',
+  'abductors',
+  'adductors',
+  'biceps',
+  'calves',
+  'chest',
+  'forearms',
+  'glutes',
+  'hamstrings',
+  'lats',
+  'lower_back',
+  'middle_back',
+  'neck',
+  'quadriceps',
+  'traps',
+  'triceps',
+] as const;
+
+export const EQUIPMENT_OPTIONS = {
+  barbell: 'barbell',
+  dumbbell: 'dumbbell',
+  machine: 'machine',
+  all: 'all',
+} as const;
+
+export type EquipmentOption = keyof typeof EQUIPMENT_OPTIONS;
+
+export const DIFFICULTY_OPTIONS = {
+  beginner: 'beginner',
+  intermediate: 'intermediate',
+  expert: 'expert',
+  all: 'all',
+} as const;
+
+export type DifficultyOption = keyof typeof DIFFICULTY_OPTIONS;
+
+export const SORT_OPTIONS = {
+  NAME_ASC: 'NAME_ASC',
+  NAME_DESC: 'NAME_DESC',
+  DIFFICULTY_ASC: 'DIFFICULTY_ASC',
+  DIFFICULTY_DESC: 'DIFFICULTY_DESC',
+} as const;
+
+export type SortOption = keyof typeof SORT_OPTIONS;
+
+export const SORT_OPTION_LABELS = {
+  [SORT_OPTIONS.NAME_ASC]: 'Name (A-Z)',
+  [SORT_OPTIONS.NAME_DESC]: 'Name (Z-A)',
+  [SORT_OPTIONS.DIFFICULTY_ASC]: 'Difficulty (Low-High)',
+  [SORT_OPTIONS.DIFFICULTY_DESC]: 'Difficulty (High-Low)',
+};

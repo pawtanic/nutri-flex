@@ -17,7 +17,7 @@ import {
 } from 'date-fns';
 import { useState } from 'react';
 import { cn } from '@/app/(frontend)/lib/utils';
-import { RoutesConfig } from '@/components/navigation';
+import { RoutesConfig } from '@/components/common/navigation/navigation';
 
 export function WeeklyCalendar() {
   const { selectedDate, setSelectedDate } = useDate();

@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 
 interface DateHeaderProps {
-  title: string;
+  title?: string;
 }
 
 export function DateHeader({ title }: DateHeaderProps) {
