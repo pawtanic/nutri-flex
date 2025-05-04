@@ -68,7 +68,7 @@
   }
 
   .progress {
-    @apply bg-white border border-zinc-400;
+    @apply bg-white border border-zinc-700;
   }
 
   .small-icon {

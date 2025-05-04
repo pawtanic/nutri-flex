@@ -10,18 +10,13 @@ import { DateHeader } from '@/components/date-header';
 import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 import { ExerciseSelector } from '@/app/(frontend)/workouts/_components/exercise-selector';
 import { Wrapper } from '@/components/layout/Wrapper';
-import { WorkoutForm } from '@/app/(frontend)/workouts/_components/workout-form';
-import { ApiExercise } from '@/app/(frontend)/api/public-api';
+import { WorkoutForm, Exercise } from '@/app/(frontend)/workouts/_components/workout-form';
 
 export default function AddWorkoutPage() {
-  const [exercises, setExercises] = useState<ApiExercise[]>([]);
+  // Use a single state with the Exercise type from WorkoutForm
+  const [exercises, setExercises] = useState<Exercise[]>([]);
   const { tab, setTab } = useTabWithUrl({ defaultTab: 'manual' });
-
-  console.log(exercises, 'exercises');
-  // exerciseName:"123"
-  // reps:1
-  // sets:1
-
+  console.log(exercises);
   return (
     <Wrapper>
       <div className="flex items-center">
@@ -42,7 +37,7 @@ export default function AddWorkoutPage() {
           <WorkoutForm exercises={exercises} setExercises={setExercises} />
         </TabsContent>
         <TabsContent value="api" className="mt-4">
-          <ExerciseSelector setExercises={setExercises} />
+          <ExerciseSelector setExercisesAction={setExercises} />
         </TabsContent>
       </Tabs>
     </Wrapper>

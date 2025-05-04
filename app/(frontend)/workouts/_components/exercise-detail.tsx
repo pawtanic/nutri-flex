@@ -10,7 +10,7 @@ import { capitalize, getDifficultyColor } from '@/app/(frontend)/utils/helpers';
 interface ExerciseDetailProps {
   exercise: ApiExercise;
   onBackAction: () => void;
-  onAddExerciseAction: (exercise: ApiExercise) => void;
+  onAddExerciseAction: () => void;
 }
 
 export function ExerciseDetail({
@@ -50,8 +50,8 @@ export function ExerciseDetail({
             <h4 className="font-medium mb-2">Instructions</h4>
             <p className="text-muted-foreground whitespace-pre-line">{exercise.instructions}</p>
           </div>
-          <Button onClick={() => onAddExerciseAction(exercise)} className="w-full">
-            Add This Exercise
+          <Button onClick={onAddExerciseAction} className="w-full">
+            Add to Workout
           </Button>
         </CardContent>
       </Card>

@@ -71,7 +71,7 @@ export default function NutritionPage() {
               </div>
               <Progress
                 value={(dailyTotals.calories.current / dailyTotals.calories.target) * 100}
-                className="h-2"
+                className="h-2 progress"
               />
             </div>
             <div>
@@ -83,7 +83,7 @@ export default function NutritionPage() {
               </div>
               <Progress
                 value={(dailyTotals.protein.current / dailyTotals.protein.target) * 100}
-                className="h-2 bg-green-100"
+                className="h-2 progress"
               />
             </div>
             <div>
@@ -95,7 +95,7 @@ export default function NutritionPage() {
               </div>
               <Progress
                 value={(dailyTotals.carbs.current / dailyTotals.carbs.target) * 100}
-                className="h-2 bg-blue-100"
+                className="h-2 progress"
               />
             </div>
             <div>
@@ -107,7 +107,7 @@ export default function NutritionPage() {
               </div>
               <Progress
                 value={(dailyTotals.fat.current / dailyTotals.fat.target) * 100}
-                className="h-2 bg-orange-100"
+                className="h-2 progress"
               />
             </div>
           </div>

@@ -136,7 +136,12 @@ function ExercisesCard({
             onChange={e => onUpdateExercise(index, 'exerciseName', e.target.value)}
             aria-invalid={!!exerciseNameError}
           />
-          <Button variant="ghost" onClick={() => onRemoveExercise(index)} disabled={isOnlyExercise}>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => onRemoveExercise(index)}
+            disabled={isOnlyExercise}
+          >
             <Trash2
               style={{ width: '24px', height: '24px' }}
               aria-label="Remove exercise from workout"

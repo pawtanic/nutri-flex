@@ -1,4 +1,4 @@
-import fetchWorkouts from '@/app/(frontend)/workouts/_api/fetch-workouts';
+// import fetchWorkouts from '@/app/(frontend)/workouts/_api/fetch-workouts';
 import WorkoutsPageClient from '@/app/(frontend)/workouts/_components/WorkoutsPageClient';
 
 export default async function WorkoutsPage({
@@ -10,7 +10,8 @@ export default async function WorkoutsPage({
 }) {
   // Fetch all necessary data on the server
   // todo: pass generic ?
-  const workoutsData = await fetchWorkouts();
+  const workoutsData = [];
+  // const workoutsData = await fetchWorkouts();
 
   console.log(params);
 

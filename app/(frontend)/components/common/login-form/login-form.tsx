@@ -6,7 +6,6 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { loginAction } from '@/app/(frontend)/auth/auth-actions';
-import { SocialLoginButtons } from '@/components/common/social-login-button/social-login-button';
 import { FormFooter } from '@/components/common/form-footer/form-footer';
 
 const initialState = {

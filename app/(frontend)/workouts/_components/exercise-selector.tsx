@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ApiExercise } from '@/app/(frontend)/api/public-api';
 import { MuscleGroup, useFetchExerciseByMuscleGroup } from '@/hooks/fetchExercises';
 import {
@@ -16,9 +16,11 @@ import { ExerciseFilterPanel } from './exercise-filter-panel';
 import { ExerciseList } from './exercise-list';
 import { ExerciseDetail } from './exercise-detail';
 import { DataSourceAttribution } from './data-source-attribution';
+import { Exercise } from './workout-form';
+import { showSuccessToast } from '@/app/(frontend)/utils/helpers';
 
 interface ExerciseSelectorProps {
-  setExercises: (exercise: ApiExercise) => void;
+  setExercisesAction: React.Dispatch<React.SetStateAction<Exercise[]>>;
 }
 
 interface FilterState {
@@ -28,14 +30,10 @@ interface FilterState {
   isOpen: boolean;
 }
 
-export function ExerciseSelector({ setExercises }): ExerciseSelectorProps {
+export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) {
   const [selectedMuscle, setSelectedMuscle] = useState<MuscleGroup>('');
   const [selectedExercise, setSelectedExercise] = useState<ApiExercise | null>(null);
-  // TODO: transform data ?
   const { data, isLoading, error } = useFetchExerciseByMuscleGroup({ selectedMuscle });
-
-  console.log(selectedMuscle);
-  console.log(selectedExercise);
 
   const [filterState, setFilterState] = useState<FilterState>({
     equipment: EQUIPMENT_OPTIONS.ALL,
@@ -103,7 +101,21 @@ export function ExerciseSelector({ setExercises }): ExerciseSelectorProps {
 
   const addSelectedExercise = () => {
     if (selectedExercise) {
-      setSelectedExercise(selectedExercise);
+      // Transform API exercise to the Exercise format used by WorkoutForm
+      const formattedExercise: Exercise = {
+        exerciseName: selectedExercise.name,
+        sets: 3, // Default values
+        reps: 10, // Default values
+      };
+
+      // Update the exercises array by adding the new exercise
+      setExercisesAction(prevExercises => [...prevExercises, formattedExercise]);
+
+      // Reset selection
+      setSelectedExercise(null);
+
+      // show success toast
+      showSuccessToast('Success', 'The exercise has been added to your workout');
     }
   };
 
