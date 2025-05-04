@@ -38,18 +38,19 @@ export const muscleGroups = [
 ] as const;
 
 export const EQUIPMENT_OPTIONS = {
-  ALL: 'ALL',
-  BARBELL: 'BARBELL',
-  DUMBBELL: 'DUMBBELL',
+  ALL: 'all',
+  BARBELL: 'barbell',
+  DUMBBELL: 'dumbbell',
+  MACHINE: 'machine',
 } as const;
 
 export type EquipmentOption = keyof typeof EQUIPMENT_OPTIONS;
 
 export const DIFFICULTY_OPTIONS = {
-  BEGINNER: 'BEGINNER',
-  INTERMEDIATE: 'INTERMEDIATE',
-  EXPERT: 'EXPERT',
-  ALL: 'ALL',
+  BEGINNER: 'beginner',
+  INTERMEDIATE: 'intermediate',
+  EXPERT: 'expert',
+  ALL: 'all',
 } as const;
 
 export type DifficultyOption = keyof typeof DIFFICULTY_OPTIONS;

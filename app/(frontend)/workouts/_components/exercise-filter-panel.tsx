@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
@@ -13,12 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
-import { capitalize } from '@/app/(frontend)/utils/helpers';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
   EQUIPMENT_OPTIONS,
   DIFFICULTY_OPTIONS,
@@ -38,21 +32,23 @@ interface FilterState {
 
 interface ExerciseFilterPanelProps {
   filterState: FilterState;
-  onFilterChange: (newState: Partial<FilterState>) => void;
+  onFilterChangeAction: (newState: Partial<FilterState>) => void;
+  onSortChangeAction: () => void;
   exerciseCount: number;
 }
 
 export function ExerciseFilterPanel({
   filterState,
-  onFilterChange,
+  onFilterChangeAction,
   exerciseCount,
+  onSortChangeAction,
 }: ExerciseFilterPanelProps) {
   const { equipment, difficulty, sortBy, isOpen } = filterState;
 
   return (
     <Collapsible
       open={isOpen}
-      onOpenChange={(open) => onFilterChange({ isOpen: open })}
+      onOpenChange={open => onFilterChangeAction({ isOpen: open })}
       className="rounded-md shadow bg-white"
     >
       <CollapsibleTrigger asChild>
@@ -75,17 +71,15 @@ export function ExerciseFilterPanel({
             <Label htmlFor="equipment-filter">Equipment</Label>
             <Select
               value={equipment}
-              onValueChange={(value) => onFilterChange({ equipment: value as EquipmentOption })}
+              onValueChange={value => onFilterChangeAction({ equipment: value as EquipmentOption })}
             >
               <SelectTrigger id="equipment-filter" className="mt-1">
-                <SelectValue placeholder="All equipment" />
+                <SelectValue placeholder="All Equipment" />
               </SelectTrigger>
               <SelectContent>
-                {Object.values(EQUIPMENT_OPTIONS).map((equipmentOption) => (
+                {Object.values(EQUIPMENT_OPTIONS).map(equipmentOption => (
                   <SelectItem key={equipmentOption} value={equipmentOption}>
-                    {equipmentOption === EQUIPMENT_OPTIONS.ALL
-                      ? 'All equipment'
-                      : capitalize(equipmentOption)}
+                    {equipmentOption === EQUIPMENT_OPTIONS.ALL ? 'All Equipment' : equipmentOption}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -95,32 +89,35 @@ export function ExerciseFilterPanel({
             <Label htmlFor="difficulty-filter">Difficulty</Label>
             <Select
               value={difficulty}
-              onValueChange={(value) => onFilterChange({ difficulty: value as DifficultyOption })}
+              onValueChange={value =>
+                onFilterChangeAction({ difficulty: value as DifficultyOption })
+              }
             >
               <SelectTrigger id="difficulty-filter" className="mt-1">
-                <SelectValue placeholder="All levels" />
+                <SelectValue placeholder="All Levels" />
               </SelectTrigger>
               <SelectContent>
-                {Object.values(DIFFICULTY_OPTIONS).map((difficultyOption) => (
+                {Object.values(DIFFICULTY_OPTIONS).map(difficultyOption => (
                   <SelectItem key={difficultyOption} value={difficultyOption}>
-                    {difficultyOption === DIFFICULTY_OPTIONS.ALL
-                      ? 'All levels'
-                      : capitalize(difficultyOption)}
+                    {difficultyOption === DIFFICULTY_OPTIONS.ALL ? 'All Levels' : difficultyOption}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
         </div>
-
+        {/*separate comp ?*/}
         <div>
           <Label>Sort By</Label>
           <RadioGroup
             value={sortBy}
-            onValueChange={(value) => onFilterChange({ sortBy: value as SortOption })}
+            onValueChange={value => {
+              onFilterChangeAction({ sortBy: value as SortOption });
+              onSortChangeAction();
+            }}
             className="grid grid-cols-2 gap-4 mt-1"
           >
-            {Object.entries(SORT_OPTIONS).map(([key, value]) => (
+            {Object.entries(SORT_OPTIONS).map(([_, value]) => (
               <div key={value} className="flex items-center space-x-2">
                 <RadioGroupItem value={value} id={value} />
                 <Label htmlFor={value} className="cursor-pointer">
