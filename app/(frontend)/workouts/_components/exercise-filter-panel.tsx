@@ -79,7 +79,7 @@ export function ExerciseFilterPanel({
               <SelectContent>
                 {Object.values(EQUIPMENT_OPTIONS).map(equipmentOption => (
                   <SelectItem key={equipmentOption} value={equipmentOption}>
-                    {equipmentOption === EQUIPMENT_OPTIONS.ALL ? 'All Equipment' : equipmentOption}
+                    {equipmentOption === EQUIPMENT_OPTIONS.all ? 'All Equipment' : equipmentOption}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -99,7 +99,7 @@ export function ExerciseFilterPanel({
               <SelectContent>
                 {Object.values(DIFFICULTY_OPTIONS).map(difficultyOption => (
                   <SelectItem key={difficultyOption} value={difficultyOption}>
-                    {difficultyOption === DIFFICULTY_OPTIONS.ALL ? 'All Levels' : difficultyOption}
+                    {difficultyOption === DIFFICULTY_OPTIONS.all ? 'All Levels' : difficultyOption}
                   </SelectItem>
                 ))}
               </SelectContent>

@@ -90,7 +90,6 @@ export const sortExercises = (exercises: ApiExercise[], filterState: FilterState
       case SORT_OPTIONS.DIFFICULTY_ASC:
         return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
       case SORT_OPTIONS.DIFFICULTY_DESC:
-        // bug !
         return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
       default:
         return 0;

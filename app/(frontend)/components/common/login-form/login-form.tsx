@@ -14,11 +14,8 @@ const initialState = {
   message: '',
 };
 
-export default function LoginForm({ onTabChange }: { onTabChange: () => void }) {
+export default function LoginForm({ onTabChangeAction }: { onTabChangeAction: () => void }) {
   const [state, action, isPending] = useActionState(loginAction, initialState);
-
-  console.log('state', state);
-  console.log(isPending);
 
   return (
     <div className="space-y-4">
@@ -79,7 +76,11 @@ export default function LoginForm({ onTabChange }: { onTabChange: () => void }) 
 
       {/*<SocialLoginButtons />*/}
 
-      <FormFooter text="Don't have an account?" linkText="Sign up here" onClick={onTabChange} />
+      <FormFooter
+        text="Don't have an account?"
+        linkText="Sign up here"
+        onClick={onTabChangeAction}
+      />
     </div>
   );
 }

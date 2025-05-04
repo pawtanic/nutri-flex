@@ -15,7 +15,7 @@ const initialState = {
   success: false,
 };
 
-export default function SignupForm({ onTabChange }: { onTabChange: () => void }) {
+export default function SignupForm({ onTabChangeAction }: { onTabChangeAction: () => void }) {
   const [state, action, isPending] = useActionState(signupAction, initialState);
 
   return (
@@ -99,7 +99,11 @@ export default function SignupForm({ onTabChange }: { onTabChange: () => void })
 
       {/*<SocialLoginButtons />*/}
 
-      <FormFooter text="Already have an account?" linkText="Log in here" onClick={onTabChange} />
+      <FormFooter
+        text="Already have an account?"
+        linkText="Log in here"
+        onClick={onTabChangeAction}
+      />
     </div>
   );
 }

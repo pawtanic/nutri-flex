@@ -55,7 +55,7 @@ export default function WaterPage() {
         </TabsList>
 
         <TabsContent value="quick-add" className="mt-4">
-          <WaterQuickAdd onAddWater={handleWaterChange} />
+          <WaterQuickAdd onAddWaterAction={handleWaterChange} />
         </TabsContent>
 
         <TabsContent value="history" className="mt-4">

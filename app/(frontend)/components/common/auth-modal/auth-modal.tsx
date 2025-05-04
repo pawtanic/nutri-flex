@@ -33,10 +33,10 @@ export default function AuthModal({ isOpen, onCloseAction }: AuthModalProps) {
             <TabsTrigger value="signup">Sign Up</TabsTrigger>
           </TabsList>
           <TabsContent value="login" className="mt-4">
-            <LoginForm onTabChange={() => setActiveTab('signup')} />
+            <LoginForm onTabChangeAction={() => setActiveTab('signup')} />
           </TabsContent>
           <TabsContent value="signup" className="mt-4">
-            <SignupForm onTabChange={() => setActiveTab('login')} />
+            <SignupForm onTabChangeAction={() => setActiveTab('login')} />
           </TabsContent>
         </Tabs>
       </DialogContent>

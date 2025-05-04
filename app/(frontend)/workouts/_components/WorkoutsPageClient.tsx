@@ -12,14 +12,29 @@ import { linkAkaBtnStyles } from '@/app/(frontend)/utils/constants';
 import { RoutesConfig } from '@/components/common/navigation/navigation';
 import { WorkoutTemplates } from '@/app/(frontend)/workouts/_components/workout-templates';
 import { useTabWithUrl } from '@/hooks/use-tab-with-url';
+import { Exercise } from '@/app/(frontend)/workouts/_components/workout-form';
+
+export interface Workout {
+  id?: string;
+  name: string;
+  exercises: Exercise[];
+  date: string;
+}
+
+interface WorkoutsPageClientProps {
+  initialWorkouts: Workout[];
+  initialTemplates: Workout[];
+  initialTab: string;
+}
 
 export default function WorkoutsPageClient({
   initialWorkouts = [],
   initialTemplates = [],
   initialTab = 'workout',
-}) {
+}: WorkoutsPageClientProps) {
   const { selectedDate } = useDate();
-  const [workouts, setWorkouts] = useState(initialWorkouts);
+  // probably not needed ?
+  const [workouts] = useState(initialWorkouts);
   const { tab, setTab } = useTabWithUrl({ defaultTab: initialTab });
   const [currentWorkout, setCurrentWorkout] = useState(() => {
     if (workouts.length > 0) {
@@ -35,9 +50,10 @@ export default function WorkoutsPageClient({
 
   const hasWorkouts = workouts.length > 0;
 
-  const handleUseTemplate = template => {
+  const handleUseTemplate = (template: { name: string; exercises: Exercise[] }) => {
     setCurrentWorkout({
       name: template.name,
+      // @ts-ignore - to be fixed
       exercises: [...template.exercises],
     });
   };
@@ -96,7 +112,7 @@ export default function WorkoutsPageClient({
         <TabsContent value="templates" className="mt-4">
           <WorkoutTemplates
             initialTemplates={initialTemplates}
-            onUseTemplate={handleUseTemplate}
+            onUseTemplateAction={handleUseTemplate}
             currentWorkout={currentWorkout}
           />
 
@@ -112,7 +128,7 @@ export default function WorkoutsPageClient({
                     {currentWorkout.exercises.map((exercise, index) => (
                       <li key={index} className="text-sm">
                         <div className="flex justify-between">
-                          <span>{exercise.name}</span>
+                          <span>{exercise.exerciseName}</span>
                           <span className="text-muted-foreground">
                             {exercise.sets} × {exercise.reps}
                           </span>
