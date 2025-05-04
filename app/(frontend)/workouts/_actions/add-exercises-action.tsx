@@ -1,7 +1,8 @@
 'use server';
 
 import { exerciseSchema } from '@/app/(frontend)/workouts/_schemas/exercise-schema';
-import { ActionResponse, Exercise } from '@/app/(frontend)/workouts/_components/workout-form';
+import { Exercise } from '@/app/(frontend)/workouts/_components/workout-form';
+import { ActionResponse } from '@/app/(frontend)/types/common-types';
 
 export async function addExercisesAction(
   _: ActionResponse,
@@ -40,7 +41,7 @@ export async function addExercisesAction(
       return (result as { success: true; data: any }).data;
     });
 
-    // Create exercises in Payload CMS
+    // Create exercises in Payload CMS - move to payload api
     const responses = await Promise.all(
       validExercises.map(exercise =>
         fetch(`${process.env.PAYLOAD_API_URL}/api/exercises`, {

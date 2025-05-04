@@ -6,18 +6,21 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Dumbbell } from 'lucide-react';
 import { ApiExercise } from '@/app/(frontend)/api/public-api';
 import { capitalize, getDifficultyColor } from '@/app/(frontend)/utils/helpers';
-import { AuthRequiredButton } from '@/components/common/auth-button/auth-button';
 
 interface ExerciseDetailProps {
   exercise: ApiExercise;
-  onBack: () => void;
-  onAddExercise: (exercise: ApiExercise) => void;
+  onBackAction: () => void;
+  onAddExerciseAction: (exercise: ApiExercise) => void;
 }
 
-export function ExerciseDetail({ exercise, onBack, onAddExercise }: ExerciseDetailProps) {
+export function ExerciseDetail({
+  exercise,
+  onBackAction,
+  onAddExerciseAction,
+}: ExerciseDetailProps) {
   return (
     <div className="space-y-4">
-      <Button variant="ghost" size="sm" className="pl-0" onClick={onBack}>
+      <Button variant="ghost" size="sm" className="pl-0" onClick={onBackAction}>
         <ArrowLeft className="h-4 w-4 mr-1" />
         Back to exercises
       </Button>
@@ -39,27 +42,17 @@ export function ExerciseDetail({ exercise, onBack, onAddExercise }: ExerciseDeta
                 )}
                 {capitalize(exercise.equipment)}
               </Badge>
-
               <Badge variant="outline">{capitalize(exercise.type)}</Badge>
             </div>
           </div>
-
           <hr />
-
           <div>
             <h4 className="font-medium mb-2">Instructions</h4>
             <p className="text-muted-foreground whitespace-pre-line">{exercise.instructions}</p>
           </div>
-          <AuthRequiredButton
-            loadingText="Saving..."
-            successMessageText="Exercise saved successfully!"
-            successMessageDescription="You can now view your added exercise in the 'Workouts' page."
-            errorMessageText="Failed to save exercise. Please try again."
-            className="w-full"
-            onAuthenticatedClick={() => onAddExercise(exercise)}
-          >
+          <Button onClick={() => onAddExerciseAction(exercise)} className="w-full">
             Add This Exercise
-          </AuthRequiredButton>
+          </Button>
         </CardContent>
       </Card>
     </div>

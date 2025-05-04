@@ -72,7 +72,7 @@ export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
             </Button>
           </div>
           {!hasExercises && <NoExerciseMessage />}
-          {exercises.map((exercise, index) => {
+          {exercises.map((_, index) => {
             return (
               <ExercisesCard
                 key={index}

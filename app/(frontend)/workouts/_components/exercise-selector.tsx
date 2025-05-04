@@ -17,9 +17,9 @@ import { ExerciseList } from './exercise-list';
 import { ExerciseDetail } from './exercise-detail';
 import { DataSourceAttribution } from './data-source-attribution';
 
-// interface ExerciseSelectorProps {
-//   onSelectExercise: (exercise: Exercise) => void;
-// }
+interface ExerciseSelectorProps {
+  setExercises: (exercise: ApiExercise) => void;
+}
 
 interface FilterState {
   equipment: EquipmentOption;
@@ -28,12 +28,15 @@ interface FilterState {
   isOpen: boolean;
 }
 
-export function ExerciseSelector() {
-  // Selection state
+export function ExerciseSelector({ setExercises }): ExerciseSelectorProps {
   const [selectedMuscle, setSelectedMuscle] = useState<MuscleGroup>('');
   const [selectedExercise, setSelectedExercise] = useState<ApiExercise | null>(null);
+  // TODO: transform data ?
+  const { data, isLoading, error } = useFetchExerciseByMuscleGroup({ selectedMuscle });
 
-  // Filter state
+  console.log(selectedMuscle);
+  console.log(selectedExercise);
+
   const [filterState, setFilterState] = useState<FilterState>({
     equipment: EQUIPMENT_OPTIONS.ALL,
     difficulty: DIFFICULTY_OPTIONS.ALL,
@@ -41,11 +44,7 @@ export function ExerciseSelector() {
     isOpen: false,
   });
 
-  // Filtered exercises
   const [filteredExercises, setFilteredExercises] = useState<ApiExercise[]>([]);
-
-  // Fetch exercises
-  const { data, isLoading, error } = useFetchExerciseByMuscleGroup({ selectedMuscle });
 
   // Apply filters when data or filter state changes
   useEffect(() => {
@@ -93,7 +92,6 @@ export function ExerciseSelector() {
     setFilteredExercises(result);
   }, [data, filterState]);
 
-  // Event handlers
   const selectMuscleGroup = (muscle: MuscleGroup) => {
     setSelectedMuscle(muscle);
     setSelectedExercise(null);
@@ -105,7 +103,7 @@ export function ExerciseSelector() {
 
   const addSelectedExercise = () => {
     if (selectedExercise) {
-      // onSelectExercise(selectedExercise);
+      setSelectedExercise(selectedExercise);
     }
   };
 
@@ -116,7 +114,6 @@ export function ExerciseSelector() {
   return (
     <div className="space-y-4">
       <MuscleGroupSelector selectedMuscle={selectedMuscle} onSelectMuscle={selectMuscleGroup} />
-
       {selectedMuscle && !selectedExercise && (
         <ExerciseFilterPanel
           filterState={filterState}
@@ -130,15 +127,15 @@ export function ExerciseSelector() {
       {selectedExercise ? (
         <ExerciseDetail
           exercise={selectedExercise}
-          onBack={() => setSelectedExercise(null)}
-          onAddExercise={addSelectedExercise}
+          onBackAction={() => setSelectedExercise(null)}
+          onAddExerciseAction={addSelectedExercise}
         />
       ) : (
         <ExerciseList
           exercises={filteredExercises}
           isLoading={isLoading}
           selectedMuscle={selectedMuscle}
-          onSelectExercise={selectExercise}
+          onSelectExerciseAction={selectExercise}
         />
       )}
 

@@ -17,6 +17,11 @@ export default function AddWorkoutPage() {
   const [exercises, setExercises] = useState<ApiExercise[]>([]);
   const { tab, setTab } = useTabWithUrl({ defaultTab: 'manual' });
 
+  console.log(exercises, 'exercises');
+  // exerciseName:"123"
+  // reps:1
+  // sets:1
+
   return (
     <Wrapper>
       <div className="flex items-center">
@@ -37,7 +42,7 @@ export default function AddWorkoutPage() {
           <WorkoutForm exercises={exercises} setExercises={setExercises} />
         </TabsContent>
         <TabsContent value="api" className="mt-4">
-          <ExerciseSelector />
+          <ExerciseSelector setExercises={setExercises} />
         </TabsContent>
       </Tabs>
     </Wrapper>

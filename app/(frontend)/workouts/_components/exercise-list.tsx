@@ -9,14 +9,14 @@ interface ExerciseListProps {
   exercises: ApiExercise[];
   isLoading: boolean;
   selectedMuscle: string;
-  onSelectExercise: (exercise: ApiExercise) => void;
+  onSelectExerciseAction: (exercise: ApiExercise) => void;
 }
 
 export function ExerciseList({
   exercises,
   isLoading,
   selectedMuscle,
-  onSelectExercise,
+  onSelectExerciseAction,
 }: ExerciseListProps) {
   if (isLoading) {
     return (
@@ -48,7 +48,7 @@ export function ExerciseList({
     <ScrollArea className="h-[400px]">
       <div className="space-y-2">
         {exercises.map((exercise, index) => (
-          <ExerciseCard key={index} exercise={exercise} onSelect={onSelectExercise} />
+          <ExerciseCard key={index} exercise={exercise} onSelect={onSelectExerciseAction} />
         ))}
       </div>
     </ScrollArea>
