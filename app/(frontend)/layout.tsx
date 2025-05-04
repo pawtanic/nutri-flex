@@ -8,6 +8,7 @@ import { DateProvider } from '@/app/(frontend)/context/date-context';
 import { Toaster } from 'sonner';
 import Providers from './providers';
 import { AuthModalProvider } from '@/app/(frontend)/context/auth-modal-context';
+import { Analytics } from '@vercel/analytics/react';
 
 const inter = Nunito({ weight: '400', subsets: ['latin'], display: 'swap' });
 
@@ -37,6 +38,7 @@ export default function RootLayout({
             </AuthModalProvider>
           </DateProvider>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
