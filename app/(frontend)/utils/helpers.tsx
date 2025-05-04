@@ -80,8 +80,7 @@ export const showErrorToast = ({ title, description }: ErrorToastOptions) => {
 };
 
 export const sortExercises = (exercises: ApiExercise[], filterState: FilterState) => {
-  console.log(exercises);
-  console.log(filterState);
+  const difficultyOrder = { beginner: 1, intermediate: 2, expert: 3 };
   return exercises.toSorted((a, b) => {
     switch (filterState.sortBy) {
       case SORT_OPTIONS.NAME_ASC:
@@ -89,11 +88,9 @@ export const sortExercises = (exercises: ApiExercise[], filterState: FilterState
       case SORT_OPTIONS.NAME_DESC:
         return b.name.localeCompare(a.name);
       case SORT_OPTIONS.DIFFICULTY_ASC:
-        const difficultyOrder = { beginner: 1, intermediate: 2, expert: 3 };
         return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
       case SORT_OPTIONS.DIFFICULTY_DESC:
-        const difficultyOrderDesc = { beginner: 3, intermediate: 2, expert: 1 };
-        return difficultyOrderDesc[a.difficulty] - difficultyOrderDesc[a.difficulty];
+        return difficultyOrder[a.difficulty] - difficultyOrder[a.difficulty];
       default:
         return 0;
     }
@@ -110,11 +107,11 @@ export const filterExercises = (
 
   let result = [...exercises];
 
-  if (filterState.equipment !== EQUIPMENT_OPTIONS.ALL) {
+  if (filterState.equipment !== EQUIPMENT_OPTIONS.all) {
     result = result.filter(exercise => exercise.equipment === filterState.equipment);
   }
 
-  if (filterState.difficulty !== DIFFICULTY_OPTIONS.ALL) {
+  if (filterState.difficulty !== DIFFICULTY_OPTIONS.all) {
     result = result.filter(exercise => exercise.difficulty === filterState.difficulty);
   }
 

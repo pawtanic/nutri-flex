@@ -50,8 +50,8 @@ export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) 
   const router = useRouter();
 
   const [filterState, setFilterState] = useState<FilterState>({
-    equipment: EQUIPMENT_OPTIONS.ALL,
-    difficulty: DIFFICULTY_OPTIONS.ALL,
+    equipment: EQUIPMENT_OPTIONS.all,
+    difficulty: DIFFICULTY_OPTIONS.all,
     sortBy: SORT_OPTIONS.NAME_ASC,
     isOpen: false,
   });

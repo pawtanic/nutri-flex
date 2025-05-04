@@ -13,10 +13,8 @@ import { Wrapper } from '@/components/layout/Wrapper';
 import { WorkoutForm, Exercise } from '@/app/(frontend)/workouts/_components/workout-form';
 
 export default function AddWorkoutPage() {
-  // Use a single state with the Exercise type from WorkoutForm
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const { tab, setTab } = useTabWithUrl({ defaultTab: 'manual' });
-  console.log(exercises);
   return (
     <Wrapper>
       <div className="flex items-center">
