@@ -18,7 +18,7 @@ export function StreakCard({ className }: StreakCardProps) {
           <div className="flex items-center">
             <div className="border p-2 rounded-full mr-3">
               {/*todo: color var*/}
-              <Flame className="h-8 w-8 text-[#FF5C2B]" />
+              <Flame className="h-8 w-8 text-calories" />
             </div>
             <div>
               <p className="text-muted-foreground">Current Streak</p>

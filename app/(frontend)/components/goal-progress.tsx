@@ -20,7 +20,7 @@ const goals = [
     unit: 'glasses',
   },
   {
-    name: 'Calorie Goal',
+    name: 'Calories Goal',
     current: 1800,
     target: 2000,
     percentage: 90,
@@ -45,8 +45,8 @@ const getFillColor = (goalName: Goal['name']): string => {
       return 'bg-primary';
     case 'Daily Water':
       return 'bg-quinary';
-    case 'Calorie Goal':
-      return 'bg-tertiary';
+    case 'Calories Goal':
+      return 'bg-calories';
     case 'Protein Intake':
       return 'bg-quaternary';
     default:

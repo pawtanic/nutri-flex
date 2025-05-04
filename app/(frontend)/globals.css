@@ -28,6 +28,7 @@
     --tertiary: 92, 86%, 68%;
     --quaternary: 55 100% 77%;
     --quinary: 202 82% 85%;
+    --calories: 14 100% 58%;
   }
 
   .dark {
@@ -68,7 +69,7 @@
   }
 
   .progress {
-    @apply bg-white border border-zinc-700;
+    @apply bg-white border border-zinc-500;
   }
 
   .small-icon {

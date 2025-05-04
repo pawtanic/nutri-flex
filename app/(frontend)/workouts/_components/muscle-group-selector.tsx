@@ -14,16 +14,23 @@ import { capitalize } from '@/app/(frontend)/utils/helpers';
 
 interface MuscleGroupSelectorProps {
   selectedMuscle: MuscleGroup;
-  onSelectMuscle: (muscle: MuscleGroup) => void;
+  onSelectMuscleAction: (muscle: MuscleGroup) => void;
+  isLoading: boolean;
 }
 
-export function MuscleGroupSelector({ selectedMuscle, onSelectMuscle }: MuscleGroupSelectorProps) {
+export function MuscleGroupSelector({
+  selectedMuscle,
+  onSelectMuscleAction,
+  isLoading,
+}: MuscleGroupSelectorProps) {
   return (
     <div className="container max-w-md mx-auto pt-6 px-4">
       <Label htmlFor="muscle-group">Select Muscle Group</Label>
-      <Select value={selectedMuscle} onValueChange={onSelectMuscle}>
+      <Select value={selectedMuscle} onValueChange={onSelectMuscleAction}>
         <SelectTrigger id="muscle-group" className="mt-1 shadow border-none">
-          <SelectValue placeholder="Choose a muscle group" />
+          <SelectValue
+            placeholder={isLoading ? 'Loading muscle groups...' : 'Choose a muscle group'}
+          />
         </SelectTrigger>
         <SelectContent>
           {muscleGroups?.map(muscle => (

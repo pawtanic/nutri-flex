@@ -46,7 +46,7 @@ export function ManualMealForm() {
         label="Total Protein"
         value={macros.protein}
         max={50}
-        rangeColor="bg-tertiary"
+        rangeColor="bg-quaternary"
         onChange={value => handleMacroChange('protein', value)}
       />
 
@@ -62,7 +62,7 @@ export function ManualMealForm() {
         label="Total Fat"
         value={macros.fat}
         max={50}
-        rangeColor="bg-quaternary"
+        rangeColor="bg-tertiary"
         onChange={value => handleMacroChange('fat', value)}
       />
 

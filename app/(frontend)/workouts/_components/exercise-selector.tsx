@@ -15,9 +15,10 @@ import { MuscleGroupSelector } from './muscle-group-selector';
 import { ExerciseFilterPanel } from './exercise-filter-panel';
 import { ExerciseList } from './exercise-list';
 import { ExerciseDetail } from './exercise-detail';
-import { DataSourceAttribution } from './data-source-attribution';
 import { Exercise } from './workout-form';
 import { showSuccessToast } from '@/app/(frontend)/utils/helpers';
+import WarningAlert from '@/components/common/warning-alert/warning-alert';
+import Link from 'next/link';
 
 interface ExerciseSelectorProps {
   setExercisesAction: React.Dispatch<React.SetStateAction<Exercise[]>>;
@@ -98,7 +99,7 @@ export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) 
   const selectExercise = (exercise: ApiExercise) => {
     setSelectedExercise(exercise);
   };
-
+  console.log(selectedExercise);
   const addSelectedExercise = () => {
     if (selectedExercise) {
       // Transform API exercise to the Exercise format used by WorkoutForm
@@ -108,7 +109,6 @@ export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) 
         reps: 10, // Default values
       };
 
-      // Update the exercises array by adding the new exercise
       setExercisesAction(prevExercises => [...prevExercises, formattedExercise]);
 
       // Reset selection
@@ -125,7 +125,11 @@ export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) 
 
   return (
     <div className="space-y-4">
-      <MuscleGroupSelector selectedMuscle={selectedMuscle} onSelectMuscle={selectMuscleGroup} />
+      <MuscleGroupSelector
+        isLoading={isLoading}
+        selectedMuscle={selectedMuscle}
+        onSelectMuscleAction={selectMuscleGroup}
+      />
       {selectedMuscle && !selectedExercise && (
         <ExerciseFilterPanel
           filterState={filterState}
@@ -133,9 +137,6 @@ export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) 
           exerciseCount={filteredExercises.length}
         />
       )}
-
-      {error && <p className="text-red-500">Error fetching exercises: {error.message}</p>}
-
       {selectedExercise ? (
         <ExerciseDetail
           exercise={selectedExercise}
@@ -144,14 +145,20 @@ export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) 
         />
       ) : (
         <ExerciseList
+          error={error}
           exercises={filteredExercises}
           isLoading={isLoading}
           selectedMuscle={selectedMuscle}
           onSelectExerciseAction={selectExercise}
         />
       )}
-
-      <DataSourceAttribution />
+      {error && (
+        <WarningAlert description="The results rely on free data from Ninja API">
+          <Link href="https://api-ninjas.com/api/exercises" className="ml-2 underline">
+            Learn more
+          </Link>
+        </WarningAlert>
+      )}
     </div>
   );
 }

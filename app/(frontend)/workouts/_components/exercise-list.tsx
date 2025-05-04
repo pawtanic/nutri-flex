@@ -4,12 +4,15 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Loader2, Dumbbell } from 'lucide-react';
 import { ApiExercise } from '@/app/(frontend)/api/public-api';
 import { ExerciseCard } from './exercise-card';
+import FormErrorMessage from '@/components/common/form-error-message/form-error-message';
+import React from 'react';
 
 interface ExerciseListProps {
   exercises: ApiExercise[];
   isLoading: boolean;
   selectedMuscle: string;
   onSelectExerciseAction: (exercise: ApiExercise) => void;
+  error: Error | null;
 }
 
 export function ExerciseList({
@@ -17,7 +20,17 @@ export function ExerciseList({
   isLoading,
   selectedMuscle,
   onSelectExerciseAction,
+  error,
 }: ExerciseListProps) {
+  if (error) {
+    return (
+      <FormErrorMessage
+        className="text-center"
+        errorMessage={`Error fetching exercises: Please use manual mode.`}
+      />
+    );
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-8">
