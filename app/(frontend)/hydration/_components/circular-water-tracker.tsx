@@ -42,14 +42,14 @@ const calculateWaterLevel = (percentage: number): number => {
 export function CircularWaterTracker({ percentage, current, goal }: CircularWaterTrackerProps) {
   const { radius, circumference, strokeDashoffset } = calculateCircleProperties(percentage);
 
-  // Calculate water in ml
+  // Calculate hydration in ml
   const goalMl = goal * 250;
 
   // Animation refs
   const waveRef = useRef<SVGPathElement>(null);
   const styleRef = useRef<HTMLStyleElement | null>(null);
 
-  // Set up water wave animation on component mount and when percentage changes
+  // Set up hydration wave animation on component mount and when percentage changes
   useEffect(() => {
     // Create style element if it doesn't exist
     if (!styleRef.current) {

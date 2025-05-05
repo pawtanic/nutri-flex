@@ -140,3 +140,20 @@ export const getExerciseDisplayName = (exercise: Exercise, index: number) => {
   }
   return `New Exercise ${index + 1}`;
 };
+
+type Goal = (typeof goals)[number];
+
+export const getFillColor = (goalName: Goal['name']): string => {
+  switch (goalName) {
+    case 'Weekly Workouts':
+      return 'bg-primary';
+    case 'Daily Water':
+      return 'bg-quinary';
+    case 'Calories Goal':
+      return 'bg-calories';
+    case 'Protein Intake':
+      return 'bg-quaternary';
+    default:
+      return 'bg-primary';
+  }
+};

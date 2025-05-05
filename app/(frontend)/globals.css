@@ -109,8 +109,8 @@
     animation: waterRipple 2s infinite ease-in-out;
   }
 
-  /*.water-gradient {*/
-  /*  @apply bg-gradient-to-br from-water-light to-water;*/
+  /*.hydration-gradient {*/
+  /*  @apply bg-gradient-to-br from-hydration-light to-hydration;*/
   /*}*/
 
   /*.workout-gradient {*/

@@ -19,11 +19,13 @@ export interface Workout {
   name: string;
   exercises: Exercise[];
   date: string;
+  createdBy: string;
 }
 
 interface WorkoutsPageClientProps {
   initialWorkouts: Workout[];
-  initialTemplates: Workout[];
+  initialTemplates: any[];
+  // initialTemplates: TemplateWorkout[];
   initialTab: string;
 }
 
@@ -33,18 +35,22 @@ export default function WorkoutsPageClient({
   initialTab = 'workout',
 }: WorkoutsPageClientProps) {
   const { selectedDate } = useDate();
-  // probably not needed ?
+
+  // messed up logic
   const [workouts] = useState(initialWorkouts);
+
   const { tab, setTab } = useTabWithUrl({ defaultTab: initialTab });
+
+  // messed up logic
   const [currentWorkout, setCurrentWorkout] = useState(() => {
+    const defaultWorkout = { name: '', exercises: [] };
     if (workouts.length > 0) {
       const [workout] = workouts.filter(
         workout => new Date(workout.date).toDateString() === new Date(selectedDate).toDateString()
       );
-      // to do extract obj to var
-      return workout || { name: '', exercises: [] };
+      return workout || defaultWorkout;
     } else {
-      return { name: '', exercises: [] };
+      return defaultWorkout;
     }
   });
 
@@ -58,6 +64,8 @@ export default function WorkoutsPageClient({
     });
   };
 
+  console.log(workouts);
+
   return (
     <div className="container max-w-md mx-auto pb-20 pt-6 px-4">
       <DateHeader title="Workouts" />
@@ -66,6 +74,8 @@ export default function WorkoutsPageClient({
           <TabsTrigger value="workout">Workout</TabsTrigger>
           <TabsTrigger value="templates">Templates</TabsTrigger>
         </TabsList>
+
+        <p>You can find all your workouts here.</p>
 
         <TabsContent value="workout" className="mt-4">
           <div className="flex justify-end mb-4">
@@ -80,31 +90,34 @@ export default function WorkoutsPageClient({
               <Card key={workout.id} className="mb-4">
                 <CardHeader className="pb-2">
                   <div className="flex justify-between items-start">
-                    {/*<CardTitle className="text-lg">{workout.name}</CardTitle>*/}
+                    <CardTitle className="text-lg">{workout.name}</CardTitle>
                     <Button variant="ghost" size="icon">
                       <Copy className="h-4 w-4" />
                     </Button>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  {/*<ul className="space-y-2">*/}
-                  {/*  {workout.exercises.map((exercise, index) => (*/}
-                  {/*    <li key={index} className="text-sm">*/}
-                  {/*      <div className="flex justify-between">*/}
-                  {/*        <span>{exercise.name}</span>*/}
-                  {/*        <span className="text-muted-foreground">*/}
-                  {/*          {exercise.sets} × {exercise.reps}*/}
-                  {/*        </span>*/}
-                  {/*      </div>*/}
-                  {/*    </li>*/}
-                  {/*  ))}*/}
-                  {/*</ul>*/}
+                  <ul className="space-y-2">
+                    {/*todo - create component*/}
+                    {workout.exercises.map((exercise, index) => (
+                      <li key={index} className="text-sm">
+                        <div className="flex justify-between">
+                          <span>{exercise.exerciseName}</span>
+                          <span className="text-muted-foreground">
+                            {exercise.sets} × {exercise.reps}
+                          </span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 </CardContent>
               </Card>
             ))
           ) : (
             <div className="text-center py-12">
-              <p className="text-muted-foreground mb-4">No workouts for this date</p>
+              <p className="text-muted-foreground mb-4">
+                We could not find any workouts for this date
+              </p>
             </div>
           )}
         </TabsContent>

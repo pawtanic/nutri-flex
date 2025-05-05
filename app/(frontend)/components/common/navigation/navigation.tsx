@@ -10,14 +10,14 @@ export const RoutesConfig = {
   addWorkout: '/workouts/add?tab=manual',
   nutrition: '/nutrition',
   addNutrition: '/nutrition/add?tab=manual',
-  water: '/water',
+  hydration: '/hydration',
   history: '/history',
 } as const;
 
 export const navItems = [
   { name: 'Home', href: '/', icon: Home },
   { name: 'Workouts', href: RoutesConfig.workout, icon: Dumbbell },
-  { name: 'Water', href: '/water', icon: Droplet },
+  { name: 'Hydration', href: '/hydration', icon: Droplet },
   { name: 'Nutrition', href: '/nutrition', icon: Apple },
   { name: 'History', href: '/history', icon: BarChart2 },
 ] as const;
