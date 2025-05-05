@@ -11,6 +11,7 @@ import {
   SortOption,
 } from '@/app/(frontend)/utils/constants';
 import { Exercise } from '@/app/(frontend)/workouts/_components/workout-form';
+import { goals } from '@/components/goal-progress';
 
 export const capitalizeAll = (str: string): string => {
   return str

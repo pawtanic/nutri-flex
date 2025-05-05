@@ -1,20 +1,10 @@
-// import fetchWorkouts from '@/app/(frontend)/workouts/_api/fetch-workouts';
 import WorkoutsPageClient from '@/app/(frontend)/workouts/_components/WorkoutsPageClient';
-import { Metadata } from 'next';
+import { Suspense } from 'react';
 // import fetchWorkouts from '@/app/(frontend)/workouts/_api/fetch-workouts';
 
-// lib/mock/workouts.ts
-
-export const metadata: Metadata = {
-  title: 'Workouts',
-};
-
-export default async function WorkoutsPage() {
-  // const workouts = await fetchWorkouts();
-  // console.log(workouts);
-  // TODO: add id ?
-  // !! replace with payload api
-  const workoutsData = [
+const fetchData = async () => {
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  return [
     {
       id: '1',
       name: 'Push Day',
@@ -71,8 +61,15 @@ export default async function WorkoutsPage() {
       createdBy: 'user1',
     },
   ];
-  // const workoutsData = await fetchWorkouts();
+};
 
-  // Pass everything to the client component
-  return <WorkoutsPageClient initialWorkouts={workoutsData} initialTab="workout" />;
+export default async function WorkoutsPage() {
+  // const workouts = await fetchWorkouts();
+  const workoutsData = await fetchData();
+
+  return (
+    <Suspense>
+      <WorkoutsPageClient initialWorkouts={workoutsData} initialTab="workout" />
+    </Suspense>
+  );
 }

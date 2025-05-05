@@ -93,6 +93,12 @@ export default function WorkoutsPageClient({
                       </li>
                     ))}
                   </ul>
+                  <Link
+                    href={`${RoutesConfig.editWorkout}/${workout.id}`}
+                    className={`${linkAkaBtnStyles} w-full mt-6`}
+                  >
+                    View Details
+                  </Link>
                 </CardContent>
               </Card>
             ))

@@ -5,7 +5,7 @@ import { Progress } from '@/components/ui/progress';
 import { getFillColor } from '@/app/(frontend)/utils/helpers';
 
 // Sample data - in a real app, this would be calculated based on the period
-const goals = [
+export const goals = [
   {
     name: 'Weekly Workouts',
     current: 3,
