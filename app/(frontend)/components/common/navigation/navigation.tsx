@@ -16,7 +16,7 @@ export const RoutesConfig = {
 
 export const navItems = [
   { name: 'Home', href: '/', icon: Home },
-  { name: 'Workouts', href: RoutesConfig.workout, icon: Dumbbell },
+  { name: 'Workouts', href: '/workouts', icon: Dumbbell },
   { name: 'Hydration', href: '/hydration', icon: Droplet },
   { name: 'Nutrition', href: '/nutrition', icon: Apple },
   { name: 'History', href: '/history', icon: BarChart2 },
@@ -33,8 +33,8 @@ const getIconColor = (isActive: boolean, itemName: NavigationItem): string => {
     case name.startsWith('home'):
       return 'hsl(var(--quaternary))';
     case name.startsWith('workouts'):
-      return 'hsl(var(--secondary))';
-    case name.startsWith('water'):
+      return 'hsl(var(--primary))';
+    case name.startsWith('hydration'):
       return 'hsl(var(--quinary))';
     case name.startsWith('nutrition'):
       return 'hsl(var(--tertiary))';

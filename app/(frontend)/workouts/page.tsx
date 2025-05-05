@@ -1,6 +1,7 @@
 // import fetchWorkouts from '@/app/(frontend)/workouts/_api/fetch-workouts';
 import WorkoutsPageClient from '@/app/(frontend)/workouts/_components/WorkoutsPageClient';
 import { Metadata } from 'next';
+import fetchWorkouts from '@/app/(frontend)/workouts/_api/fetch-workouts';
 
 // lib/mock/workouts.ts
 
@@ -9,6 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default async function WorkoutsPage() {
+  // const workouts = await fetchWorkouts();
+  // console.log(workouts);
   // TODO: add id ?
   // !! replace with payload api
   const workoutsData = [

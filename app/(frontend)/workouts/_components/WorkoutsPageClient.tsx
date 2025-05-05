@@ -24,14 +24,14 @@ export interface Workout {
 
 interface WorkoutsPageClientProps {
   initialWorkouts: Workout[];
-  initialTemplates: any[];
+  // initialTemplates: any[];
   // initialTemplates: TemplateWorkout[];
   initialTab: string;
 }
 
 export default function WorkoutsPageClient({
   initialWorkouts = [],
-  initialTemplates = [],
+  // initialTemplates = [],
   initialTab = 'workout',
 }: WorkoutsPageClientProps) {
   const { selectedDate } = useDate();
@@ -41,28 +41,28 @@ export default function WorkoutsPageClient({
 
   const { tab, setTab } = useTabWithUrl({ defaultTab: initialTab });
 
-  // messed up logic
-  const [currentWorkout, setCurrentWorkout] = useState(() => {
-    const defaultWorkout = { name: '', exercises: [] };
-    if (workouts.length > 0) {
-      const [workout] = workouts.filter(
-        workout => new Date(workout.date).toDateString() === new Date(selectedDate).toDateString()
-      );
-      return workout || defaultWorkout;
-    } else {
-      return defaultWorkout;
-    }
-  });
+  // messed up logic ?
+  // const [currentWorkout, setCurrentWorkout] = useState(() => {
+  //   const defaultWorkout = { name: '', exercises: [] };
+  //   if (workouts.length > 0) {
+  //     const [workout] = workouts.filter(
+  //       workout => new Date(workout.date).toDateString() === new Date(selectedDate).toDateString()
+  //     );
+  //     return workout || defaultWorkout;
+  //   } else {
+  //     return defaultWorkout;
+  //   }
+  // });
 
   const hasWorkouts = workouts.length > 0;
 
-  const handleUseTemplate = (template: { name: string; exercises: Exercise[] }) => {
-    setCurrentWorkout({
-      name: template.name,
-      // @ts-ignore - to be fixed
-      exercises: [...template.exercises],
-    });
-  };
+  // const handleUseTemplate = (template: { name: string; exercises: Exercise[] }) => {
+  //   setCurrentWorkout({
+  //     name: template.name,
+  //     // @ts-ignore - to be fixed
+  //     exercises: [...template.exercises],
+  //   });
+  // };
 
   console.log(workouts);
 
@@ -72,7 +72,7 @@ export default function WorkoutsPageClient({
       <Tabs value={tab} onValueChange={setTab} defaultValue={initialTab} className="mb-6">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="workout">Workout</TabsTrigger>
-          <TabsTrigger value="templates">Templates</TabsTrigger>
+          {/*<TabsTrigger value="templates">Templates</TabsTrigger>*/}
         </TabsList>
 
         <p>You can find all your workouts here.</p>
@@ -91,9 +91,12 @@ export default function WorkoutsPageClient({
                 <CardHeader className="pb-2">
                   <div className="flex justify-between items-start">
                     <CardTitle className="text-lg">{workout.name}</CardTitle>
-                    <Button variant="ghost" size="icon">
-                      <Copy className="h-4 w-4" />
-                    </Button>
+                    {/*<Button onClick={() => console.log('copy')} variant="ghost" size="icon">*/}
+                    {/*  <Copy*/}
+                    {/*    aria-label={`Copy workout ${workout.name} to clipboard`}*/}
+                    {/*    className="h-4 w-4"*/}
+                    {/*  />*/}
+                    {/*</Button>*/}
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -122,47 +125,47 @@ export default function WorkoutsPageClient({
           )}
         </TabsContent>
 
-        <TabsContent value="templates" className="mt-4">
-          <WorkoutTemplates
-            initialTemplates={initialTemplates}
-            onUseTemplateAction={handleUseTemplate}
-            currentWorkout={currentWorkout}
-          />
+        {/*<TabsContent value="templates" className="mt-4">*/}
+        {/*  <WorkoutTemplates*/}
+        {/*    initialTemplates={initialTemplates}*/}
+        {/*    onUseTemplateAction={handleUseTemplate}*/}
+        {/*    currentWorkout={currentWorkout}*/}
+        {/*  />*/}
 
-          {currentWorkout.exercises?.length > 0 && (
-            <div className="mt-6">
-              <h3 className="text-lg font-medium mb-2">Preview</h3>
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">{currentWorkout.name || 'New Workout'}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {currentWorkout.exercises.map((exercise, index) => (
-                      <li key={index} className="text-sm">
-                        <div className="flex justify-between">
-                          <span>{exercise.exerciseName}</span>
-                          <span className="text-muted-foreground">
-                            {exercise.sets} × {exercise.reps}
-                          </span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+        {/*  {currentWorkout.exercises?.length > 0 && (*/}
+        {/*    <div className="mt-6">*/}
+        {/*      <h3 className="text-lg font-medium mb-2">Preview</h3>*/}
+        {/*      <Card>*/}
+        {/*        <CardHeader className="pb-2">*/}
+        {/*          <CardTitle className="text-lg">{currentWorkout.name || 'New Workout'}</CardTitle>*/}
+        {/*        </CardHeader>*/}
+        {/*        <CardContent>*/}
+        {/*          <ul className="space-y-2">*/}
+        {/*            {currentWorkout.exercises.map((exercise, index) => (*/}
+        {/*              <li key={index} className="text-sm">*/}
+        {/*                <div className="flex justify-between">*/}
+        {/*                  <span>{exercise.exerciseName}</span>*/}
+        {/*                  <span className="text-muted-foreground">*/}
+        {/*                    {exercise.sets} × {exercise.reps}*/}
+        {/*                  </span>*/}
+        {/*                </div>*/}
+        {/*              </li>*/}
+        {/*            ))}*/}
+        {/*          </ul>*/}
 
-                  <div className="mt-4">
-                    <Link href={RoutesConfig.addWorkout}>
-                      <Button className="w-full">
-                        <Plus className="h-4 w-4 mr-1" />
-                        Create Workout from Template
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-        </TabsContent>
+        {/*          <div className="mt-4">*/}
+        {/*            <Link href={RoutesConfig.addWorkout}>*/}
+        {/*              <Button className="w-full">*/}
+        {/*                <Plus className="h-4 w-4 mr-1" />*/}
+        {/*                Create Workout from Template*/}
+        {/*              </Button>*/}
+        {/*            </Link>*/}
+        {/*          </div>*/}
+        {/*        </CardContent>*/}
+        {/*      </Card>*/}
+        {/*    </div>*/}
+        {/*  )}*/}
+        {/*</TabsContent>*/}
       </Tabs>
     </div>
   );

@@ -9,11 +9,6 @@ export default async function fetchWorkouts() {
     collection: 'workouts',
     limit: 10,
     depth: 2,
-    // where: {
-    //   createdBy: {
-    //     equals: '648000000000000000000000',
-    //   },
-    // },
     sort: '-createdAt',
     page: 1,
   });
