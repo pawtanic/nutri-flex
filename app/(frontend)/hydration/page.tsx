@@ -23,8 +23,6 @@ export default function WaterPage() {
     setWaterGoal(newGoal);
   };
 
-  console.log(!!waterGoal);
-
   return (
     <div className="container max-w-md mx-auto pb-20 pt-6 px-4">
       <DateHeader title="Water Intake" />
@@ -66,8 +64,8 @@ export default function WaterPage() {
           <WaterGoalSetting
             currentGoal={waterGoal}
             currentIntake={waterIntake}
-            onUpdateGoal={updateWaterGoal}
-            onUpdateIntake={handleWaterChange}
+            onUpdateGoalAction={updateWaterGoal}
+            onUpdateIntakeAction={handleWaterChange}
           />
         </TabsContent>
       </Tabs>

@@ -2,30 +2,24 @@
 
 import { useState } from 'react';
 import { BarcodeScanner } from '@/app/(frontend)/nutrition/_components/product-scan/barcode-scanner';
-import { BarcodeProductDisplay } from '@/app/(frontend)/nutrition/_components/product-scan/scanned-product-output';
+import {
+  BarcodeProductDisplay,
+  NutritionInfo,
+} from '@/app/(frontend)/nutrition/_components/product-scan/scanned-product-output';
 import WarningAlert from '@/components/common/warning-alert/warning-alert';
 import Link from 'next/link';
-import { Macro } from './meal-types';
 
 export function ScannedProductForm() {
-  const [scannedProductMacro, setScannedProductMacro] = useState<Macro | null>(null);
+  const [scannedProductMacro, setScannedProductMacro] = useState<NutritionInfo | null>(null);
 
   const handleBack = () => {
     setScannedProductMacro(null);
   };
 
-  const handleSaveProduct = () => {
-    console.log('Saving product:');
-  };
-
   return (
     <>
       {scannedProductMacro ? (
-        <BarcodeProductDisplay
-          nutritionInfo={scannedProductMacro}
-          onSave={handleSaveProduct}
-          onBack={handleBack}
-        />
+        <BarcodeProductDisplay nutritionInfo={scannedProductMacro} onBackAction={handleBack} />
       ) : (
         <BarcodeScanner onScannedProductMacroAction={setScannedProductMacro} />
       )}
