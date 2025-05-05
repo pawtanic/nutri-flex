@@ -34,22 +34,36 @@ const initialState: ActionResponse = {
 
 export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
   const [state, action, isPending] = useActionState(addExercisesAction, initialState);
+  // bug fix needed
   useFocusError(state.errors);
+  const [expandedSections, setExpandedSections] = useState<string[]>([]);
 
   const addExercise = () => {
-    setExercises([...exercises, { exerciseName: '', sets: 1, reps: 1 }]);
+    const newExercises = [...exercises, { exerciseName: '', sets: 1, reps: 1 }];
+    setExercises(newExercises);
+    setExpandedSections([`exercise-${newExercises.length - 1}`]);
   };
 
   const removeExercise = (index: number) => {
     const newExercises = [...exercises];
     newExercises.splice(index, 1);
     setExercises(newExercises);
+
+    if (newExercises.length > 0) {
+      setExpandedSections([`exercise-${newExercises.length - 1}`]);
+    } else {
+      setExpandedSections([]);
+    }
   };
 
   const updateExercise = (index: number, field: string, value: string) => {
     const newExercises = [...exercises];
     newExercises[index] = { ...newExercises[index], [field]: value };
     setExercises(newExercises);
+  };
+
+  const handleAccordionChange = (newExpandedSections: string[]) => {
+    setExpandedSections(newExpandedSections);
   };
 
   const [workoutNameError] = state.errors[0]?.workoutName || [];
@@ -80,6 +94,8 @@ export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
           {!hasExercises && <NoExerciseMessage />}
           {hasExercises && (
             <ExercisesAccordion
+              expandedSections={expandedSections}
+              onAccordionChange={handleAccordionChange}
               exercises={exercises}
               state={state}
               onRemoveExercise={removeExercise}
@@ -108,6 +124,8 @@ export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
 }
 
 interface ExercisesAccordionProps {
+  expandedSections: string[];
+  onAccordionChange: (newExpandedSections: string[]) => void;
   exercises: Exercise[];
   state: ActionResponse;
   onRemoveExercise: (index: number) => void;
@@ -122,32 +140,21 @@ const getExerciseDisplayName = (exercise: Exercise, index: number) => {
 };
 
 function ExercisesAccordion({
+  expandedSections,
+  onAccordionChange,
   exercises,
   state,
   onRemoveExercise,
   onUpdateExercise,
 }: ExercisesAccordionProps) {
-  const initiallyExpandedSections = exercises.slice(0, 2).map((_, index) => `exercise-${index}`);
-  const [expandedSections, setExpandedSections] = useState(initiallyExpandedSections);
-
-  const handleAccordionChange = (expandedSections: string[]) => {
-    const newExpandedSections = initiallyExpandedSections.filter(
-      id => !expandedSections.includes(id)
-    );
-    setExpandedSections(() => {
-      return [...expandedSections, ...newExpandedSections];
-    });
-  };
-
   return (
     <Accordion
       type="multiple"
       value={expandedSections}
-      onValueChange={handleAccordionChange}
+      onValueChange={onAccordionChange}
       className="space-y-3"
     >
       {exercises.map((exercise, index) => {
-        const isNonCollapsible = index < 2;
         const exerciseName = getExerciseDisplayName(exercise, index);
         const isExpanded = expandedSections.includes(`exercise-${index}`);
 
@@ -157,17 +164,12 @@ function ExercisesAccordion({
             value={`exercise-${index}`}
             className="border rounded-md overflow-hidden"
           >
-            {isNonCollapsible ? (
-              <div className="flex items-center px-4 py-3 font-medium">{exerciseName}</div>
-            ) : (
-              <AccordionTrigger
-                className={`px-4 py-3 hover:no-underline ${isExpanded ? 'before:content-[""] before:flex-1' : ''}`}
-              >
-                {!isExpanded && exerciseName}
-              </AccordionTrigger>
-            )}
-            {/*@ts-ignore*/}
-            <AccordionContent forceMount={isNonCollapsible}>
+            <AccordionTrigger
+              className={`px-4 py-3 hover:no-underline ${isExpanded ? 'before:content-[""] before:flex-1' : ''}`}
+            >
+              {!isExpanded && exerciseName}
+            </AccordionTrigger>
+            <AccordionContent>
               <div className="px-4">
                 <ExercisesCardContent
                   index={index}
