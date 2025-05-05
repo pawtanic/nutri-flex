@@ -191,10 +191,11 @@ function ExercisesCard({
 function NoExerciseMessage() {
   return (
     <>
-      <BicepsFlexed className="h-12 w-12 text-muted-foreground mx-auto mt-6 mb-2" />
-      <p className="text-muted-foreground">
+      <BicepsFlexed className="h-12 w-12 text-muted-foreground mx-auto my-6" />
+      <p className="text-muted-foreground text-center">
         No exercises added yet. Click the &apos;Add Exercise&apos; button to start building your
-        workout routine.
+        workout routine or go to &apos;Exercise Library&apos; to choose from a wide range of
+        exercises.
       </p>
     </>
   );

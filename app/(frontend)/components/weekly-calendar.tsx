@@ -88,15 +88,19 @@ export function WeeklyCalendar() {
                 onClick={() => handleDayClick(day)}
                 key={day.toString()}
                 className={cn(
-                  'p-2 py-4 space-y-2 hover:bg-primary/10 rounded-2xl bg-backgroundSecondary',
+                  'py-4 space-y-2 hover:bg-primary/10 rounded-2xl bg-backgroundSecondary',
                   isToday && 'bg-quinary',
                   isSelected && 'bg-tertiary'
                 )}
               >
                 <div className="font-medium mb-1">{abbreviatedDayName}</div>
-                <span className={cn('font-medium text-primary bg-white p-1 rounded-full')}>
+                <div
+                  className={cn(
+                    'font-medium text-primary bg-white w-7 h-7 mx-auto flex items-center justify-center rounded-full'
+                  )}
+                >
                   {format(day, 'd')}
-                </span>
+                </div>
               </button>
             );
           })}
