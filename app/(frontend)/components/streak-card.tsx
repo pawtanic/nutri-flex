@@ -10,6 +10,12 @@ interface StreakCardProps {
 
 const totalWorkouts = 32;
 
+// TODO:
+// how to calculate streak?
+// grab a date when user joined
+// count all workouts since that date up to today
+// display a message to motivate user to keep going / or animated icon -thumb up ?
+
 export function StreakCard({ className }: StreakCardProps) {
   return (
     <Card className={cn('card-shadow', className)}>

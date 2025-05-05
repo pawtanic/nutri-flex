@@ -2,9 +2,10 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { getFillColor } from '@/app/(frontend)/utils/helpers';
 
 // Sample data - in a real app, this would be calculated based on the period
-const goals = [
+export const goals = [
   {
     name: 'Weekly Workouts',
     current: 3,
@@ -14,10 +15,10 @@ const goals = [
   },
   {
     name: 'Daily Water',
-    current: 6,
-    target: 8,
+    current: 600,
+    target: 1800,
     percentage: 75,
-    unit: 'glasses',
+    unit: 'ml',
   },
   {
     name: 'Calories Goal',
@@ -34,25 +35,6 @@ const goals = [
     unit: 'g',
   },
 ] as const;
-
-type Goal = (typeof goals)[number];
-
-// todo move to helpers ?
-
-const getFillColor = (goalName: Goal['name']): string => {
-  switch (goalName) {
-    case 'Weekly Workouts':
-      return 'bg-primary';
-    case 'Daily Water':
-      return 'bg-quinary';
-    case 'Calories Goal':
-      return 'bg-calories';
-    case 'Protein Intake':
-      return 'bg-quaternary';
-    default:
-      return 'bg-primary';
-  }
-};
 
 export function GoalProgress() {
   return (

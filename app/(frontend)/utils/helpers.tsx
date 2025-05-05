@@ -11,6 +11,7 @@ import {
   SortOption,
 } from '@/app/(frontend)/utils/constants';
 import { Exercise } from '@/app/(frontend)/workouts/_components/workout-form';
+import { goals } from '@/components/goal-progress';
 
 export const capitalizeAll = (str: string): string => {
   return str
@@ -139,4 +140,21 @@ export const getExerciseDisplayName = (exercise: Exercise, index: number) => {
     return exercise.exerciseName;
   }
   return `New Exercise ${index + 1}`;
+};
+
+type Goal = (typeof goals)[number];
+
+export const getFillColor = (goalName: Goal['name']): string => {
+  switch (goalName) {
+    case 'Weekly Workouts':
+      return 'bg-primary';
+    case 'Daily Water':
+      return 'bg-quinary';
+    case 'Calories Goal':
+      return 'bg-calories';
+    case 'Protein Intake':
+      return 'bg-quaternary';
+    default:
+      return 'bg-primary';
+  }
 };

@@ -20,7 +20,7 @@ import {
 import * as React from 'react';
 import { getExerciseDisplayName } from '@/app/(frontend)/utils/helpers';
 
-export type Exercise = Omit<ExerciseSchema, 'workoutName'>;
+export type Exercise = Omit<ExerciseSchema, 'workoutName'> & { id?: string };
 
 interface WorkoutFormProps {
   exercises: Exercise[];
