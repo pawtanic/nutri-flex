@@ -18,31 +18,28 @@ import {
 import { useState } from 'react';
 import { cn } from '@/app/(frontend)/lib/utils';
 import { RoutesConfig } from '@/components/common/navigation/navigation';
+import { useUrlParams } from '@/hooks/useUrlParams';
 
 export function WeeklyCalendar() {
   const { selectedDate, setSelectedDate } = useDate();
   const router = useRouter();
-  const [currentWeekStart, setCurrentWeekStart] = useState(
+  const [currentWeekStart, setCurrentWeekStart] = useState(() =>
     startOfWeek(new Date(), { weekStartsOn: 1 })
   );
 
-  // Generate days for the current week
   const weekDays = eachDayOfInterval({
     start: currentWeekStart,
     end: endOfWeek(currentWeekStart, { weekStartsOn: 1 }),
   });
 
-  // Navigate to previous week
   const prevWeek = () => {
     setCurrentWeekStart(subWeeks(currentWeekStart, 1));
   };
 
-  // Navigate to next week
   const nextWeek = () => {
     setCurrentWeekStart(addWeeks(currentWeekStart, 1));
   };
 
-  // Handle day click
   const handleDayClick = (day: Date) => {
     setSelectedDate(day);
     router.push(RoutesConfig.workout);
@@ -78,7 +75,6 @@ export function WeeklyCalendar() {
         </div>
         <div className="grid grid-cols-7 gap-2 text-center mb-2">
           {weekDays.map(day => {
-            // todo: better name
             const abbreviatedDayName = day.toString().slice(0, 3);
             const isToday = isSameDay(day, new Date());
             const isSelected = isSameDay(day, selectedDate);

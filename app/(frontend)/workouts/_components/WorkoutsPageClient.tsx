@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,51 +25,42 @@ export interface Workout {
 
 interface WorkoutsPageClientProps {
   initialWorkouts: Workout[];
-  // initialTemplates: any[];
-  // initialTemplates: TemplateWorkout[];
   initialTab: string;
+}
+
+// Normalize date to YYYY-MM-DD for comparison
+function normalizeDate(date: Date | string) {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d.toISOString().slice(0, 10);
 }
 
 export default function WorkoutsPageClient({
   initialWorkouts = [],
-  // initialTemplates = [],
   initialTab = 'workout',
 }: WorkoutsPageClientProps) {
-  const { selectedDate } = useDate();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { selectedDate, setSelectedDate } = useDate();
 
-  // messed up logic
-  const [workouts] = useState(initialWorkouts);
+  const urlTab = searchParams.get('tab') || initialTab;
 
-  const { tab, setTab } = useTabWithUrl({ defaultTab: initialTab });
+  const filteredWorkouts = initialWorkouts.filter(
+    workout => normalizeDate(workout.date) === normalizeDate(selectedDate)
+  );
 
-  // messed up logic ?
-  // const [currentWorkout, setCurrentWorkout] = useState(() => {
-  //   const defaultWorkout = { name: '', exercises: [] };
-  //   if (workouts.length > 0) {
-  //     const [workout] = workouts.filter(
-  //       workout => new Date(workout.date).toDateString() === new Date(selectedDate).toDateString()
-  //     );
-  //     return workout || defaultWorkout;
-  //   } else {
-  //     return defaultWorkout;
-  //   }
-  // });
+  const { tab, setTab } = useTabWithUrl({ defaultTab: urlTab });
 
-  const hasWorkouts = workouts.length > 0;
+  const handleDateChange = (date: Date) => {
+    const params = new URLSearchParams(searchParams.toString());
+    router.replace(`?${params.toString()}`);
+    setSelectedDate(date);
+  };
 
-  // const handleUseTemplate = (template: { name: string; exercises: Exercise[] }) => {
-  //   setCurrentWorkout({
-  //     name: template.name,
-  //     // @ts-ignore - to be fixed
-  //     exercises: [...template.exercises],
-  //   });
-  // };
-
-  console.log(workouts);
+  const hasWorkouts = filteredWorkouts.length > 0;
 
   return (
     <div className="container max-w-md mx-auto pb-20 pt-6 px-4">
-      <DateHeader title="Workouts" />
+      <DateHeader title="Workouts" onDateChange={handleDateChange} selectedDate={selectedDate} />
       <Tabs value={tab} onValueChange={setTab} defaultValue={initialTab} className="mb-6">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="workout">Workout</TabsTrigger>
@@ -86,7 +78,7 @@ export default function WorkoutsPageClient({
           </div>
 
           {hasWorkouts ? (
-            workouts.map(workout => (
+            filteredWorkouts.map(workout => (
               <Card key={workout.id} className="mb-4">
                 <CardHeader className="pb-2">
                   <div className="flex justify-between items-start">
@@ -101,7 +93,6 @@ export default function WorkoutsPageClient({
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
-                    {/*todo - create component*/}
                     {workout.exercises.map((exercise, index) => (
                       <li key={index} className="text-sm">
                         <div className="flex justify-between">
@@ -131,40 +122,6 @@ export default function WorkoutsPageClient({
         {/*    onUseTemplateAction={handleUseTemplate}*/}
         {/*    currentWorkout={currentWorkout}*/}
         {/*  />*/}
-
-        {/*  {currentWorkout.exercises?.length > 0 && (*/}
-        {/*    <div className="mt-6">*/}
-        {/*      <h3 className="text-lg font-medium mb-2">Preview</h3>*/}
-        {/*      <Card>*/}
-        {/*        <CardHeader className="pb-2">*/}
-        {/*          <CardTitle className="text-lg">{currentWorkout.name || 'New Workout'}</CardTitle>*/}
-        {/*        </CardHeader>*/}
-        {/*        <CardContent>*/}
-        {/*          <ul className="space-y-2">*/}
-        {/*            {currentWorkout.exercises.map((exercise, index) => (*/}
-        {/*              <li key={index} className="text-sm">*/}
-        {/*                <div className="flex justify-between">*/}
-        {/*                  <span>{exercise.exerciseName}</span>*/}
-        {/*                  <span className="text-muted-foreground">*/}
-        {/*                    {exercise.sets} × {exercise.reps}*/}
-        {/*                  </span>*/}
-        {/*                </div>*/}
-        {/*              </li>*/}
-        {/*            ))}*/}
-        {/*          </ul>*/}
-
-        {/*          <div className="mt-4">*/}
-        {/*            <Link href={RoutesConfig.addWorkout}>*/}
-        {/*              <Button className="w-full">*/}
-        {/*                <Plus className="h-4 w-4 mr-1" />*/}
-        {/*                Create Workout from Template*/}
-        {/*              </Button>*/}
-        {/*            </Link>*/}
-        {/*          </div>*/}
-        {/*        </CardContent>*/}
-        {/*      </Card>*/}
-        {/*    </div>*/}
-        {/*  )}*/}
         {/*</TabsContent>*/}
       </Tabs>
     </div>

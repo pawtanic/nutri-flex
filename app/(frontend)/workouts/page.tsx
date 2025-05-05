@@ -1,7 +1,7 @@
 // import fetchWorkouts from '@/app/(frontend)/workouts/_api/fetch-workouts';
 import WorkoutsPageClient from '@/app/(frontend)/workouts/_components/WorkoutsPageClient';
 import { Metadata } from 'next';
-import fetchWorkouts from '@/app/(frontend)/workouts/_api/fetch-workouts';
+// import fetchWorkouts from '@/app/(frontend)/workouts/_api/fetch-workouts';
 
 // lib/mock/workouts.ts
 
@@ -74,7 +74,5 @@ export default async function WorkoutsPage() {
   // const workoutsData = await fetchWorkouts();
 
   // Pass everything to the client component
-  return (
-    <WorkoutsPageClient initialWorkouts={workoutsData} initialTab="workout" initialTemplates={[]} />
-  );
+  return <WorkoutsPageClient initialWorkouts={workoutsData} initialTab="workout" />;
 }
