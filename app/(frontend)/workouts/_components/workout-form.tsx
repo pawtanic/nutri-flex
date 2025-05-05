@@ -146,7 +146,7 @@ function ExercisesAccordion({
       type="multiple"
       value={expandedSections}
       onValueChange={onAccordionChange}
-      className="space-y-3"
+      className="space-y-3 bg-white"
     >
       {exercises.map((exercise, index) => {
         const exerciseName = getExerciseDisplayName(exercise, index);

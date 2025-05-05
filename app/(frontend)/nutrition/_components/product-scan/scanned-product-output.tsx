@@ -3,10 +3,14 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Plus, Minus, Check, ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ChefHat } from 'lucide-react';
 import Image from 'next/image';
+import { Input } from '@/components/ui/input';
+import { calculateNutrition } from '@/app/(frontend)/utils/helpers';
+import { Label } from '@/components/ui/label';
+import { AuthRequiredButton } from '@/components/common/auth-button/auth-button';
 
-interface NutritionInfo {
+export interface NutritionInfo {
   productName: string;
   image: string;
   calories: number;
@@ -17,42 +21,22 @@ interface NutritionInfo {
 
 interface BarcodeProductDisplayProps {
   nutritionInfo: NutritionInfo;
-  onSave: () => void;
-  onBack: () => void;
+  onBackAction: () => void;
 }
 
-export function BarcodeProductDisplay({
-  nutritionInfo,
-  onSave,
-  onBack,
-}: BarcodeProductDisplayProps) {
-  const [quantity, setQuantity] = useState(1);
+export function BarcodeProductDisplay({ nutritionInfo, onBackAction }: BarcodeProductDisplayProps) {
+  const [amountInGrams, setAmountInGrams] = useState(100);
 
-  const increaseQuantity = () => {
-    setQuantity(prev => Math.min(prev + 1, 10));
-  };
-
-  const decreaseQuantity = () => {
-    setQuantity(prev => Math.max(prev - 1, 1));
-  };
-
-  // Calculate nutrition values based on quantity
-  const calculatedNutrition = {
-    calories: Math.round(nutritionInfo.calories * quantity),
-    protein: Math.round(nutritionInfo.protein * quantity * 10) / 10,
-    carbs: Math.round(nutritionInfo.carbs * quantity * 10) / 10,
-    fat: Math.round(nutritionInfo.fat * quantity * 10) / 10,
-  };
+  const calculatedNutrition = calculateNutrition(nutritionInfo, amountInGrams);
 
   return (
     <div className="space-y-4">
       <div className="flex items-center mb-2">
-        <Button variant="ghost" size="sm" className="p-0 h-8 w-8 mr-2" onClick={onBack}>
+        <Button variant="ghost" size="sm" className="p-0 h-8 w-8 mr-2" onClick={onBackAction}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <h2 className="text-lg font-medium">Scanned Product</h2>
       </div>
-
       <div className="flex gap-4">
         <div className="relative h-32 w-32 bg-white  border rounded-md flex-shrink-0">
           {nutritionInfo.image ? (
@@ -64,34 +48,22 @@ export function BarcodeProductDisplay({
               sizes="96px"
             />
           ) : (
-            <div className="h-full w-full flex items-center justify-center text-muted-foreground">
-              No image
+            <div className="h-full w-full text-muted-foreground text-center flex items-center p-2">
+              This product has no image
             </div>
           )}
         </div>
-        <div className="flex-1 bg-white p-4 border rounded-md">
-          <h3 className="font-medium text-xl line-clamp-2">{nutritionInfo.productName}</h3>
-          <div className="flex items-center mt-2">
-            <span className="mr-2">Quantity:</span>
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-7 w-7"
-              onClick={decreaseQuantity}
-              disabled={quantity <= 1}
-            >
-              <Minus className="h-3 w-3" />
-            </Button>
-            <span className="w-8 text-center font-medium">{quantity}</span>
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-7 w-7"
-              onClick={increaseQuantity}
-              disabled={quantity >= 10}
-            >
-              <Plus className="h-3 w-3" />
-            </Button>
+        <div className="flex-1 bg-white p-3 border rounded-md">
+          <h3 className="font-medium text-lg line-clamp-2">{nutritionInfo.productName}</h3>
+          <div className="space-y-1">
+            <Label htmlFor="amount">Amount (g)</Label>
+            <Input
+              id="amount"
+              type="number"
+              value={amountInGrams}
+              onChange={e => setAmountInGrams(Number(e.target.value))}
+              className="w-1/2"
+            />
           </div>
         </div>
       </div>
@@ -99,7 +71,7 @@ export function BarcodeProductDisplay({
       <Card>
         <CardContent className="p-4">
           <div className="flex justify-between items-center mb-3">
-            <h4 className="font-medium">Nutrition Values</h4>
+            <h4 className="font-medium">Nutrition Values per {amountInGrams}g</h4>
             <div className="text-lg font-bold">{calculatedNutrition.calories} kcal</div>
           </div>
 
@@ -120,10 +92,16 @@ export function BarcodeProductDisplay({
         </CardContent>
       </Card>
 
-      <Button className="w-full" onClick={onSave}>
-        <Check className="h-4 w-4 mr-2" />
-        Add to Diary
-      </Button>
+      <AuthRequiredButton
+        successMessageText="Product added successfully!"
+        successMessageDescription="You can now view your added product in the 'Nutrition' page."
+        errorMessageText="Failed to add product. Please try again."
+        className="w-full"
+        onAuthenticatedClick={() => console.log('clicked')}
+      >
+        <ChefHat className="h-4 w-4 mr-2" />
+        Add product to meal
+      </AuthRequiredButton>
     </div>
   );
 }

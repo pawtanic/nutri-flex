@@ -158,3 +158,17 @@ export const getFillColor = (goalName: Goal['name']): string => {
       return 'bg-primary';
   }
 };
+
+export const calculateNutrition = (
+  nutritionData: { calories: number; protein: number; carbs: number; fat: number },
+  grams: number
+) => {
+  const { calories, protein, carbs, fat } = nutritionData;
+
+  return {
+    calories: (calories * grams) / 100,
+    protein: (protein * grams) / 100,
+    carbs: (carbs * grams) / 100,
+    fat: (fat * grams) / 100,
+  };
+};
