@@ -1,17 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, Copy } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { DateHeader } from '@/components/date-header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDate } from '@/app/(frontend)/context/date-context';
 import { linkAkaBtnStyles } from '@/app/(frontend)/utils/constants';
 import { RoutesConfig } from '@/components/common/navigation/navigation';
-import { WorkoutTemplates } from '@/app/(frontend)/workouts/_components/workout-templates';
 import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 import { Exercise } from '@/app/(frontend)/workouts/_components/workout-form';
 
@@ -28,7 +25,6 @@ interface WorkoutsPageClientProps {
   initialTab: string;
 }
 
-// Normalize date to YYYY-MM-DD for comparison
 function normalizeDate(date: Date | string) {
   const d = typeof date === 'string' ? new Date(date) : date;
   return d.toISOString().slice(0, 10);
@@ -38,29 +34,22 @@ export default function WorkoutsPageClient({
   initialWorkouts = [],
   initialTab = 'workout',
 }: WorkoutsPageClientProps) {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const { selectedDate, setSelectedDate } = useDate();
+  const { selectedDate } = useDate();
 
   const urlTab = searchParams.get('tab') || initialTab;
 
+  // ideally done on server
   const filteredWorkouts = initialWorkouts.filter(
     workout => normalizeDate(workout.date) === normalizeDate(selectedDate)
   );
 
   const { tab, setTab } = useTabWithUrl({ defaultTab: urlTab });
-
-  const handleDateChange = (date: Date) => {
-    const params = new URLSearchParams(searchParams.toString());
-    router.replace(`?${params.toString()}`);
-    setSelectedDate(date);
-  };
-
   const hasWorkouts = filteredWorkouts.length > 0;
 
   return (
     <div className="container max-w-md mx-auto pb-20 pt-6 px-4">
-      <DateHeader title="Workouts" onDateChange={handleDateChange} selectedDate={selectedDate} />
+      <DateHeader title="Workouts" />
       <Tabs value={tab} onValueChange={setTab} defaultValue={initialTab} className="mb-6">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="workout">Workout</TabsTrigger>
