@@ -149,6 +149,7 @@ function ExercisesAccordion({
       {exercises.map((exercise, index) => {
         const isNonCollapsible = index < 2;
         const exerciseName = getExerciseDisplayName(exercise, index);
+        const isExpanded = expandedSections.includes(`exercise-${index}`);
 
         return (
           <AccordionItem
@@ -159,8 +160,10 @@ function ExercisesAccordion({
             {isNonCollapsible ? (
               <div className="flex items-center px-4 py-3 font-medium">{exerciseName}</div>
             ) : (
-              <AccordionTrigger className="px-4 py-3 hover:no-underline">
-                {exerciseName} trigger
+              <AccordionTrigger
+                className={`px-4 py-3 hover:no-underline ${isExpanded ? 'before:content-[""] before:flex-1' : ''}`}
+              >
+                {!isExpanded && exerciseName}
               </AccordionTrigger>
             )}
             {/*@ts-ignore*/}
