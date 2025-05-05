@@ -1,4 +1,7 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload';
+
+// TODO:
+// copy all exercises for all muscles from : https://api.api-ninjas.com/v1/exercises?muscle=biceps
 
 export const Exercises: CollectionConfig = {
   slug: 'exercises',
@@ -78,4 +81,4 @@ export const Exercises: CollectionConfig = {
       },
     },
   ],
-}
+};

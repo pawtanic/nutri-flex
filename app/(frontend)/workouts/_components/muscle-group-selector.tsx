@@ -24,7 +24,7 @@ export function MuscleGroupSelector({
   isLoading,
 }: MuscleGroupSelectorProps) {
   return (
-    <div className="container max-w-md mx-auto pt-6 px-4">
+    <div className="mx-auto pt-6">
       <Label htmlFor="muscle-group">Select Muscle Group</Label>
       <Select value={selectedMuscle} onValueChange={onSelectMuscleAction}>
         <SelectTrigger id="muscle-group" className="mt-1 shadow border-none">
