@@ -18,6 +18,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import * as React from 'react';
+import { getExerciseDisplayName } from '@/app/(frontend)/utils/helpers';
 
 export type Exercise = Omit<ExerciseSchema, 'workoutName'>;
 
@@ -131,13 +132,6 @@ interface ExercisesAccordionProps {
   onRemoveExercise: (index: number) => void;
   onUpdateExercise: (index: number, field: string, value: string) => void;
 }
-
-const getExerciseDisplayName = (exercise: Exercise, index: number) => {
-  if (exercise.exerciseName) {
-    return exercise.exerciseName;
-  }
-  return `New Exercise ${index + 1}`;
-};
 
 function ExercisesAccordion({
   expandedSections,
