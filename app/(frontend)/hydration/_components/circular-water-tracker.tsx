@@ -41,7 +41,7 @@ const calculateWaterLevel = (percentage: number): number => {
 
 export function CircularWaterTracker({ percentage, current, goal }: CircularWaterTrackerProps) {
   const { radius, circumference, strokeDashoffset } = calculateCircleProperties(percentage);
-
+  console.log(current);
   // Calculate hydration in ml
   const goalMl = goal * 250;
 
@@ -95,11 +95,11 @@ export function CircularWaterTracker({ percentage, current, goal }: CircularWate
           {/*  {current}/{goal}*/}
           {/*</p>*/}
           {/*<p>glasses</p>*/}
-          <p className="mt-1 text-2xl">{goalMl} ml</p>
+          <p className="mt-1 text-2xl">{goalMl / 1000}l</p>
         </div>
       </div>
       <div className="mt-2 text-center">
-        <p className="font-medium">{percentage}% of daily goal</p>
+        <p className="font-medium">{percentage ? `${percentage} % of daily goal` : ''}</p>
       </div>
     </div>
   );

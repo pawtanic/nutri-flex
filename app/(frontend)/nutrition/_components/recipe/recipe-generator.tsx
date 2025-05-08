@@ -3,32 +3,32 @@
 import { useState } from 'react';
 import { RecipeForm } from './recipe-form';
 import { RecipeDisplay } from './recipe-display';
-import { Recipe, sampleRecipes } from './recipe-types';
+import { Recipe } from './recipe-types';
+import { useRecipeGenerator } from '@/app/(frontend)/nutrition/hooks/use-recipe-generator';
+import RecipeDietaryPreferenceSelect, {
+  dietaryPreferenceLabels,
+} from '@/app/(frontend)/nutrition/_components/recipe/recipe-dietary-preference-select';
+import { useSaveRecipe } from '@/app/(frontend)/nutrition/hooks/save-recipe';
 
 export function RecipeGenerator() {
   const [prompt, setPrompt] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
   const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [dietaryPreference, setDietaryPreference] = useState(dietaryPreferenceLabels[0].value);
 
-  const handleGenerateRecipe = () => {
+  const { generateRecipe, isGenerating } = useRecipeGenerator();
+  const { handleSaveMeal } = useSaveRecipe();
+
+  const handleGenerateRecipe = async () => {
     if (!prompt.trim()) return;
-    setIsGenerating(true);
-    
-    // In a real app, this would call an API to generate a recipe
-    // For now, we're using sample data
-    setTimeout(() => {
-      setRecipe(sampleRecipes.balanced);
-      setIsGenerating(false);
-    }, 1000);
+
+    const generatedRecipe = await generateRecipe({
+      query: prompt,
+      goal: dietaryPreference,
+    });
+    setRecipe(generatedRecipe);
   };
 
-  const handleSaveMeal = () => {
-    // In a real app, you would save the recipe to your database
-    // and navigate back to the nutrition page
-    alert('Meal saved successfully!');
-  };
-
-  const handleGenerateAnother = () => {
+  const handleGenerateAnotherRecipe = () => {
     setRecipe(null);
   };
 
@@ -36,22 +36,26 @@ export function RecipeGenerator() {
     <div className="space-y-4">
       {!recipe ? (
         <>
-          <RecipeForm 
+          <RecipeDietaryPreferenceSelect
+            onSetDietaryPreference={setDietaryPreference}
+            dietaryPreference={dietaryPreference}
+          />
+          <RecipeForm
             prompt={prompt}
             setPrompt={setPrompt}
             isGenerating={isGenerating}
             onGenerate={handleGenerateRecipe}
           />
-          
           <div className="text-center text-sm text-muted-foreground mt-6">
             <p>AI will generate a recipe with detailed nutrition information</p>
           </div>
         </>
       ) : (
-        <RecipeDisplay 
-          recipe={recipe}
-          onGenerateAnother={handleGenerateAnother}
-          onSaveMeal={handleSaveMeal}
+        <RecipeDisplay
+          recipe={recipe!}
+          // recipe={recipe}
+          onGenerateAnotherAction={handleGenerateAnotherRecipe}
+          onSaveMealAction={handleSaveMeal}
         />
       )}
     </div>

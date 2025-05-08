@@ -11,6 +11,7 @@ import { linkAkaBtnStyles } from '@/app/(frontend)/utils/constants';
 import { RoutesConfig } from '@/components/common/navigation/navigation';
 import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 import { Exercise } from '@/app/(frontend)/workouts/_components/workout-form';
+import { Workout as PayloadWorkout } from '@/payload-types';
 
 export interface Workout {
   id?: string;
@@ -21,13 +22,18 @@ export interface Workout {
 }
 
 interface WorkoutsPageClientProps {
-  initialWorkouts: Workout[];
+  initialWorkouts: PayloadWorkout[];
   initialTab: string;
 }
 
-function normalizeDate(date: Date | string) {
-  const d = typeof date === 'string' ? new Date(date) : date;
-  return d.toISOString().slice(0, 10);
+function normalizeDate(date: Date | string): string {
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+
+  const year = dateObj.getFullYear();
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Add 1 because months are 0-indexed
+  const day = String(dateObj.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
 }
 
 export default function WorkoutsPageClient({
@@ -38,11 +44,12 @@ export default function WorkoutsPageClient({
   const { selectedDate } = useDate();
 
   const urlTab = searchParams.get('tab') || initialTab;
-
   // ideally done on server
-  const filteredWorkouts = initialWorkouts.filter(
-    workout => normalizeDate(workout.date) === normalizeDate(selectedDate)
-  );
+  const filteredWorkouts = initialWorkouts.filter(workout => {
+    const workoutDate = normalizeDate(workout.date);
+    const currentDate = normalizeDate(selectedDate);
+    return workoutDate === currentDate;
+  });
 
   const { tab, setTab } = useTabWithUrl({ defaultTab: urlTab });
   const hasWorkouts = filteredWorkouts.length > 0;
@@ -85,7 +92,7 @@ export default function WorkoutsPageClient({
                     {workout.exercises.map((exercise, index) => (
                       <li key={index} className="text-sm">
                         <div className="flex justify-between">
-                          <span>{exercise.exerciseName}</span>
+                          <span>{exercise.name}</span>
                           <span className="text-muted-foreground">
                             {exercise.sets} × {exercise.reps}
                           </span>

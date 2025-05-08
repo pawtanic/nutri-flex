@@ -35,6 +35,7 @@ const initialState: ActionResponse = {
 
 export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
   const [state, action, isPending] = useActionState(addExercisesAction, initialState);
+  console.log(state);
   // bug fix needed
   useFocusError(state.errors);
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
@@ -67,8 +68,12 @@ export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
     setExpandedSections(newExpandedSections);
   };
 
-  const [workoutNameError] = state.errors[0]?.workoutName || [];
+  // hide in fn ?
+  const workoutNameError = state.errors?.[0]?.workoutName?.[0];
   const hasExercises = exercises.length > 0;
+
+  // bug:
+  // - workout name value dissapear after submit althoug is invalid - should be preserved
 
   return (
     <Wrapper>
@@ -113,7 +118,6 @@ export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
             errorMessageText="Failed to save workout. Please try again."
             className="w-full"
             // optional prop ? or completely get rid of ?
-            onAuthenticatedClick={() => null}
             disabled={isPending}
           >
             Save Workout
@@ -196,7 +200,10 @@ function ExercisesCardContent({
   onRemoveExercise,
   onUpdateExercise,
 }: ExerciseCardProps) {
-  const exerciseErrors = state.errors[index];
+  // const exerciseErrors = state.errors?.[index] || state.message;
+  const exerciseErrors = state.errors?.[index] || null;
+  const errorMessage = state.message || null;
+
   const [exerciseNameError] = exerciseErrors?.exerciseName || [];
   const [repsError] = exerciseErrors?.reps || [];
   const [setsError] = exerciseErrors?.sets || [];
@@ -223,7 +230,8 @@ function ExercisesCardContent({
             aria-label="Remove exercise from workout"
           />
         </Button>
-        {exerciseNameError && <FormErrorMessage errorMessage={exerciseNameError} />}
+        {exerciseNameError && <FormErrorMessage errorMessage={exerciseNameError || errorMessage} />}
+        {/*{index === 0 && errorMessage && <FormErrorMessage errorMessage={errorMessage} />}*/}
         <div className="col-span-2 grid grid-cols-2 gap-3 mt-2">
           <div>
             <Label htmlFor={`sets-${index}`} className="text-xs">

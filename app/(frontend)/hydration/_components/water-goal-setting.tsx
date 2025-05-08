@@ -12,23 +12,24 @@ import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 interface WaterGoalSettingProps {
   currentGoal: number;
   currentIntake: number;
-  onUpdateGoal: (goal: number) => void;
-  onUpdateIntake: (intake: number) => void;
+  onUpdateGoalAction: (goal: number) => void;
+  onUpdateIntakeAction: (intake: number) => void;
 }
 
 export function WaterGoalSetting({
   currentGoal,
   currentIntake,
-  onUpdateGoal,
-  onUpdateIntake,
+  onUpdateGoalAction,
+  onUpdateIntakeAction,
 }: WaterGoalSettingProps) {
-  const [weight, setWeight] = useState(70); // kg
+  // TODO: refactor - to much markup
+  // calculate recommended goal in ml not glasses
+  const [weight, setWeight] = useState(70);
   const [activity, setActivity] = useState('moderate');
   const { tab, setTab } = useTabWithUrl({ defaultTab: 'manual' });
 
   const handleSliderChange = (value: number[]) => {
-    const glassesCount = Math.round(value[0] / 250); // Convert ml to glasses and round
-    onUpdateGoal(glassesCount);
+    onUpdateGoalAction(value[0]);
   };
 
   const handleSave = () => {
@@ -36,10 +37,10 @@ export function WaterGoalSetting({
   };
 
   const calculateGoalFromWeight = () => {
+    // extract to fn - need better alg ?
     const activityFactor = activity === 'low' ? 30 : activity === 'moderate' ? 35 : 40;
     const recommendedMl = weight * activityFactor;
-    const recommendedGlasses = Math.round(recommendedMl / 250);
-    onUpdateGoal(recommendedGlasses);
+    onUpdateGoalAction(recommendedMl);
   };
 
   return (
@@ -66,7 +67,7 @@ export function WaterGoalSetting({
                 <div className="flex items-center gap-4">
                   <Slider
                     id="water-goal"
-                    value={[currentGoal * 250]} // Convert glasses to ml for slider
+                    value={[currentGoal]}
                     min={0}
                     max={4000}
                     step={100}
@@ -144,7 +145,7 @@ export function WaterGoalSetting({
               </Button>
 
               {currentIntake !== currentGoal && (
-                <div className=" text-center">Recommended: {currentGoal} glasses per day</div>
+                <div className=" text-center">Recommended: {currentGoal} ml per day</div>
               )}
             </div>
           </TabsContent>
@@ -153,7 +154,7 @@ export function WaterGoalSetting({
               variant="outline"
               className="w-full"
               onClick={() => {
-                onUpdateIntake(currentIntake);
+                onUpdateIntakeAction(currentIntake);
               }}
             >
               Cancel

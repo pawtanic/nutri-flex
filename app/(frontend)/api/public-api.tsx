@@ -1,3 +1,6 @@
+import { Recipe } from '../nutrition/_components/recipe/recipe-types';
+import { RecipeGeneratorParams } from '../nutrition/hooks/use-recipe-generator';
+
 class ApiClient {
   private readonly baseUrl: string;
   private readonly headers: Record<string, string>;

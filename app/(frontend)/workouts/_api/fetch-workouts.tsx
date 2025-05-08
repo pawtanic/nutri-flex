@@ -3,7 +3,7 @@
 import { getPayload } from 'payload';
 import config from '@payload-config';
 
-export default async function fetchWorkouts() {
+export async function fetchWorkouts() {
   const payload = await getPayload({ config });
   const workoutsResult = await payload.find({
     collection: 'workouts',
@@ -12,6 +12,5 @@ export default async function fetchWorkouts() {
     sort: '-createdAt',
     page: 1,
   });
-
   return workoutsResult.docs;
 }
