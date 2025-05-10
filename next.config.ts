@@ -6,10 +6,10 @@ const nextConfig: NextConfig = {
     // Skip ESLint checking
     ignoreDuringBuilds: true,
   },
-  reactStrictMode: true,
-  // env: {
-  //   NEXT_PUBLIC_NINJAS_API_KEY: process.env.NEXT_PUBLIC_NINJAS_API_KEY,
+  // experimental: {
+  //   reactCompiler: false,
   // },
+  reactStrictMode: true,
   images: {
     remotePatterns: [
       {

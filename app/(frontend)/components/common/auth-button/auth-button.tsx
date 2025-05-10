@@ -6,14 +6,15 @@ import { useAuthModal } from '@/app/(frontend)/context/auth-modal-context';
 const useAuthModalState = () => {
   // const { isUserAuthenticated } = use(AuthContext);
   const { showAuthModal } = useAuthModal();
-  const isUserAuthenticated = false;
+  const isUserAuthenticated = true;
 
   return { isUserAuthenticated, showAuthModal };
 };
 
 interface AuthRequiredButtonProps
   extends Omit<React.ComponentProps<typeof LoadingButton>, 'onClick'> {
-  onAuthenticatedClick: () => Promise<unknown> | unknown;
+  onAuthenticatedClick?: any;
+  // onAuthenticatedClick: () => Promise<unknown> | unknown;
   successMessageText: string;
   successMessageDescription: string;
   errorMessageText: string;
