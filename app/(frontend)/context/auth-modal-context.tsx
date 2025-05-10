@@ -2,7 +2,6 @@
 
 import React, { createContext, use, useState, ReactNode } from 'react';
 import AuthModal from '@/components/common/auth-modal/auth-modal';
-// TODO: use new hook USE for context consumption !! check docs
 
 interface AuthModalContextType {
   showAuthModal: () => void;
@@ -27,30 +26,7 @@ export const AuthModalProvider = ({ children }: { children: ReactNode }) => {
       }}
     >
       {children}
-      {isModalOpen && (
-        // <Modal isOpen={isModalOpen} onClose={hideAuthModal} title="Authentication Required">
-        //   <div>
-        //     <p>Please log in to continue with this action.</p>
-        //     {/* Login form or buttons */}
-        //     <button
-        //       onClick={() => {
-        //         /* login logic */
-        //       }}
-        //     >
-        //       Log In
-        //     </button>
-        //     <button
-        //       onClick={() => {
-        //         /* signup logic */
-        //       }}
-        //     >
-        //       Sign Up
-        //     </button>
-        //     <button onClick={hideAuthModal}>Cancel</button>
-        //   </div>
-        // </Modal>
-        <AuthModal isOpen={isModalOpen} onCloseAction={hideAuthModal} />
-      )}
+      {isModalOpen && <AuthModal isOpen={isModalOpen} onCloseAction={hideAuthModal} />}
     </AuthModalContext.Provider>
   );
 };

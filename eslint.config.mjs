@@ -11,14 +11,22 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends(
-      "next/core-web-vitals",
-      "next/typescript",
-      "prettier"
+    "next/core-web-vitals",
+    "next/typescript",
+    "prettier"
   ),
   {
-    "rules": {
+    plugins: {
+      "@typescript-eslint": require("@typescript-eslint/eslint-plugin"),
+    },
+    rules: {
+      // Indentation (2 spaces)
+      "indent": ["error", 2],
+      "@typescript-eslint/indent": ["error", 2],
+
+      // Your existing overrides
       "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/ban-ts-comment": "off"
+      "@typescript-eslint/ban-ts-comment": "off",
     }
   }
 ];
