@@ -64,8 +64,8 @@ export default function WaterPage() {
           <WaterGoalSetting
             currentGoal={waterGoal}
             currentIntake={waterIntake}
-            onUpdateGoal={updateWaterGoal}
-            onUpdateIntake={handleWaterChange}
+            onUpdateGoalAction={updateWaterGoal}
+            onUpdateIntakeAction={handleWaterChange}
           />
         </TabsContent>
       </Tabs>

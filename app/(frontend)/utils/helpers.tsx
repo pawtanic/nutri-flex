@@ -10,7 +10,7 @@ import {
   SORT_OPTIONS,
   SortOption,
 } from '@/app/(frontend)/utils/constants';
-import { Exercise } from '@/app/(frontend)/workouts/_components/workout-form';
+import type { Exercises } from '@/app/(frontend)/workouts/_components/workout-form';
 import { goals } from '@/components/goal-progress';
 
 export const capitalizeAll = (str: string): string => {
@@ -135,7 +135,7 @@ export const applyFiltersAndSort = (
   return sortExercises(filtered, filterState);
 };
 
-export const getExerciseDisplayName = (exercise: Exercise, index: number) => {
+export const getExerciseDisplayName = (exercise: Exercises[number], index: number) => {
   if (exercise.exerciseName) {
     return exercise.exerciseName;
   }

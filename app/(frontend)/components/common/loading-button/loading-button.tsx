@@ -6,6 +6,7 @@ interface LoadingButtonProps extends Omit<ButtonProps, 'onClick'> {
   onClick: () => Promise<unknown> | unknown;
   loadingContent?: React.ReactNode;
   loadingText?: string;
+  isBusy?: boolean;
 }
 
 export function LoadingButton({
@@ -13,20 +14,9 @@ export function LoadingButton({
   onClick,
   loadingContent,
   loadingText = 'Loading...',
-  disabled = false,
+  isBusy,
   ...props
 }: LoadingButtonProps) {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleClick = async () => {
-    setIsLoading(true);
-    try {
-      await onClick();
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const defaultLoadingContent = (
     <>
       <Loader className="mr-2 h-4 w-4 animate-spin" />
@@ -35,8 +25,8 @@ export function LoadingButton({
   );
 
   return (
-    <Button onClick={handleClick} disabled={disabled || isLoading} {...props}>
-      {isLoading ? (loadingContent ?? defaultLoadingContent) : children}
+    <Button onClick={onClick} disabled={isBusy} {...props}>
+      {isBusy ? (loadingContent ?? defaultLoadingContent) : children}
     </Button>
   );
 }

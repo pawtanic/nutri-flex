@@ -10,6 +10,7 @@ import { AuthModalProvider } from '@/app/(frontend)/context/auth-modal-context';
 import Navigation from '@/components/common/navigation/navigation';
 import { Analytics } from '@vercel/analytics/react';
 import { ReactQueryProvider, SessionProviderWrapper } from './providers';
+import React from 'react';
 
 const inter = Nunito({ subsets: ['latin'], weight: '400', display: 'swap' });
 

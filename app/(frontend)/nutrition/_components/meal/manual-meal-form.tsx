@@ -22,10 +22,6 @@ export function ManualMealForm() {
     setMacros(prev => ({ ...prev, [type]: value }));
   };
 
-  const handleSaveMeal = () => {
-    console.log('Meal saved successfully!');
-  };
-
   return (
     <div className="space-y-6">
       <div>
@@ -66,14 +62,7 @@ export function ManualMealForm() {
         onChange={value => handleMacroChange('fat', value)}
       />
 
-      <AuthRequiredButton
-        successMessageText="Meal saved successfully!"
-        errorMessageText="Failed to save meal. Please try again."
-        successMessageDescription="'You can now view your meal in 'Nutrition' page'"
-        loadingText="Saving meal..."
-        onAuthenticatedClick={handleSaveMeal}
-        className="w-full"
-      >
+      <AuthRequiredButton isBusy={false} loadingText="Saving meal..." className="w-full">
         <Save className="h-4 w-4 mr-2" />
         Save Meal
       </AuthRequiredButton>

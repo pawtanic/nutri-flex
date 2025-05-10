@@ -92,13 +92,7 @@ export function BarcodeProductDisplay({ nutritionInfo, onBackAction }: BarcodePr
         </CardContent>
       </Card>
 
-      <AuthRequiredButton
-        successMessageText="Product added successfully!"
-        successMessageDescription="You can now view your added product in the 'Nutrition' page."
-        errorMessageText="Failed to add product. Please try again."
-        className="w-full"
-        onAuthenticatedClick={() => console.log('clicked')}
-      >
+      <AuthRequiredButton isBusy={false} className="w-full" loadingText="Adding product...">
         <ChefHat className="h-4 w-4 mr-2" />
         Add product to meal
       </AuthRequiredButton>
