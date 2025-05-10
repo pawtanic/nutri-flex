@@ -1,15 +1,7 @@
 import { LoadingButton } from '@/components/common/loading-button/loading-button';
 import { showErrorToast, showSuccessToast } from '@/app/(frontend)/utils/helpers';
 import React from 'react';
-import { useAuthModal } from '@/app/(frontend)/context/auth-modal-context';
-
-const useAuthModalState = () => {
-  // const { isUserAuthenticated } = use(AuthContext);
-  const { showAuthModal } = useAuthModal();
-  const isUserAuthenticated = true;
-
-  return { isUserAuthenticated, showAuthModal };
-};
+import { useAuth } from '@/app/(frontend)/context/auth';
 
 interface AuthRequiredButtonProps
   extends Omit<React.ComponentProps<typeof LoadingButton>, 'onClick'> {
@@ -27,7 +19,7 @@ export function AuthRequiredButton({
   errorMessageText,
   ...props
 }: AuthRequiredButtonProps) {
-  const { isUserAuthenticated, showAuthModal } = useAuthModalState();
+  const { isUserAuthenticated, showAuthModal } = useAuth();
 
   const handleClick = async () => {
     if (!isUserAuthenticated) {

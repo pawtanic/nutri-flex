@@ -13,6 +13,7 @@ export const RoutesConfig = {
   addNutrition: '/nutrition/add?tab=manual',
   hydration: '/hydration',
   history: '/history',
+  settings: '/settings',
 } as const;
 
 export const navItems = [

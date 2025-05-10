@@ -1,10 +1,10 @@
 'use client';
 
-import Image from "next/image";
-import AuthComponent from "@/components/common/auth-button/AuthComponent";
-import { WeeklyCalendar } from "@/components/weekly-calendar";
-import { StreakCard } from "./components/streak-card";
-import TabContent from "@/components/ui/pages/TabContentByPeriod";
+import Image from 'next/image';
+import { WeeklyCalendar } from '@/components/weekly-calendar';
+import { StreakCard } from './components/streak-card';
+import TabContent from '@/components/ui/pages/TabContentByPeriod';
+import { Settings } from '@/app/(frontend)/settings/_components/settings';
 
 export default function Home() {
   return (
@@ -17,7 +17,7 @@ export default function Home() {
           width={100}
           height={100}
         />
-        <AuthComponent />
+        <Settings />
       </div>
       <WeeklyCalendar />
       <StreakCard className="mb-6" />

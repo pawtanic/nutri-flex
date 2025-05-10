@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { loginAction } from '@/app/(frontend)/auth/auth-actions';
 import { FormFooter } from '@/components/common/form-footer/form-footer';
+import { SocialLoginButtons } from '@/components/common/social-login-button/social-login-button';
 
 const initialState = {
   errors: {},
@@ -64,18 +65,7 @@ export default function LoginForm({ onTabChangeAction }: { onTabChangeAction: ()
           {isPending ? 'Logging in...' : 'Log In'}
         </Button>
       </form>
-
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
-        </div>
-      </div>
-
-      {/*<SocialLoginButtons />*/}
-
+      <SocialLoginButtons />
       <FormFooter
         text="Don't have an account?"
         linkText="Sign up here"

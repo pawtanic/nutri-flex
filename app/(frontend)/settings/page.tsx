@@ -6,11 +6,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Settings } from '@/app/(frontend)/settings/_components/settings';
+
+// TODO - protected route !!!
 
 export default function SettingsPage() {
   return (
     <div className="container max-w-md mx-auto pb-20 pt-6 px-4">
-      <h1 className="text-2xl font-bold mb-6">Settings</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Settings</h1>
+        <Settings />
+      </div>
 
       <Tabs defaultValue="profile" className="mb-6">
         <TabsList className="grid w-full grid-cols-2">
