@@ -2,10 +2,9 @@ import { NextRequest } from 'next/server';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 import { RequiredDataFromCollectionSlug } from 'payload';
-import {DataUtils} from "@/lib/utils/data";
-import BotService from "@/lib/services/BotService";
+import { DataUtils } from '@/lib/utils/data';
+import BotService from '@/lib/services/BotService';
 import { Workout } from '@/payload-types';
-import { WorkoutExercise } from '@/lib/collections/types';
 
 /**
  * Interface for the workout request body
@@ -19,42 +18,6 @@ interface WorkoutRequestBody {
   targetMuscleGroups?: string[];
   equipment?: string[];
 }
-
-/**
- * Example response directly in the database format:
- * {
- *   "name": "Full Body HIIT Circuit",
- *   "description": "A high-intensity interval training workout that targets all major muscle groups...",
- *   "level": "intermediate",
- *   "duration": 45,
- *   "type": "hiit",
- *   "targetMuscleGroups": ["chest", "back", "shoulders", "arms", "legs", "core"],
- *   "exercises": [
- *     {
- *       "exercise": "60f1a5c3e4b0f2001c1e1a01", // ID of the exercise in the database
- *       "sets": 3,
- *       "reps": "15",
- *       "restBetweenSets": 30,
- *       "notes": "Focus on form and control throughout the movement"
- *     }
- *   ],
- *   "notes": {
- *     "root": {
- *       "type": "root",
- *       "children": [
- *         {
- *           "type": "paragraph",
- *           "children": [{"text": "Warm up for 5 minutes before starting the workout..."}]
- *         }
- *       ],
- *       "direction": null,
- *       "format": "",
- *       "indent": 0,
- *       "version": 1
- *     }
- *   }
- * }
- */
 
 /**
  * POST handler for the workout route
@@ -78,73 +41,59 @@ export async function POST(request: NextRequest) {
     const context: Record<string, any> = {};
 
     // Add optional parameters to the context if provided
-    if (body.level) {
-      context.level = body.level;
-    }
-    if (body.duration) {
-      context.duration = body.duration;
-    }
-    if (body.type) {
-      context.type = body.type;
-    }
-    if (body.targetMuscleGroups) {
-      context.targetMuscleGroups = body.targetMuscleGroups;
-    }
-    if (body.equipment) {
-      context.equipment = body.equipment;
-    }
+    if (body.level) context.level = body.level;
+    if (body.duration) context.duration = body.duration;
+    if (body.type) context.type = body.type;
+    if (body.targetMuscleGroups) context.targetMuscleGroups = body.targetMuscleGroups;
+    if (body.equipment) context.equipment = body.equipment;
 
     // Define the expected response format that matches the database schema
     const responseFormat: RequiredDataFromCollectionSlug<'workouts'> = {
-      name: "Workout Name",
-      description: "Brief overview of the workout",
-      level: "intermediate", // Default level
-      duration: 45, // Example duration in minutes
-      type: "strength", // Default type
-      targetMuscleGroups: ["chest", "back"], // Example target muscle groups
+      name: 'Workout Name',
+      date: new Date().toISOString(),
       exercises: [
         {
-          exercise: "", // This would be an ID in a real implementation
-          sets: 3,
-          reps: "10",
-          restBetweenSets: 60,
-          notes: "Focus on form"
-        }
+          exerciseName: 'Exercise Name',
+          sets: [
+            {
+              reps: 10,
+              weight: 20,
+            },
+          ],
+        },
       ],
-      notes: DataUtils.convertToRichText("Additional notes for the workout")
+      notes: DataUtils.convertToRichText('Additional notes for the workout'),
     };
 
     // Custom formatting instructions for the workout response that matches the database schema
     const formattingInstructions = `
     {
       "name": "Workout Name", // REQUIRED: Provide a descriptive name for the workout
-      "description": "Brief overview of the workout", // REQUIRED: Provide a concise description of the workout
-      "level": "${body.level || 'intermediate'}", // REQUIRED: Use one of: beginner, intermediate, advanced
-      "duration": ${body.duration || 45}, // REQUIRED: Total workout duration in minutes (between 5 and 180)
-      "type": "${body.type || 'strength'}", // REQUIRED: Use one of: strength, cardio, hiit, flexibility, hybrid
-      "targetMuscleGroups": ${JSON.stringify(body.targetMuscleGroups || ["chest", "back", "shoulders", "arms", "legs", "core"])}, // REQUIRED: Use any combination of: chest, back, shoulders, arms, legs, core, fullBody
+      "date": "${new Date().toISOString()}", // Current date in ISO format
       "exercises": [
         {
-          "exercise": "", // This would be an ID in a real implementation, leave empty for now
-          "sets": 3, // REQUIRED: Number of sets (between 1 and 20)
-          "reps": "10", // REQUIRED: Number of reps as a string (e.g., "10", "8-12", "Until failure")
-          "restBetweenSets": 60, // REQUIRED: Rest time between sets in seconds (between 0 and 300)
-          "notes": "Focus on form and control throughout the movement" // Optional: Additional notes for this exercise
+          "exerciseName": "Exercise Name", // REQUIRED: Name of the exercise
+          "sets": [
+            {
+              "reps": 10, // REQUIRED: Number of repetitions (between 1 and 100)
+              "weight": 20 // REQUIRED: Weight in pounds/kg (minimum 0)
+            },
+            // Add more sets as needed
+            {
+              "reps": 10,
+              "weight": 20
+            }
+          ]
         },
         // Add more exercises as needed, at least 3-5 exercises for a complete workout
         {
-          "exercise": "",
-          "sets": 4,
-          "reps": "12-15",
-          "restBetweenSets": 45,
-          "notes": "Maintain proper form throughout the exercise"
-        },
-        {
-          "exercise": "",
-          "sets": 3,
-          "reps": "8-10",
-          "restBetweenSets": 90,
-          "notes": "Use a weight that challenges you for the last 2 reps"
+          "exerciseName": "Another Exercise",
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 15
+            }
+          ]
         }
       ],
       "notes": {
@@ -153,7 +102,7 @@ export async function POST(request: NextRequest) {
           "children": [
             {
               "type": "paragraph",
-              "children": [{"text": "Detailed instructions for the workout, including warm-up and cool-down recommendations. Provide guidance on proper form, breathing techniques, and any modifications for different fitness levels."}]
+              "children": [{"text": "Detailed instructions for the workout, including warm-up and cool-down recommendations."}]
             }
           ],
           "direction": null,
@@ -165,51 +114,43 @@ export async function POST(request: NextRequest) {
     }`;
 
     // Call the AI service to generate the workout directly in the database format
-    const workoutData = await BotService.generateResponse<RequiredDataFromCollectionSlug<'workouts'>>({
+    const workoutData = await BotService.generateResponse<
+      RequiredDataFromCollectionSlug<'workouts'>
+    >({
       query: body.question,
-      instruction: body.instruction || 'You are a fitness expert with knowledge of various workout types and exercises.',
+      instruction:
+        body.instruction ||
+        'You are a fitness expert with knowledge of various workout types and exercises.',
       context,
       responseFormat,
-      formattingInstructions
+      formattingInstructions,
     });
 
     // Helper function to validate and sanitize workout data
     const validateWorkoutData = (data: any): RequiredDataFromCollectionSlug<'workouts'> => {
       // Ensure exercises have valid values
-      const validatedExercises = Array.isArray(data.exercises) 
-        ? data.exercises.map((exercise: WorkoutExercise, index: number) => ({
-            exercise: exercise.exercise || '', // This would be an ID in a real implementation
-            sets: typeof exercise.sets === 'number' ? Math.max(1, Math.min(exercise.sets, 20)) : 3,
-            reps: exercise.reps || '10',
-            restBetweenSets: typeof exercise.restBetweenSets === 'number' ? Math.max(0, Math.min(exercise.restBetweenSets, 300)) : 60,
-            notes: exercise.notes || null,
+      const validatedExercises = Array.isArray(data.exercises)
+        ? data.exercises.map((exercise: any) => ({
+            exerciseName: exercise.exerciseName || 'Unnamed Exercise',
+            sets: Array.isArray(exercise.sets)
+              ? exercise.sets.map((set: any) => ({
+                  reps: typeof set.reps === 'number' ? Math.max(1, Math.min(set.reps, 100)) : 10,
+                  weight: typeof set.weight === 'number' ? Math.max(0, set.weight) : 0,
+                }))
+              : [{ reps: 10, weight: 0 }],
           }))
         : [];
 
       // Ensure notes has valid structure
-      const validatedNotes = (data.notes && data.notes.root && data.notes.root.children) 
-        ? data.notes 
-        : DataUtils.convertToRichText("Additional notes for the workout");
-
-      // Ensure targetMuscleGroups is valid
-      const validMuscleGroups = ['chest', 'back', 'shoulders', 'arms', 'legs', 'core', 'fullBody'];
-      const validatedTargetMuscleGroups = Array.isArray(data.targetMuscleGroups) 
-        ? data.targetMuscleGroups.filter((group: string) => validMuscleGroups.includes(group))
-        : ['fullBody'];
-
-      // If no valid muscle groups were found, default to fullBody
-      if (validatedTargetMuscleGroups.length === 0) {
-        validatedTargetMuscleGroups.push('fullBody');
-      }
+      const validatedNotes =
+        data.notes && data.notes.root && data.notes.root.children
+          ? data.notes
+          : DataUtils.convertToRichText('Additional notes for the workout');
 
       // Return the validated workout data
       return {
         name: data.name || 'Untitled Workout',
-        description: data.description || '',
-        level: ['beginner', 'intermediate', 'advanced'].includes(data.level) ? data.level : 'intermediate',
-        duration: typeof data.duration === 'number' ? Math.max(5, Math.min(data.duration, 180)) : 45,
-        type: ['strength', 'cardio', 'hiit', 'flexibility', 'hybrid'].includes(data.type) ? data.type : 'strength',
-        targetMuscleGroups: validatedTargetMuscleGroups,
+        date: data.date || new Date().toISOString(),
         exercises: validatedExercises,
         notes: validatedNotes,
       };
@@ -233,10 +174,13 @@ export async function POST(request: NextRequest) {
 
       // Check if it's a validation error
       if (error instanceof Error && error.name === 'ValidationError') {
-        return Response.json({
-          error: 'Validation error when saving workout',
-          details: error.message || 'Unknown validation error'
-        }, { status: 400 });
+        return Response.json(
+          {
+            error: 'Validation error when saving workout',
+            details: error.message || 'Unknown validation error',
+          },
+          { status: 400 }
+        );
       }
 
       return Response.json({ error: 'Failed to save workout to database' }, { status: 500 });
@@ -249,12 +193,12 @@ export async function POST(request: NextRequest) {
 
 /**
  * The workout route handles AI-generated workout plans.
- * 
+ *
  * The service handles:
  * - Constructing the prompt with the user's query and context
  * - Calling the AI model
  * - Parsing and returning the response directly in the database format
- * 
+ *
  * The response format is structured to match the database schema exactly,
  * eliminating the need for post-processing before saving to the database.
  * This includes properly formatted rich text fields for notes.

@@ -4,27 +4,28 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { BicepsFlexed, Plus, Trash2 } from 'lucide-react';
 import { AuthRequiredButton } from '@/components/common/auth-button/auth-button';
-import { ExerciseSchema } from '@/app/(frontend)/workouts/_schemas/exercise-schema';
+import { SetSchema } from '@/app/(frontend)/workouts/_schemas/exercise-schema';
 import { useActionState, useState } from 'react';
 import { addExercisesAction } from '@/app/(frontend)/workouts/_actions/add-exercises-action';
-import WarningAlert from '@/components/common/warning-alert/warning-alert';
 import FormErrorMessage from '@/components/common/form-error-message/form-error-message';
-import { ActionResponse } from '@/app/(frontend)/types/common-types';
-import { useFocusError } from '@/hooks/use-focus-error';
+// import { useFocusError } from '@/hooks/use-focus-error';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import * as React from 'react';
 import { getExerciseDisplayName } from '@/app/(frontend)/utils/helpers';
+import type { Workout } from '@/payload-types';
+import { ActionResponse } from '@/app/(frontend)/types/common-types';
 
-export type Exercise = Omit<ExerciseSchema, 'workoutName'> & { id?: string };
+export type Set = SetSchema;
+// Define a non-nullable version of the Exercises type
+export type Exercises = NonNullable<Workout['exercises']>;
 
 interface WorkoutFormProps {
-  exercises: Exercise[];
-  setExercises: (exercises: Exercise[]) => void;
+  exercises: Exercises;
+  setExercises: (exercises: Exercises) => void;
 }
 
 const initialState: ActionResponse = {
@@ -35,13 +36,15 @@ const initialState: ActionResponse = {
 
 export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
   const [state, action, isPending] = useActionState(addExercisesAction, initialState);
-  console.log(state);
-  // bug fix needed
-  useFocusError(state.errors);
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
-
   const addExercise = () => {
-    const newExercises = [...exercises, { exerciseName: '', sets: 1, reps: 1 }];
+    const newExercises = [
+      ...exercises,
+      {
+        exerciseName: '',
+        sets: [{ reps: null, weight: null }],
+      },
+    ];
     setExercises(newExercises);
     setExpandedSections([`exercise-${newExercises.length - 1}`]);
   };
@@ -58,9 +61,64 @@ export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
     }
   };
 
-  const updateExercise = (index: number, field: string, value: string) => {
+  const updateExercise = (index: number, field: string, value: string | Set[]) => {
     const newExercises = [...exercises];
-    newExercises[index] = { ...newExercises[index], [field]: value };
+
+    if (field === 'sets') {
+      // When updating the entire sets array
+      newExercises[index] = { ...newExercises[index], sets: value as Set[] };
+    } else {
+      // For other fields like exerciseName
+      newExercises[index] = { ...newExercises[index], [field]: value };
+    }
+
+    setExercises(newExercises);
+  };
+
+  const updateSet = (exerciseIndex: number, setIndex: number, field: string, value: string) => {
+    const newExercises = [...exercises];
+    const newSets = [...newExercises[exerciseIndex].sets];
+
+    newSets[setIndex] = {
+      ...newSets[setIndex],
+      [field]: field === 'reps' || field === 'weight' ? Number(value) : value,
+    };
+
+    newExercises[exerciseIndex] = {
+      ...newExercises[exerciseIndex],
+      sets: newSets,
+    };
+
+    setExercises(newExercises);
+  };
+
+  const addSet = (exerciseIndex: number) => {
+    const newExercises = [...exercises];
+    const newSets = [...newExercises[exerciseIndex].sets, { reps: null, weight: null }];
+
+    newExercises[exerciseIndex] = {
+      ...newExercises[exerciseIndex],
+      sets: newSets,
+    };
+
+    setExercises(newExercises);
+  };
+
+  const removeSet = (exerciseIndex: number, setIndex: number) => {
+    if (exercises[exerciseIndex].sets.length <= 1) {
+      return; // Don't remove the last set
+    }
+
+    const newExercises = [...exercises];
+    const newSets = [...newExercises[exerciseIndex].sets];
+
+    newSets.splice(setIndex, 1);
+
+    newExercises[exerciseIndex] = {
+      ...newExercises[exerciseIndex],
+      sets: newSets,
+    };
+
     setExercises(newExercises);
   };
 
@@ -68,16 +126,18 @@ export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
     setExpandedSections(newExpandedSections);
   };
 
+  const handleAction = async (formData: FormData) => {
+    formData.append('exercises', JSON.stringify(exercises));
+    return action(formData);
+  };
+
   // hide in fn ?
   const workoutNameError = state.errors?.[0]?.workoutName?.[0];
   const hasExercises = exercises.length > 0;
 
-  // bug:
-  // - workout name value dissapear after submit althoug is invalid - should be preserved
-
   return (
     <Wrapper>
-      <form action={action} className="space-y-6">
+      <form action={handleAction} className="space-y-6">
         <div>
           <Label htmlFor="workout-name">Workout Name</Label>
           <Input
@@ -85,6 +145,7 @@ export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
             name="workoutName"
             placeholder="e.g., Upper Body, Leg Day"
             className="mt-1"
+            defaultValue={state?.inputs?.workoutName}
             aria-invalid={!!workoutNameError}
           />
           {workoutNameError && <FormErrorMessage errorMessage={workoutNameError} />}
@@ -106,20 +167,14 @@ export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
               state={state}
               onRemoveExercise={removeExercise}
               onUpdateExercise={updateExercise}
+              onUpdateSet={updateSet}
+              onAddSet={addSet}
+              onRemoveSet={removeSet}
             />
           )}
         </div>
-        {!state.success && state.message && <WarningAlert description={state.message} />}
         {hasExercises && (
-          <AuthRequiredButton
-            loadingText="Saving workout..."
-            successMessageText="Workout saved successfully!"
-            successMessageDescription="You can now view your added workout in the 'Workouts' page."
-            errorMessageText="Failed to save workout. Please try again."
-            className="w-full"
-            // optional prop ? or completely get rid of ?
-            disabled={isPending}
-          >
+          <AuthRequiredButton loadingText="Saving workout..." className="w-full" isBusy={isPending}>
             Save Workout
           </AuthRequiredButton>
         )}
@@ -131,10 +186,13 @@ export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
 interface ExercisesAccordionProps {
   expandedSections: string[];
   onAccordionChange: (newExpandedSections: string[]) => void;
-  exercises: Exercise[];
+  exercises: Exercises;
   state: ActionResponse;
   onRemoveExercise: (index: number) => void;
   onUpdateExercise: (index: number, field: string, value: string) => void;
+  onUpdateSet: (exerciseIndex: number, setIndex: number, field: string, value: string) => void;
+  onAddSet: (exerciseIndex: number) => void;
+  onRemoveSet: (exerciseIndex: number, setIndex: number) => void;
 }
 
 function ExercisesAccordion({
@@ -144,6 +202,9 @@ function ExercisesAccordion({
   state,
   onRemoveExercise,
   onUpdateExercise,
+  onUpdateSet,
+  onAddSet,
+  onRemoveSet,
 }: ExercisesAccordionProps) {
   return (
     <Accordion
@@ -175,6 +236,9 @@ function ExercisesAccordion({
                   exercises={exercises}
                   onRemoveExercise={onRemoveExercise}
                   onUpdateExercise={onUpdateExercise}
+                  onUpdateSet={onUpdateSet}
+                  onAddSet={onAddSet}
+                  onRemoveSet={onRemoveSet}
                 />
               </div>
             </AccordionContent>
@@ -188,9 +252,12 @@ function ExercisesAccordion({
 interface ExerciseCardProps {
   index: number;
   state: ActionResponse;
-  exercises: Exercise[];
+  exercises: Exercises;
   onRemoveExercise: (index: number) => void;
   onUpdateExercise: (index: number, field: string, value: string) => void;
+  onUpdateSet: (exerciseIndex: number, setIndex: number, field: string, value: string) => void;
+  onAddSet: (exerciseIndex: number) => void;
+  onRemoveSet: (exerciseIndex: number, setIndex: number) => void;
 }
 
 function ExercisesCardContent({
@@ -199,16 +266,16 @@ function ExercisesCardContent({
   exercises,
   onRemoveExercise,
   onUpdateExercise,
+  onUpdateSet,
+  onAddSet,
+  onRemoveSet,
 }: ExerciseCardProps) {
-  // const exerciseErrors = state.errors?.[index] || state.message;
   const exerciseErrors = state.errors?.[index] || null;
   const errorMessage = state.message || null;
 
   const [exerciseNameError] = exerciseErrors?.exerciseName || [];
-  const [repsError] = exerciseErrors?.reps || [];
-  const [setsError] = exerciseErrors?.sets || [];
   const isOnlyExercise = exercises.length === 1;
-
+  console.log(state, 'state');
   return (
     <div className="pt-2 pb-4">
       <div className="grid grid-cols-[1fr,auto] gap-2">
@@ -217,6 +284,7 @@ function ExercisesCardContent({
           name="exerciseName"
           value={exercises[index].exerciseName}
           onChange={e => onUpdateExercise(index, 'exerciseName', e.target.value)}
+          defaultValue={state?.inputs?.exercises?.[index]?.exerciseName}
           aria-invalid={!!exerciseNameError}
         />
         <Button
@@ -231,40 +299,73 @@ function ExercisesCardContent({
           />
         </Button>
         {exerciseNameError && <FormErrorMessage errorMessage={exerciseNameError || errorMessage} />}
-        {/*{index === 0 && errorMessage && <FormErrorMessage errorMessage={errorMessage} />}*/}
-        <div className="col-span-2 grid grid-cols-2 gap-3 mt-2">
-          <div>
-            <Label htmlFor={`sets-${index}`} className="text-xs">
-              Sets
-            </Label>
-            <Input
-              id={`sets-${index}`}
-              name={`sets-${index}`}
-              type="number"
-              placeholder="Sets"
-              value={exercises[index].sets}
-              onChange={e => onUpdateExercise(index, 'sets', e.target.value)}
-              aria-invalid={!!setsError}
-            />
-            {setsError && <FormErrorMessage errorMessage={setsError} />}
+
+        <div className="col-span-2 mt-4">
+          <div className="flex justify-between items-center mb-2">
+            <Label className="text-sm font-medium">Sets</Label>
+            <div className="space-x-3">
+              <Button type="button" size="sm" onClick={() => onAddSet(index)} className="h-8">
+                <Plus className="h-4 w-4 mr-1" />
+                Add set
+              </Button>
+            </div>
           </div>
-          <div>
-            <Label htmlFor={`reps-${index}`} className="text-xs">
-              Reps
-            </Label>
-            <Input
-              id={`reps-${index}`}
-              name={`reps-${index}`}
-              type="number"
-              placeholder="Reps"
-              value={exercises[index].reps}
-              onChange={e => onUpdateExercise(index, 'reps', e.target.value)}
-              aria-invalid={!!repsError}
-            />
-            {repsError && <FormErrorMessage errorMessage={repsError} />}
-            {/*HACK for now to pass exercises array to Form Data*/}
-            <input type="hidden" name="exercises" value={JSON.stringify(exercises)} />
-          </div>
+          {exercises[index].sets.map((_, setIndex) => {
+            // Get errors for this specific set
+            const setErrors = exerciseErrors?.sets?.[setIndex] || {};
+            return (
+              // component
+              <div
+                key={setIndex}
+                className="grid grid-cols-[1fr,1fr,auto] gap-3 mb-3 p-3 bg-gray-50 rounded-md"
+              >
+                <div>
+                  <Label htmlFor={`reps-${index}-${setIndex}`} className="text-xs">
+                    Reps
+                  </Label>
+                  <Input
+                    id={`reps-${index}-${setIndex}`}
+                    name={`reps-${index}-${setIndex}`}
+                    type="number"
+                    placeholder="Reps"
+                    onChange={e => onUpdateSet(index, setIndex, 'reps', e.target.value)}
+                    aria-invalid={!!setErrors.reps}
+                    defaultValue={state?.inputs?.exercises?.[index]?.sets?.[setIndex]?.reps}
+                  />
+                  {setErrors.reps && <FormErrorMessage errorMessage={setErrors.reps} />}
+                </div>
+
+                <div>
+                  <Label htmlFor={`weight-${index}-${setIndex}`} className="text-xs">
+                    Weight (kg)
+                  </Label>
+                  <Input
+                    id={`weight-${index}-${setIndex}`}
+                    name={`weight-${index}-${setIndex}`}
+                    type="number"
+                    placeholder="Weight"
+                    onChange={e => onUpdateSet(index, setIndex, 'weight', e.target.value)}
+                    aria-invalid={!!setErrors.weight}
+                    defaultValue={state?.inputs?.exercises?.[index]?.sets?.[setIndex]?.weight}
+                  />
+                  {setErrors.weight && <FormErrorMessage errorMessage={setErrors.weight} />}
+                </div>
+
+                {exercises[index].sets.length > 1 && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => onRemoveSet(index, setIndex)}
+                    className="self-end mb-1"
+                    aria-label="Remove set"
+                  >
+                    <Trash2 aria-hidden="true" className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

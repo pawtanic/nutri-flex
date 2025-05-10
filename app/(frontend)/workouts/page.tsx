@@ -2,6 +2,8 @@ import WorkoutsPageClient from '@/app/(frontend)/workouts/_components/WorkoutsPa
 import { Suspense } from 'react';
 import { fetchWorkouts } from '@/app/(frontend)/workouts/_api/fetch-workouts';
 
+// export const dynamic = 'force-dynamic';
+
 export default async function WorkoutsPage() {
   const payloadWorkouts = await fetchWorkouts();
   return (

@@ -1,6 +1,6 @@
 import { getPayload } from 'payload';
 import config from '@payload-config';
-import { Workout } from '@/payload-types';
+import type { Workout } from '@/payload-types';
 
 export async function updateExistingWorkout(id: string, updatedWorkoutData: Workout) {
   const payload = await getPayload({ config });

@@ -13,14 +13,9 @@ import { AuthRequiredButton } from '@/components/common/auth-button/auth-button'
 interface RecipeDisplayProps {
   recipe: Recipe;
   onGenerateAnotherAction: () => void;
-  onSaveMealAction: (recipe: Recipe) => void;
 }
 
-export function RecipeDisplay({
-  recipe,
-  onGenerateAnotherAction,
-  onSaveMealAction,
-}: RecipeDisplayProps) {
+export function RecipeDisplay({ recipe, onGenerateAnotherAction }: RecipeDisplayProps) {
   return (
     <div className="space-y-4">
       <Card>
@@ -38,12 +33,7 @@ export function RecipeDisplay({
         <Button variant="outline" className="flex-1" onClick={onGenerateAnotherAction}>
           Generate Another
         </Button>
-        <AuthRequiredButton
-          onAuthenticatedClick={onSaveMealAction}
-          successMessageText="Meal saved successfully!"
-          successMessageDescription="You can now view your added meal in the 'Nutrition' page."
-          errorMessageText="Failed to save meal. Please try again."
-        >
+        <AuthRequiredButton loadingText="Saving meal..." isBusy={false}>
           <Plus className="h-4 w-4 mr-2" />
           Save Meal
         </AuthRequiredButton>

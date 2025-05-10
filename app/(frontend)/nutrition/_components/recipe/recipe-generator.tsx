@@ -8,7 +8,7 @@ import { useRecipeGenerator } from '@/app/(frontend)/nutrition/hooks/use-recipe-
 import RecipeDietaryPreferenceSelect, {
   dietaryPreferenceLabels,
 } from '@/app/(frontend)/nutrition/_components/recipe/recipe-dietary-preference-select';
-import { useSaveRecipe } from '@/app/(frontend)/nutrition/hooks/save-recipe';
+// import { useSaveRecipe } from '@/app/(frontend)/nutrition/hooks/save-recipe';
 
 export function RecipeGenerator() {
   const [prompt, setPrompt] = useState('');
@@ -16,7 +16,7 @@ export function RecipeGenerator() {
   const [dietaryPreference, setDietaryPreference] = useState(dietaryPreferenceLabels[0].value);
 
   const { generateRecipe, isGenerating } = useRecipeGenerator();
-  const { handleSaveMeal } = useSaveRecipe();
+  // const { handleSaveMeal } = useSaveRecipe();
 
   const handleGenerateRecipe = async () => {
     if (!prompt.trim()) return;
@@ -55,7 +55,6 @@ export function RecipeGenerator() {
           recipe={recipe!}
           // recipe={recipe}
           onGenerateAnotherAction={handleGenerateAnotherRecipe}
-          onSaveMealAction={handleSaveMeal}
         />
       )}
     </div>

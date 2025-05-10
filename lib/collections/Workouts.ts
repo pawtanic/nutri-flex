@@ -28,33 +28,38 @@ export const Workouts: CollectionConfig = {
     {
       name: 'exercises',
       type: 'array',
-      required: true,
+      required: false,
       admin: {
         description: 'Add exercises to this workout',
       },
       fields: [
         {
-          name: 'name',
+          name: 'exerciseName',
           type: 'text',
           required: true,
         },
         {
           name: 'sets',
-          type: 'number',
+          type: 'array',
           required: true,
-          min: 1,
-          max: 20,
-        },
-        {
-          name: 'reps',
-          type: 'number',
-          required: true,
-          min: 1,
-          max: 100,
-        },
-        {
-          name: 'notes',
-          type: 'textarea',
+          minRows: 1,
+          admin: {
+            description: 'Add sets to this exercise',
+          },
+          fields: [
+            {
+              name: 'reps',
+              type: 'number',
+              required: false,
+              min: 1,
+            },
+            {
+              name: 'weight',
+              type: 'number',
+              required: false,
+              min: 0,
+            },
+          ],
         },
       ],
     },
