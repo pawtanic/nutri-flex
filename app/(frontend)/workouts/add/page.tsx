@@ -10,10 +10,10 @@ import { DateHeader } from '@/components/date-header';
 import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 import { ExerciseSelector } from '@/app/(frontend)/workouts/_components/exercise-selector';
 import { Wrapper } from '@/components/layout/Wrapper';
-import { WorkoutForm, Exercise } from '@/app/(frontend)/workouts/_components/workout-form';
+import { WorkoutForm, Exercises } from '@/app/(frontend)/workouts/_components/workout-form';
 
 export default function AddWorkoutPage() {
-  const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [exercises, setExercises] = useState<Exercises>([]);
   const { tab, setTab } = useTabWithUrl({ defaultTab: 'manual' });
   return (
     <Wrapper>

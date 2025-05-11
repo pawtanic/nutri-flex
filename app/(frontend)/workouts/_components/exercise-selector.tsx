@@ -15,7 +15,7 @@ import { MuscleGroupSelector } from './muscle-group-selector';
 import { ExerciseFilterPanel } from './exercise-filter-panel';
 import { ExerciseList } from './exercise-list';
 import { ExerciseDetail } from './exercise-detail';
-import { Exercise } from './workout-form';
+import { Exercises } from './workout-form';
 import { applyFiltersAndSort, FilterState, showSuccessToast } from '@/app/(frontend)/utils/helpers';
 import WarningAlert from '@/components/common/warning-alert/warning-alert';
 import Link from 'next/link';
@@ -25,9 +25,10 @@ import { useUrlParams } from '@/hooks/useUrlParams';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 interface ExerciseSelectorProps {
-  setExercisesAction: React.Dispatch<React.SetStateAction<Exercise[]>>;
+  setExercisesAction: React.Dispatch<React.SetStateAction<Exercises>>;
 }
 
+// TODO; refactor to new structure
 export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) {
   const [storedMuscleGroup, setStoredMuscleGroup] = useLocalStorage('selectedMuscleGroup', '');
   const { updateParams, getParams } = useUrlParams();
@@ -78,10 +79,14 @@ export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) 
 
   const addSelectedExercise = () => {
     if (selectedExercise) {
-      const formattedExercise: Exercise = {
+      const formattedExercise: Exercises[number] = {
         exerciseName: selectedExercise.name,
-        sets: 1,
-        reps: 1,
+        sets: [
+          {
+            reps: 1,
+            weight: 1,
+          },
+        ],
       };
 
       setExercisesAction(prevExercises => [...prevExercises, formattedExercise]);

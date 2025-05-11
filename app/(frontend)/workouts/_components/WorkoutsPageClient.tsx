@@ -10,19 +10,10 @@ import { useDate } from '@/app/(frontend)/context/date-context';
 import { linkAkaBtnStyles } from '@/app/(frontend)/utils/constants';
 import { RoutesConfig } from '@/components/common/navigation/navigation';
 import { useTabWithUrl } from '@/hooks/use-tab-with-url';
-import { Exercise } from '@/app/(frontend)/workouts/_components/workout-form';
-import { Workout as PayloadWorkout } from '@/payload-types';
-
-export interface Workout {
-  id?: string;
-  name: string;
-  exercises: Exercise[];
-  date: string;
-  createdBy: string;
-}
+import type { Workout } from '@/payload-types';
 
 interface WorkoutsPageClientProps {
-  initialWorkouts: PayloadWorkout[];
+  initialWorkouts: Workout[];
   initialTab: string;
 }
 
@@ -89,13 +80,18 @@ export default function WorkoutsPageClient({
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
-                    {workout.exercises.map((exercise, index) => (
-                      <li key={index} className="text-sm">
+                    {workout?.exercises?.map((exercise, index) => (
+                      <li key={exercise.id} className="text-sm">
                         <div className="flex justify-between">
-                          <span>{exercise.name}</span>
-                          <span className="text-muted-foreground">
-                            {exercise.sets} × {exercise.reps}
-                          </span>
+                          <span>{exercise.exerciseName}</span>
+                          {/*<span className="text-muted-foreground">*/}
+                          {/*  {exercise.sets[index].reps} × {exercise.sets[index].weight}*/}
+                          {/*</span>*/}
+                          {exercise.sets.map(set => (
+                            <span key={set.id} className="text-muted-foreground">
+                              {set.reps} × {set.weight}
+                            </span>
+                          ))}
                         </div>
                       </li>
                     ))}

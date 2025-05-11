@@ -168,9 +168,17 @@ export interface Media {
  */
 export interface Exercise {
   id: string;
-  name: string;
-  description: string;
-  instructions: {
+  exerciseName: string;
+  /**
+   * Sets for this exercise
+   */
+  sets: {
+    reps?: number | null;
+    weight?: number | null;
+    id?: string | null;
+  }[];
+  description?: string | null;
+  instructions?: {
     root: {
       type: string;
       children: {
@@ -184,15 +192,10 @@ export interface Exercise {
       version: number;
     };
     [k: string]: unknown;
-  };
-  muscleGroups: ('chest' | 'back' | 'shoulders' | 'arms' | 'legs' | 'core' | 'fullBody')[];
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  } | null;
+  muscleGroups?: ('chest' | 'back' | 'shoulders' | 'arms' | 'legs' | 'core' | 'fullBody')[] | null;
+  difficulty?: ('beginner' | 'intermediate' | 'advanced') | null;
   equipment?: ('none' | 'dumbbells' | 'barbell' | 'kettlebell' | 'resistanceBands' | 'machine' | 'bodyweight')[] | null;
-  demonstrationImage?: (string | null) | Media;
-  /**
-   * URL to a video demonstration (e.g., YouTube link)
-   */
-  demonstrationVideo?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -207,13 +210,20 @@ export interface Workout {
   /**
    * Add exercises to this workout
    */
-  exercises: {
-    name: string;
-    sets: number;
-    reps: number;
-    notes?: string | null;
-    id?: string | null;
-  }[];
+  exercises?:
+    | {
+        exerciseName: string;
+        /**
+         * Add sets to this exercise
+         */
+        sets: {
+          reps?: number | null;
+          weight?: number | null;
+          id?: string | null;
+        }[];
+        id?: string | null;
+      }[]
+    | null;
   /**
    * Additional notes or instructions for the workout
    */
@@ -615,14 +625,19 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "exercises_select".
  */
 export interface ExercisesSelect<T extends boolean = true> {
-  name?: T;
+  exerciseName?: T;
+  sets?:
+    | T
+    | {
+        reps?: T;
+        weight?: T;
+        id?: T;
+      };
   description?: T;
   instructions?: T;
   muscleGroups?: T;
   difficulty?: T;
   equipment?: T;
-  demonstrationImage?: T;
-  demonstrationVideo?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -636,10 +651,14 @@ export interface WorkoutsSelect<T extends boolean = true> {
   exercises?:
     | T
     | {
-        name?: T;
-        sets?: T;
-        reps?: T;
-        notes?: T;
+        exerciseName?: T;
+        sets?:
+          | T
+          | {
+              reps?: T;
+              weight?: T;
+              id?: T;
+            };
         id?: T;
       };
   notes?: T;

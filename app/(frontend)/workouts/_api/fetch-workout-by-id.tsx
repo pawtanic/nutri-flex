@@ -2,7 +2,8 @@
 
 import { getPayload } from 'payload';
 import config from '@payload-config';
-import { Workout } from '@/app/(frontend)/workouts/_components/WorkoutsPageClient';
+import { Workout } from '@/payload-types';
+import { Exercises } from '@/app/(frontend)/workouts/_components/workout-form';
 
 export async function getWorkoutById(id: string): Promise<Workout | null> {
   try {
@@ -22,16 +23,15 @@ export async function getWorkoutById(id: string): Promise<Workout | null> {
       id: workout.id,
       name: workout.name,
       date: workout.date,
-      exercises: workout.exercises.map((exercise: any) => ({
-        exerciseName: exercise.name,
-        sets: exercise.sets,
-        reps: exercise.reps,
-        notes: exercise.notes || '',
-        id: exercise.id,
-      })),
+      exercises:
+        workout.exercises?.map((exercise: Exercises[number]) => ({
+          exerciseName: exercise.exerciseName,
+          sets: exercise.sets,
+          id: exercise.id,
+        })) || [],
       createdBy:
         typeof workout.createdBy === 'string' ? workout.createdBy : workout.createdBy?.id || '',
-    };
+    } as Workout;
   } catch (error) {
     console.error('Error fetching workout by ID:', error);
     return null;
