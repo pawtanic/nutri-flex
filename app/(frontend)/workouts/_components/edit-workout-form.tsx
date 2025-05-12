@@ -145,8 +145,8 @@ export function EditWorkoutForm({ workout }: { workout: Workout }) {
     formData.append('workoutName', workoutName);
     formData.append('exercises', JSON.stringify(exercises));
     formData.append('date', workout.date);
-    console.log('Submitting exercises:', exercises);
     formData.append('exercises', JSON.stringify(exercises));
+
     return action(formData);
   };
 
@@ -266,7 +266,6 @@ export function EditWorkoutForm({ workout }: { workout: Workout }) {
                                   <FormErrorMessage errorMessage={setErrors.reps} />
                                 )}
                               </div>
-
                               <div>
                                 <Label htmlFor={`weight-${index}-${setIndex}`} className="text-xs">
                                   Weight (kg)
