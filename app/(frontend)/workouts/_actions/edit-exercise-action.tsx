@@ -4,8 +4,6 @@
 import { ActionResponse } from '@/app/(frontend)/types/common-types';
 import { exerciseSchema } from '@/app/(frontend)/workouts/_schemas/exercise-schema';
 import { updateExistingWorkout } from '@/app/(frontend)/workouts/_api/update-workout';
-import { redirect } from 'next/navigation';
-import { RoutesConfig } from '@/components/common/navigation/navigation';
 import { Exercises } from '@/app/(frontend)/workouts/_components/workout-form';
 import { Workout } from '@/payload-types';
 
@@ -18,7 +16,7 @@ export async function updateWorkout(
   const workoutId = formData.get('workoutId') as string;
   const workoutName = formData.get('workoutName') as string;
   const exercises = JSON.parse(formData.get('exercises') as string) as Exercises;
-  console.log(exercises, 'fromn update workout');
+
   if (!exercises.length) {
     return {
       success: false,
@@ -101,14 +99,12 @@ export async function updateWorkout(
           reps: Number(set.reps),
           weight: Number(set.weight),
         })),
-        id: exercise.id,
       })),
     } as Workout);
 
-    redirect(RoutesConfig.workout);
+    return { success: true, message: 'Workout updated successfully' };
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error('Error updating workout:', error.message);
       return {
         success: false,
         message: 'An error occurred during workout update',

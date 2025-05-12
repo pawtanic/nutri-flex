@@ -144,6 +144,9 @@ export function EditWorkoutForm({ workout }: { workout: Workout }) {
     formData.append('workoutId', workout.id as string);
     formData.append('workoutName', workoutName);
     formData.append('exercises', JSON.stringify(exercises));
+    formData.append('date', workout.date);
+    formData.append('exercises', JSON.stringify(exercises));
+
     return action(formData);
   };
 
@@ -255,6 +258,7 @@ export function EditWorkoutForm({ workout }: { workout: Workout }) {
                                   onChange={e => updateSet(index, setIndex, 'reps', e.target.value)}
                                   aria-invalid={!!setErrors.reps}
                                   defaultValue={
+                                    set.reps ??
                                     state?.inputs?.exercises?.[index]?.sets?.[setIndex]?.reps
                                   }
                                 />
@@ -262,7 +266,6 @@ export function EditWorkoutForm({ workout }: { workout: Workout }) {
                                   <FormErrorMessage errorMessage={setErrors.reps} />
                                 )}
                               </div>
-
                               <div>
                                 <Label htmlFor={`weight-${index}-${setIndex}`} className="text-xs">
                                   Weight (kg)
@@ -277,6 +280,7 @@ export function EditWorkoutForm({ workout }: { workout: Workout }) {
                                   }
                                   aria-invalid={!!setErrors.weight}
                                   defaultValue={
+                                    set.weight ??
                                     state?.inputs?.exercises?.[index]?.sets?.[setIndex]?.weight
                                   }
                                 />
@@ -297,15 +301,10 @@ export function EditWorkoutForm({ workout }: { workout: Workout }) {
         </Accordion>
         {!state.success && state.message && <WarningAlert description={state.message} />}
       </div>
-      <div className="flex gap-3">
-        <Button type="button" variant="outline" className="flex-1" onClick={() => router.back()}>
-          Cancel
-        </Button>
-        <AuthRequiredButton loadingText="Updating workout..." isBusy={isPending}>
-          <Save className="h-4 w-4 mr-2" />
-          Save Changes
-        </AuthRequiredButton>
-      </div>
+      <AuthRequiredButton className="w-full" loadingText="Updating workout..." isBusy={isPending}>
+        <Save className="h-4 w-4 mr-2" />
+        Save Changes
+      </AuthRequiredButton>
     </form>
   );
 }

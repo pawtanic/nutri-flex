@@ -52,7 +52,6 @@ export const Workouts: CollectionConfig = {
               type: 'number',
               required: false,
               min: 1,
-              max: 100,
             },
             {
               name: 'weight',
