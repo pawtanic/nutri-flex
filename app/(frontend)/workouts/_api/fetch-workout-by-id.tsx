@@ -3,7 +3,7 @@
 import { getPayload } from 'payload';
 import config from '@payload-config';
 import { Workout } from '@/payload-types';
-import { Exercises } from '@/app/(frontend)/workouts/_components/workout-form';
+import type { Exercises } from '@/app/(frontend)/workouts/_components/workout-form-types';
 
 export async function getWorkoutById(id: string): Promise<Workout | null> {
   try {

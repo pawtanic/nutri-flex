@@ -4,7 +4,7 @@
 import { ActionResponse } from '@/app/(frontend)/types/common-types';
 import { exerciseSchema } from '@/app/(frontend)/workouts/_schemas/exercise-schema';
 import { updateExistingWorkout } from '@/app/(frontend)/workouts/_api/update-workout';
-import { Exercises } from '@/app/(frontend)/workouts/_components/workout-form';
+import type { Exercises } from '@/app/(frontend)/workouts/_components/workout-form-types';
 import { Workout } from '@/payload-types';
 
 // todo - update in payload
