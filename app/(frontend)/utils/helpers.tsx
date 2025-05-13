@@ -10,7 +10,7 @@ import {
   SORT_OPTIONS,
   SortOption,
 } from '@/app/(frontend)/utils/constants';
-import type { Exercises } from '@/app/(frontend)/workouts/_components/workout-form';
+import type { Exercises } from '@/app/(frontend)/workouts/_components/workout-form-types';
 import { goals } from '@/components/goal-progress';
 
 export const capitalizeAll = (str: string): string => {

@@ -15,7 +15,6 @@ import { MuscleGroupSelector } from './muscle-group-selector';
 import { ExerciseFilterPanel } from './exercise-filter-panel';
 import { ExerciseList } from './exercise-list';
 import { ExerciseDetail } from './exercise-detail';
-import { Exercises } from './workout-form';
 import { applyFiltersAndSort, FilterState, showSuccessToast } from '@/app/(frontend)/utils/helpers';
 import WarningAlert from '@/components/common/warning-alert/warning-alert';
 import Link from 'next/link';
@@ -23,6 +22,7 @@ import { RoutesConfig } from '@/components/common/navigation/navigation';
 import { useRouter } from 'next/navigation';
 import { useUrlParams } from '@/hooks/useUrlParams';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { Exercises } from '@/app/(frontend)/workouts/_components/workout-form-types';
 
 interface ExerciseSelectorProps {
   setExercisesAction: React.Dispatch<React.SetStateAction<Exercises>>;

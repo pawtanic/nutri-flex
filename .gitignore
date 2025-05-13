@@ -19,8 +19,6 @@
 
 # production
 /build
-.windsurfrules
-/app/(frontend)/.windsurf/
 
 # misc
 .DS_Store
@@ -42,5 +40,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-/app/(frontend)/.windsurf/
-.windsurfrules
