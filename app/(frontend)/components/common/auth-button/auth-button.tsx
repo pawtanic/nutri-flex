@@ -26,6 +26,7 @@ export function AuthRequiredButton({
 
   return (
     <LoadingButton
+      type={isUserAuthenticated ? 'submit' : 'button'}
       onClick={handleClick}
       loadingText={loadingText}
       className={className}

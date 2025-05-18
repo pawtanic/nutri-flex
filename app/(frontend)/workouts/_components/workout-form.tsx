@@ -9,6 +9,7 @@ import { WorkoutFormProps } from './workout-form-types';
 import { NoExerciseMessage } from './no-exercise-message';
 import { ExerciseAccordion } from './exercise-accordion';
 import { useWorkoutForm } from '@/app/(frontend)/workouts/hooks/use-workout-form';
+import { useFocusError } from '@/hooks/use-focus-error';
 
 export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
   const {
@@ -27,6 +28,8 @@ export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
     removeSet,
   } = useWorkoutForm(exercises, setExercises);
 
+  // todo different structure of the errors !
+  // useFocusError(state.errors[0]);
   return (
     <Wrapper>
       <form action={handleAction} className="space-y-6">

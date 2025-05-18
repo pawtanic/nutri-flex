@@ -3,6 +3,7 @@ import { Loader } from 'lucide-react';
 import { Button, ButtonProps } from '@/components/ui/button';
 
 interface LoadingButtonProps extends Omit<ButtonProps, 'onClick'> {
+  type: 'submit' | 'button';
   onClick: () => Promise<unknown> | unknown;
   loadingContent?: React.ReactNode;
   loadingText?: string;
@@ -10,6 +11,7 @@ interface LoadingButtonProps extends Omit<ButtonProps, 'onClick'> {
 }
 
 export function LoadingButton({
+  type = 'button',
   children,
   onClick,
   loadingContent,
@@ -25,7 +27,7 @@ export function LoadingButton({
   );
 
   return (
-    <Button onClick={onClick} disabled={isBusy} {...props}>
+    <Button type={type} onClick={onClick} disabled={isBusy} {...props}>
       {isBusy ? (loadingContent ?? defaultLoadingContent) : children}
     </Button>
   );
