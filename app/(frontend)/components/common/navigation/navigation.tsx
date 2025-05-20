@@ -4,6 +4,7 @@ import { Home, Dumbbell, Apple, Droplet, BarChart2 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/app/(frontend)/lib/utils';
+import { useAuth } from '@/app/(frontend)/context/auth';
 
 export const RoutesConfig = {
   workout: '/workouts?tab=workout',
@@ -47,6 +48,7 @@ const getIconColor = (isActive: boolean, itemName: NavigationItem): string => {
 
 export default function Navigation() {
   const pathname = usePathname();
+  const { isUserAuthenticated } = useAuth();
 
   return (
     <div className="sm:max-w-md sm:mx-auto fixed bottom-0 left-0 right-0 border sm:rounded-md bg-white shadow-lg z-50">
@@ -54,6 +56,9 @@ export default function Navigation() {
         {navItems.map(item => {
           const isActive =
             (pathname.startsWith(item.href) && item.href !== '/') || pathname === item.href;
+
+          if (!isUserAuthenticated && item.name === 'History') return null;
+
           return (
             <Link
               key={item.name}

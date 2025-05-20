@@ -13,7 +13,6 @@ export async function deleteExerciseAction(
     const payload = await getPayload({ config });
 
     // First, fetch the current workout
-    console.log(`Fetching workout with ID: ${workoutId}`);
     const workout = (await payload.findByID({
       collection: 'workouts',
       id: workoutId,
@@ -26,9 +25,6 @@ export async function deleteExerciseAction(
         message: 'Workout not found',
       };
     }
-
-    console.log('Current workout exercises:', JSON.stringify(workout.exercises));
-    console.log(`Attempting to delete exercise with ID: ${exerciseId}`);
 
     // Filter out the exercise to be deleted
     const updatedExercises = workout.exercises?.filter(exercise => exercise.id !== exerciseId);

@@ -14,10 +14,19 @@ import {
 import { Label } from '@/components/ui/label';
 import { WorkoutHistoryCalendar } from '@/app/(frontend)/workouts/_components/workout-history-calendar';
 import { WorkoutStats } from '@/app/(frontend)/workouts/_components/workout-stats';
+import { ErrorPage } from '@/components/error-page';
+import { useAuth } from '@/app/(frontend)/context/auth';
 
 export default function HistoryPage() {
+  const { isUserAuthenticated } = useAuth();
   const [selectedPeriod, setSelectedPeriod] = useState('month');
   const [selectedType, setSelectedType] = useState('all');
+
+  if (!isUserAuthenticated) {
+    return (
+      <ErrorPage code="403" title="Access Restricted" message="Please log in to view this page." />
+    );
+  }
 
   return (
     <div className="container max-w-md mx-auto pb-20 pt-6 px-4">
