@@ -1,30 +1,21 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus } from 'lucide-react';
 import { DateHeader } from '@/components/date-header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useDate } from '@/app/(frontend)/context/date-context';
 import { linkAkaBtnStyles } from '@/app/(frontend)/utils/constants';
 import { RoutesConfig } from '@/components/common/navigation/navigation';
 import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 import type { Workout } from '@/payload-types';
+import { useDate } from '@/app/(frontend)/context/date-context';
+import { useEffect } from 'react';
 
 interface WorkoutsPageClientProps {
   initialWorkouts: Workout[];
   initialTab: string;
-}
-
-function normalizeDate(date: Date | string): string {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
-
-  const year = dateObj.getFullYear();
-  const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Add 1 because months are 0-indexed
-  const day = String(dateObj.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
 }
 
 export default function WorkoutsPageClient({
@@ -32,18 +23,31 @@ export default function WorkoutsPageClient({
   initialTab = 'workout',
 }: WorkoutsPageClientProps) {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const { selectedDate } = useDate();
 
+  // append to url selectedDate
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    const currentDateParam = params.get('date');
+
+    if (currentDateParam !== selectedDate) {
+      // todo - resuable fn for both server side and client
+
+      const year = selectedDate.getFullYear();
+      const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+      const day = String(selectedDate.getDate()).padStart(2, '0');
+      params.set('date', `${year}-${month}-${day}`);
+
+      // Update the URL without causing a page reload
+      router.replace(`${window.location.pathname}?${params.toString()}`, { scroll: false });
+    }
+  }, [selectedDate, searchParams, router]);
+
   const urlTab = searchParams.get('tab') || initialTab;
-  // ideally done on server
-  const filteredWorkouts = initialWorkouts.filter(workout => {
-    const workoutDate = normalizeDate(workout.date);
-    const currentDate = normalizeDate(selectedDate);
-    return workoutDate === currentDate;
-  });
 
   const { tab, setTab } = useTabWithUrl({ defaultTab: urlTab });
-  const hasWorkouts = filteredWorkouts.length > 0;
+  const hasWorkouts = initialWorkouts.length > 0;
 
   return (
     <div className="container max-w-md mx-auto pb-20 pt-6 px-4">
@@ -65,7 +69,7 @@ export default function WorkoutsPageClient({
           </div>
 
           {hasWorkouts ? (
-            filteredWorkouts.map(workout => (
+            initialWorkouts.map(workout => (
               <Card key={workout.id} className="mb-4">
                 <CardHeader className="pb-2">
                   <div className="flex justify-between items-start">
