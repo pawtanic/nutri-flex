@@ -18,6 +18,16 @@ interface WorkoutsPageClientProps {
   initialTab: string;
 }
 
+function normalizeDate(date: Date | string): string {
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+
+  const year = dateObj.getFullYear();
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Add 1 because months are 0-indexed
+  const day = String(dateObj.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
 export default function WorkoutsPageClient({
   initialWorkouts = [],
   initialTab = 'workout',
@@ -29,19 +39,11 @@ export default function WorkoutsPageClient({
   // append to url selectedDate
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
-    const currentDateParam = params.get('date');
+    const formattedDate = normalizeDate(selectedDate);
+    params.set('date', formattedDate);
 
-    if (currentDateParam !== selectedDate) {
-      // todo - resuable fn for both server side and client
-
-      const year = selectedDate.getFullYear();
-      const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
-      const day = String(selectedDate.getDate()).padStart(2, '0');
-      params.set('date', `${year}-${month}-${day}`);
-
-      // Update the URL without causing a page reload
-      router.replace(`${window.location.pathname}?${params.toString()}`, { scroll: false });
-    }
+    // Update the URL without causing a page reload - cleaner way ?
+    router.replace(`${window.location.pathname}?${params.toString()}`, { scroll: false });
   }, [selectedDate, searchParams, router]);
 
   const urlTab = searchParams.get('tab') || initialTab;

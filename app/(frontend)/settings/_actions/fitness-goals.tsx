@@ -5,11 +5,17 @@ import { fitnessGoalsSchema } from '@/app/(frontend)/settings/_schemas/schemas';
 export interface FitnessGoalsResponse {
   success: boolean;
   message: string;
-  errors?: Record<string, string>;
+  errors?: {
+    calories?: string;
+    protein?: string;
+    workouts?: string;
+    hydration?: string;
+  };
   inputs?: {
     calories?: number;
     protein?: number;
     workouts?: number;
+    hydration?: number;
   };
 }
 
@@ -30,6 +36,7 @@ export async function saveFitnessGoals(
     calories: formData.get('calories'),
     protein: formData.get('protein'),
     workouts: formData.get('workouts'),
+    hydration: formData.get('hydration'),
   };
 
   // Validate with zod
