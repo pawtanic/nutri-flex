@@ -1,14 +1,19 @@
 import WorkoutsPageClient from '@/app/(frontend)/workouts/_components/WorkoutsPageClient';
-import { Suspense } from 'react';
 import { fetchWorkouts } from '@/app/(frontend)/workouts/_api/fetch-workouts';
 
-// export const dynamic = 'force-dynamic';
+export default async function WorkoutsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}) {
+  const { date } = await searchParams;
 
-export default async function WorkoutsPage() {
-  const payloadWorkouts = await fetchWorkouts();
-  return (
-    <Suspense>
-      <WorkoutsPageClient initialWorkouts={payloadWorkouts} initialTab="workout" />
-    </Suspense>
-  );
+  // ideally show not found page ?
+  if (!date) {
+    return <WorkoutsPageClient initialWorkouts={[]} initialTab="workout" />;
+  }
+
+  const payloadWorkouts = await fetchWorkouts(date);
+
+  return <WorkoutsPageClient initialWorkouts={payloadWorkouts} initialTab="workout" />;
 }

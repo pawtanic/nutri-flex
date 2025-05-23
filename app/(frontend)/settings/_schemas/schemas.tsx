@@ -57,12 +57,12 @@ export type UserProfileData = z.infer<typeof userProfileSchema>;
 export const fitnessGoalsSchema = z.object({
   calories: z.coerce
     .number()
-    .positive('Calorie target must be positive')
+    .positive('Calorie target must be a positive number')
     .min(500, 'Calorie target must be at least 500')
     .max(10000, 'Calorie target must be less than 10000'),
   protein: z.coerce
     .number()
-    .positive('Protein target must be positive')
+    .positive('Protein target must be a positive number')
     .min(10, 'Protein target must be at least 10g')
     .max(500, 'Protein target must be less than 500g'),
   workouts: z.coerce
@@ -70,6 +70,11 @@ export const fitnessGoalsSchema = z.object({
     .int('Workout target must be a whole number')
     .min(1, 'Workout target must be at least 1')
     .max(14, 'Workout target must be 14 or less'),
+  hydration: z.coerce
+    .number()
+    .positive('Hydration target must be a positive number')
+    .min(200, 'Hydration target must be at least 200ml')
+    .max(10000, 'Hydration target must be less than 10000ml'),
 });
 
 export type FitnessGoals = z.infer<typeof fitnessGoalsSchema>;

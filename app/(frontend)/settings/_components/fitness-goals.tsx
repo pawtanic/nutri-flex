@@ -79,6 +79,21 @@ export function FitnessGoalsForm() {
             {state.errors?.workouts && <FormErrorMessage errorMessage={state.errors.workouts} />}
           </div>
 
+          <div className="grid gap-2">
+            <Label htmlFor="workouts">Daily hydration target (ml)</Label>
+            <Input
+              className="col-span-2"
+              id="hydration"
+              name="hydration"
+              type="number"
+              placeholder="400"
+              defaultValue={state.inputs?.hydration}
+              aria-invalid={!!state.errors?.hydration}
+              aria-describedby={state.errors?.hydration ? 'workouts-error' : undefined}
+            />
+            {state.errors?.hydration && <FormErrorMessage errorMessage={state.errors.hydration} />}
+          </div>
+
           <Button type="submit" className="w-full" disabled={isPending}>
             {isPending ? 'Saving...' : 'Save Goals'}
           </Button>

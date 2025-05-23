@@ -4,6 +4,7 @@ import { exerciseSchema } from '@/app/(frontend)/workouts/_schemas/exercise-sche
 import type { Exercises } from '@/app/(frontend)/workouts/_components/workout-form-types';
 import { ActionResponse } from '@/app/(frontend)/types/common-types';
 import { createWorkout } from '@/app/(frontend)/workouts/_api/create-workout';
+import { revalidatePath } from 'next/cache';
 
 export async function addExercisesAction(
   _: ActionResponse,
@@ -109,6 +110,8 @@ export async function addExercisesAction(
 
     // Create the workout first
     await createWorkout({ newWorkout: workoutData });
+
+    revalidatePath('/workouts');
 
     // Then redirect - this will throw a NEXT_REDIRECT "error" that should not be caught
     return { success: true, message: 'Workout created successfully' };

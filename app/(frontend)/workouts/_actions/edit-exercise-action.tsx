@@ -6,6 +6,7 @@ import { exerciseSchema } from '@/app/(frontend)/workouts/_schemas/exercise-sche
 import { updateExistingWorkout } from '@/app/(frontend)/workouts/_api/update-workout';
 import type { Exercises } from '@/app/(frontend)/workouts/_components/workout-form-types';
 import { Workout } from '@/payload-types';
+import { revalidatePath } from 'next/cache';
 
 // todo - update in payload
 
@@ -101,6 +102,8 @@ export async function updateWorkout(
         })),
       })),
     } as Workout);
+
+    revalidatePath('/workouts');
 
     return { success: true, message: 'Workout updated successfully' };
   } catch (error: unknown) {
