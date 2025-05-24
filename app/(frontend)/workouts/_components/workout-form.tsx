@@ -44,7 +44,9 @@ export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
             aria-invalid={!!workoutNameError}
             aria-describedby={workoutNameError ? 'workout-name-error' : undefined}
           />
-          {workoutNameError && <FormErrorMessage errorMessage={workoutNameError} />}
+          {workoutNameError && (
+            <FormErrorMessage id="workout-name-error" errorMessage={workoutNameError} />
+          )}
         </div>
         <div>
           <div className="flex justify-between items-center mb-2">

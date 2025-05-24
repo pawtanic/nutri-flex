@@ -1,13 +1,15 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { loginAction } from '@/app/(frontend)/auth/auth-actions';
 import { FormFooter } from '@/components/common/form-footer/form-footer';
 import { SocialLoginButtons } from '@/components/common/social-login-button/social-login-button';
+import { useFocusError } from '@/hooks/use-focus-error';
+import FormErrorMessage from '@/components/common/form-error-message/form-error-message';
+import WarningAlert from '@/components/common/warning-alert/warning-alert';
 
 const initialState = {
   errors: {},
@@ -17,7 +19,7 @@ const initialState = {
 
 export default function LoginForm({ onTabChangeAction }: { onTabChangeAction: () => void }) {
   const [state, action, isPending] = useActionState(loginAction, initialState);
-
+  useFocusError(state.errors);
   return (
     <div className="space-y-4">
       <form action={action} className="space-y-4">
@@ -27,14 +29,13 @@ export default function LoginForm({ onTabChangeAction }: { onTabChangeAction: ()
             id="email"
             name="email"
             type="email"
+            defaultValue={state?.inputs?.email}
             autoComplete="email"
             aria-invalid={!!state?.errors?.email}
             aria-describedby={state?.errors?.email ? 'email-error' : undefined}
           />
           {state?.errors?.email && (
-            <p id="email-error" className="text-sm text-destructive">
-              {state.errors.email[0]}
-            </p>
+            <FormErrorMessage id="signup-email-error" errorMessage={state.errors?.email} />
           )}
         </div>
 
@@ -44,22 +45,18 @@ export default function LoginForm({ onTabChangeAction }: { onTabChangeAction: ()
             id="password"
             name="password"
             type="password"
+            defaultValue={state?.inputs?.password}
             autoComplete="current-password"
             aria-invalid={!!state?.errors?.password}
             aria-describedby={state?.errors?.password ? 'password-error' : undefined}
           />
           {state?.errors?.password && (
-            <p id="password-error" className="text-sm text-destructive">
-              {state.errors.password[0]}
-            </p>
+            <FormErrorMessage id="signup-password-error" errorMessage={state.errors?.password} />
           )}
         </div>
 
-        {state?.message && !state.success && (
-          <Alert variant="destructive">
-            <AlertDescription>{state.message}</AlertDescription>
-          </Alert>
-        )}
+        {/*// add server response message here - check what state is once u have response !*/}
+        {state?.message && !state.success && <WarningAlert description={state.message} />}
 
         <Button type="submit" className="w-full" disabled={isPending}>
           {isPending ? 'Logging in...' : 'Log In'}

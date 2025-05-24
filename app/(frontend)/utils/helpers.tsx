@@ -173,10 +173,7 @@ export const calculateNutrition = (
   };
 };
 
-export function normalizeDate(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
+export function constructApiUrl(path: string): string {
+  const baseUrl = process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3000';
+  return `${baseUrl}${path}`;
 }

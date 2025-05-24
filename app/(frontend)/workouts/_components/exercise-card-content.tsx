@@ -60,7 +60,12 @@ export function ExerciseCardContent({
         >
           <Trash2 style={{ width: '24px', height: '24px' }} aria-hidden="true" />
         </Button>
-        {exerciseNameError && <FormErrorMessage errorMessage={exerciseNameError || errorMessage} />}
+        {exerciseNameError && (
+          <FormErrorMessage
+            id={`exercise-name-error-${index}`}
+            errorMessage={exerciseNameError || errorMessage}
+          />
+        )}
 
         <div className="col-span-2 mt-4">
           <div className="flex justify-between items-center mb-2">
@@ -126,13 +131,13 @@ function ExerciseSetRow({
   const weightId = `weight-${index}-${setIndex}`;
   const repsErrorId = `${repsId}-error`;
   const weightErrorId = `${weightId}-error`;
-  
+
   const currentExercise = exercises[index];
   const hasMultipleSets = currentExercise.sets.length > 1;
-  
+
   const savedRepsValue = state?.inputs?.exercises?.[index]?.sets?.[setIndex]?.reps;
   const savedWeightValue = state?.inputs?.exercises?.[index]?.sets?.[setIndex]?.weight;
-  
+
   const hasRepsError = !!setErrors.reps;
   const hasWeightError = !!setErrors.weight;
 
@@ -152,7 +157,7 @@ function ExerciseSetRow({
           aria-describedby={hasRepsError ? repsErrorId : undefined}
           defaultValue={savedRepsValue}
         />
-        {hasRepsError && <FormErrorMessage errorMessage={setErrors.reps} />}
+        {hasRepsError && <FormErrorMessage id={repsErrorId} errorMessage={setErrors.reps} />}
       </div>
 
       <div>
@@ -169,7 +174,7 @@ function ExerciseSetRow({
           aria-describedby={hasWeightError ? weightErrorId : undefined}
           defaultValue={savedWeightValue}
         />
-        {hasWeightError && <FormErrorMessage errorMessage={setErrors.weight} />}
+        {hasWeightError && <FormErrorMessage id={weightErrorId} errorMessage={setErrors.weight} />}
       </div>
 
       {hasMultipleSets && (

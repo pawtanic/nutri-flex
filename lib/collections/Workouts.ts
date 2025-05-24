@@ -8,6 +8,27 @@ export const Workouts: CollectionConfig = {
   },
   access: {
     read: () => true,
+    //   create: ({ req }) => {
+    //     return Boolean(req.user); // Only allow creation if user is logged in
+    //   },
+    //   read: () => true,
+    //   update: ({ req }) => {
+    //     if (req.user) {
+    //       // If user is admin, allow update
+    //       if (req.user.roles?.includes('admin')) return true;
+    //
+    //       // Otherwise, only allow updating their own workouts
+    //       return {
+    //         'createdBy': {
+    //           equals: req.user.id,
+    //         },
+    //       };
+    //     }
+    //     return false;
+    //   },
+    //   delete: ({ req }) => {
+    //     return req.user?.roles?.includes('admin') || false;
+    //   },
   },
   fields: [
     {
