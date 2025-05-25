@@ -46,7 +46,9 @@ export function FitnessGoalsForm() {
               aria-invalid={!!state.errors?.calories}
               aria-describedby={state.errors?.calories ? 'calories-error' : undefined}
             />
-            {state.errors?.calories && <FormErrorMessage errorMessage={state.errors.calories} />}
+            {state.errors?.calories && (
+              <FormErrorMessage id="calories-error" errorMessage={state.errors.calories} />
+            )}
           </div>
 
           <div className="grid gap-2">
@@ -61,7 +63,9 @@ export function FitnessGoalsForm() {
               aria-invalid={!!state.errors?.protein}
               aria-describedby={state.errors?.protein ? 'protein-error' : undefined}
             />
-            {state.errors?.protein && <FormErrorMessage errorMessage={state.errors.protein} />}
+            {state.errors?.protein && (
+              <FormErrorMessage id="protein-error" errorMessage={state.errors.protein} />
+            )}
           </div>
 
           <div className="grid gap-2">
@@ -76,7 +80,9 @@ export function FitnessGoalsForm() {
               aria-invalid={!!state.errors?.workouts}
               aria-describedby={state.errors?.workouts ? 'workouts-error' : undefined}
             />
-            {state.errors?.workouts && <FormErrorMessage errorMessage={state.errors.workouts} />}
+            {state.errors?.workouts && (
+              <FormErrorMessage id="workouts-error" errorMessage={state.errors.workouts} />
+            )}
           </div>
 
           <div className="grid gap-2">
@@ -91,7 +97,9 @@ export function FitnessGoalsForm() {
               aria-invalid={!!state.errors?.hydration}
               aria-describedby={state.errors?.hydration ? 'workouts-error' : undefined}
             />
-            {state.errors?.hydration && <FormErrorMessage errorMessage={state.errors.hydration} />}
+            {state.errors?.hydration && (
+              <FormErrorMessage id="hydration-error" errorMessage={state.errors.hydration} />
+            )}
           </div>
 
           <Button type="submit" className="w-full" disabled={isPending}>

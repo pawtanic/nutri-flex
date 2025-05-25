@@ -20,7 +20,12 @@ interface EditExerciseAccordionProps {
   readonly state: ActionResponse;
   readonly onRemoveExercise: (index: number) => Promise<void>;
   readonly onUpdateExercise: (index: number, field: string, value: string | Set[]) => void;
-  readonly onUpdateSet: (exerciseIndex: number, setIndex: number, field: string, value: string) => void;
+  readonly onUpdateSet: (
+    exerciseIndex: number,
+    setIndex: number,
+    field: string,
+    value: string
+  ) => void;
 }
 
 export function EditExerciseAccordion({
@@ -44,7 +49,7 @@ export function EditExerciseAccordion({
         const isExpanded = expandedSections.includes(`exercise-${index}`);
         const exerciseErrors = state.errors?.[index] || null;
         const savedExerciseName = state?.inputs?.exercises?.[index]?.exerciseName;
-        
+
         return (
           <AccordionItem
             key={index}
@@ -60,6 +65,7 @@ export function EditExerciseAccordion({
               <div className="px-4 pt-2 pb-4">
                 <div className="grid grid-cols-[1fr,auto] gap-2">
                   <Input
+                    id={`exercise-name-${index}`}
                     placeholder="Exercise name"
                     name="exerciseName"
                     value={exerciseName}
@@ -67,9 +73,9 @@ export function EditExerciseAccordion({
                     defaultValue={savedExerciseName}
                     aria-invalid={!!exerciseErrors?.exerciseName}
                   />
-                  <Button 
-                    type="button" 
-                    variant="ghost" 
+                  <Button
+                    type="button"
+                    variant="ghost"
                     onClick={() => onRemoveExercise(index)}
                     aria-label="Remove exercise from workout"
                   >
@@ -77,6 +83,7 @@ export function EditExerciseAccordion({
                   </Button>
                   {exerciseErrors?.exerciseName && (
                     <FormErrorMessage
+                      id={`exercise-name-${index}`}
                       errorMessage={exerciseErrors.exerciseName[0] || state.message}
                     />
                   )}

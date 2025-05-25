@@ -4,10 +4,12 @@ import { useActionState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { signupAction } from '@/app/(frontend)/auth/auth-actions';
 import { FormFooter } from '@/components/common/form-footer/form-footer';
 import { SocialLoginButtons } from '@/components/common/social-login-button/social-login-button';
+import FormErrorMessage from '@/components/common/form-error-message/form-error-message';
+import WarningAlert from '@/components/common/warning-alert/warning-alert';
+import { useFocusError } from '@/hooks/use-focus-error';
 
 const initialState = {
   errors: {},
@@ -17,7 +19,7 @@ const initialState = {
 
 export default function SignupForm({ onTabChangeAction }: { onTabChangeAction: () => void }) {
   const [state, action, isPending] = useActionState(signupAction, initialState);
-
+  useFocusError(state.errors);
   return (
     <div className="space-y-4">
       <form action={action} className="space-y-4">
@@ -28,14 +30,12 @@ export default function SignupForm({ onTabChangeAction }: { onTabChangeAction: (
             name="email"
             type="email"
             autoComplete="email"
-            required
+            defaultValue={state?.inputs?.email}
             aria-invalid={!!state?.errors?.email}
             aria-describedby={state?.errors?.email ? 'signup-email-error' : undefined}
           />
           {state?.errors?.email && (
-            <p id="signup-email-error" className="text-sm text-destructive">
-              {state.errors.email[0]}
-            </p>
+            <FormErrorMessage id="signup-email-error" errorMessage={state.errors?.email} />
           )}
         </div>
 
@@ -46,14 +46,12 @@ export default function SignupForm({ onTabChangeAction }: { onTabChangeAction: (
             name="password"
             type="password"
             autoComplete="new-password"
-            required
+            defaultValue={state?.inputs?.password}
             aria-invalid={!!state?.errors?.password}
             aria-describedby={state?.errors?.password ? 'signup-password-error' : undefined}
           />
           {state?.errors?.password && (
-            <p id="signup-password-error" className="text-sm text-destructive">
-              {state.errors.password[0]}
-            </p>
+            <FormErrorMessage id="signup-password-error" errorMessage={state.errors?.password} />
           )}
         </div>
 
@@ -64,24 +62,21 @@ export default function SignupForm({ onTabChangeAction }: { onTabChangeAction: (
             name="confirmPassword"
             type="password"
             autoComplete="new-password"
-            required
+            defaultValue={state?.inputs?.confirmPassword}
             aria-invalid={!!state?.errors?.confirmPassword}
             aria-describedby={
               state?.errors?.confirmPassword ? 'signup-confirm-password-error' : undefined
             }
           />
           {state?.errors?.confirmPassword && (
-            <p id="signup-confirm-password-error" className="text-sm text-destructive">
-              {state.errors.confirmPassword[0]}
-            </p>
+            <FormErrorMessage
+              id="signup-confirm-password-error"
+              errorMessage={state.errors?.confirmPassword}
+            />
           )}
         </div>
 
-        {state?.message && !state.success && (
-          <Alert variant="destructive">
-            <AlertDescription>{state.message}</AlertDescription>
-          </Alert>
-        )}
+        {state?.message && !state.success && <WarningAlert description={state.message} />}
 
         <Button type="submit" className="w-full" disabled={isPending}>
           {isPending ? 'Creating account...' : 'Sign Up'}

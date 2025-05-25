@@ -57,7 +57,9 @@ export function EditWorkoutForm({ workout }: { workout: Workout }) {
             defaultValue={state?.inputs?.workoutName}
             aria-invalid={!!workoutNameError}
           />
-          {workoutNameError && <FormErrorMessage errorMessage={workoutNameError} />}
+          {workoutNameError && (
+            <FormErrorMessage id="workout-name-error" errorMessage={workoutNameError} />
+          )}
         </div>
         <DeleteButton onWorkoutDelete={handleDelete} />
       </div>

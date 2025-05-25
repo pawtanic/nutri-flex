@@ -189,7 +189,7 @@ function FormField({
         aria-describedby={error ? `${id}-error` : undefined}
         defaultValue={defaultValue}
       />
-      {error && <FormErrorMessage errorMessage={error} />}
+      {error && <FormErrorMessage id={`${id}-error`} errorMessage={error} />}
     </div>
   );
 }

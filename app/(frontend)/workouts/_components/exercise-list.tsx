@@ -25,6 +25,7 @@ export function ExerciseList({
   if (error) {
     return (
       <FormErrorMessage
+        id="exercise-list-error"
         className="text-center"
         errorMessage={`Error fetching exercises: Please use manual mode.`}
       />

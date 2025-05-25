@@ -11,7 +11,12 @@ interface EditExerciseSetRowProps {
   readonly state: ActionResponse;
   readonly exercises: Exercises;
   readonly exerciseErrors: any;
-  readonly onUpdateSet: (exerciseIndex: number, setIndex: number, field: string, value: string) => void;
+  readonly onUpdateSet: (
+    exerciseIndex: number,
+    setIndex: number,
+    field: string,
+    value: string
+  ) => void;
 }
 
 export function EditExerciseSetRow({
@@ -25,16 +30,16 @@ export function EditExerciseSetRow({
   const setErrors = exerciseErrors?.sets?.[setIndex] || {};
   const repsId = `reps-${index}-${setIndex}`;
   const weightId = `weight-${index}-${setIndex}`;
-  
+
   const currentExercise = exercises[index];
   const currentSet = currentExercise.sets[setIndex];
-  
+
   const savedRepsValue = state?.inputs?.exercises?.[index]?.sets?.[setIndex]?.reps;
   const savedWeightValue = state?.inputs?.exercises?.[index]?.sets?.[setIndex]?.weight;
-  
+
   const hasRepsError = !!setErrors.reps;
   const hasWeightError = !!setErrors.weight;
-  
+
   // Use the current value from state or fall back to saved value
   const repsValue = currentSet.reps ?? savedRepsValue;
   const weightValue = currentSet.weight ?? savedWeightValue;
@@ -55,9 +60,9 @@ export function EditExerciseSetRow({
           aria-describedby={hasRepsError ? `${repsId}-error` : undefined}
           defaultValue={repsValue}
         />
-        {hasRepsError && <FormErrorMessage errorMessage={setErrors.reps} />}
+        {hasRepsError && <FormErrorMessage id={`${repsId}-error`} errorMessage={setErrors.reps} />}
       </div>
-      
+
       <div>
         <Label htmlFor={weightId} className="text-xs">
           Weight (kg)
@@ -72,7 +77,9 @@ export function EditExerciseSetRow({
           aria-describedby={hasWeightError ? `${weightId}-error` : undefined}
           defaultValue={weightValue}
         />
-        {hasWeightError && <FormErrorMessage errorMessage={setErrors.weight} />}
+        {hasWeightError && (
+          <FormErrorMessage id={`${weightId}-error`} errorMessage={setErrors.weight} />
+        )}
       </div>
     </div>
   );
