@@ -83,7 +83,8 @@ export default function SignupForm({ onTabChangeAction }: { onTabChangeAction: (
         </Button>
       </form>
 
-      <SocialLoginButtons />
+      {/* Temporarily disable Social auth */}
+      {/*<SocialLoginButtons />*/}
       <FormFooter
         text="Already have an account?"
         linkText="Log in here"

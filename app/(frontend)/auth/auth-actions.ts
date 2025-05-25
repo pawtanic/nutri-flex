@@ -73,6 +73,7 @@ export async function loginAction(
       };
     }
 
+    revalidatePath('/');
     return {
       success: true,
       message: 'Login successful',
@@ -80,9 +81,6 @@ export async function loginAction(
   } catch (error) {
     return handleApiError(error, 'An error occurred during login. Please try again.');
   }
-
-  revalidatePath('/');
-  redirect('/');
 }
 
 export async function signupAction(
@@ -117,7 +115,7 @@ export async function signupAction(
         email: result.data.email,
         password: result.data.password,
       }),
-      // credentials: 'include',
+      credentials: 'include',
       cache: 'no-store',
     });
 
@@ -134,6 +132,7 @@ export async function signupAction(
       };
     }
 
+    revalidatePath('/');
     return {
       success: true,
       message: 'Account created successfully!',
@@ -141,58 +140,56 @@ export async function signupAction(
   } catch (error) {
     return handleApiError(error, 'An error occurred during signup. Please try again.');
   }
-
-  revalidatePath('/');
-  redirect('/');
 }
 
 /**
  * Logout action
  */
-// export async function logoutAction(): Promise<ActionResponse> {
-//   try {
-//     // Call Payload CMS logout endpoint
-//     const response = await fetch(constructApiUrl('/api/users/logout'), {
-//       method: 'POST',
-//       credentials: 'include',
-//       cache: 'no-store',
-//     });
-//
-//     if (!response.ok) {
-//       throw new Error('Failed to logout');
-//     }
-//
-//     return {
-//       success: true,
-//       message: 'Logout successful',
-//     };
-//   } catch (error) {
-//     return handleApiError(error, 'An error occurred during logout. Please try again.');
-//   }
-// }
+export async function logoutAction(): Promise<ActionResponse> {
+  try {
+    // Call Payload CMS logout endpoint
+    const response = await fetch(constructApiUrl('/api/users/logout'), {
+      method: 'POST',
+      credentials: 'include',
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to logout');
+    }
+
+    revalidatePath('/');
+    return {
+      success: true,
+      message: 'Logout successful',
+    };
+  } catch (error) {
+    return handleApiError(error, 'An error occurred during logout. Please try again.');
+  }
+}
 
 /**
  * Get current user session
  */
-// export async function getCurrentUser() {
-//   try {
-//     const response = await fetch(constructApiUrl('/api/users/me'), {
-//       method: 'GET',
-//       credentials: 'include',
-//       cache: 'no-store',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
-//
-//     if (!response.ok) {
-//       return null;
-//     }
-//
-//     const data = await response.json();
-//     return data.user || null;
-//   } catch (error) {
-//     console.error('Error fetching current user:', error);
-//     return null;
-//   }
-// }
+export async function getCurrentUser() {
+  try {
+    const response = await fetch(constructApiUrl('/api/users/me'), {
+      method: 'GET',
+      credentials: 'include',
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    return data.user || null;
+  } catch (error) {
+    console.error('Error fetching current user:', error);
+    return null;
+  }
+}

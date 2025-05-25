@@ -62,7 +62,8 @@ export default function LoginForm({ onTabChangeAction }: { onTabChangeAction: ()
           {isPending ? 'Logging in...' : 'Log In'}
         </Button>
       </form>
-      <SocialLoginButtons />
+      {/*TODO: disable social auth temporarily to support payload auth*/}
+      {/*<SocialLoginButtons />*/}
       <FormFooter
         text="Don't have an account?"
         linkText="Sign up here"
