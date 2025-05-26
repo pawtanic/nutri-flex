@@ -11,6 +11,10 @@ import WarningAlert from '@/components/common/warning-alert/warning-alert';
 import { showSuccessToast } from '@/app/(frontend)/utils/helpers';
 import FormErrorMessage from '@/components/common/form-error-message/form-error-message';
 import { useFocusError } from '@/hooks/use-focus-error';
+import {
+  UserFitnessData,
+  UserMeasurementsUnits,
+} from '@/app/(frontend)/settings/_components/fitness-goals';
 
 export const initialState = {
   errors: {},
@@ -19,12 +23,12 @@ export const initialState = {
   inputs: {},
 };
 
-// for now hardcoded values
-// waiting for api
-const heightUnit = 'metric';
-const weightUnit = 'metric';
+interface UserProfileFormProps {
+  fitnessData: UserFitnessData;
+  measurementUnits: UserMeasurementsUnits;
+}
 
-export function UserProfileForm() {
+export function UserProfileForm({ fitnessData, measurementUnits }: UserProfileFormProps) {
   const [state, action, isPending] = useActionState(saveUserProfile, initialState);
   useFocusError(state.errors);
 
@@ -35,22 +39,23 @@ export function UserProfileForm() {
         description: state.message,
       });
     }
-  }, [state.success, state.message]);
+  }, [state]);
 
   async function handleAction(formData: FormData): Promise<void> {
-    formData.append('heightUnit', heightUnit);
-    formData.append('weightUnit', weightUnit);
+    formData.append('heightUnit', measurementUnits.heightUnit);
+    formData.append('weightUnit', measurementUnits.weightUnit);
     return action(formData);
   }
 
   const nameError = state.errors?.name;
-  const emailError = state.errors?.email;
+  // const emailError = state.errors?.email;
   const heightError = state.errors?.height;
   const weightError = state.errors?.weight;
   const heightFtError = state.errors?.['height-ft'];
   const heightInError = state.errors?.['height-in'];
   const weightStError = state.errors?.['weight-st'];
   const weightLbError = state.errors?.['weight-lb'];
+  const ageError = state.errors?.age;
 
   return (
     <Card>
@@ -69,22 +74,31 @@ export function UserProfileForm() {
             className="col-span-2"
           />
 
+          {/*<FormField*/}
+          {/*  id="email"*/}
+          {/*  label="Email"*/}
+          {/*  placeholder="Your email"*/}
+          {/*  defaultValue={state?.inputs?.email}*/}
+          {/*  error={emailError}*/}
+          {/*  className="col-span-2"*/}
+          {/*/>*/}
+
           <FormField
-            id="email"
-            label="Email"
-            placeholder="Your email"
-            defaultValue={state?.inputs?.email}
-            error={emailError}
+            id="age"
+            label="Age"
+            placeholder="30"
+            defaultValue={fitnessData.age || state?.inputs?.age}
+            error={ageError}
             className="col-span-2"
           />
 
-          {heightUnit === 'metric' ? (
+          {measurementUnits.heightUnit === 'metric' ? (
             <FormField
               id="height"
               label="Height (cm)"
               type="number"
               placeholder="175"
-              defaultValue={state?.inputs?.height}
+              defaultValue={fitnessData.height || state?.inputs?.height}
               error={heightError}
               className="col-span-2"
             />
@@ -111,13 +125,13 @@ export function UserProfileForm() {
             </div>
           )}
 
-          {weightUnit === 'metric' ? (
+          {measurementUnits.weightUnit === 'metric' ? (
             <FormField
               id="weight"
               label="Weight (kg)"
               type="number"
               placeholder="70"
-              defaultValue={state?.inputs?.weight}
+              defaultValue={fitnessData.weight || state?.inputs?.weight}
               error={weightError}
               className="col-span-2"
             />
@@ -128,7 +142,7 @@ export function UserProfileForm() {
                 label="Weight (st)"
                 type="number"
                 placeholder="11"
-                defaultValue={state?.inputs?.['weight-st']}
+                defaultValue={fitnessData.weight || state?.inputs?.['weight-st']}
                 error={weightStError}
                 className="col-span-2"
               />

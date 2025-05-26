@@ -17,13 +17,9 @@ export async function saveMeasurementPreferences(_: ActionResponse, formData: Fo
   };
 
   try {
-    // In a real app, you would save this to your database
-    console.log('Saving measurement preferences:', preferences);
+    // TODO api call here
 
-    // Simulate a successful save
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    // Revalidate the settings page to reflect the changes
+    // Revalidate the settings page to reflect the changes - should be defined outside catch block ?
     revalidatePath('/settings');
 
     return {
@@ -48,15 +44,11 @@ export async function saveMeasurementPreferences(_: ActionResponse, formData: Fo
 }
 
 export async function saveUserProfile(_: ActionResponse, formData: FormData) {
-  // Create an object to collect all input values
   const inputs: Record<string, string | number> = {};
 
-  // Process and collect all form inputs
   for (const [key, value] of formData.entries()) {
     if (typeof value === 'string') {
-      // Handle numeric inputs
       if (['height', 'weight', 'height-ft', 'height-in', 'weight-st', 'weight-lb'].includes(key)) {
-        // Store as number for validation
         inputs[key] = value.trim() === '' ? '' : Number(value);
       } else {
         inputs[key] = value;
@@ -64,24 +56,21 @@ export async function saveUserProfile(_: ActionResponse, formData: FormData) {
     }
   }
 
-  console.log('Form inputs:', inputs);
-
   try {
-    // Extract form data
     const rawData = {
       name: formData.get('name') as string,
-      email: formData.get('email') as string,
+      // email: formData.get('email') as string,
       height: formData.get('height') as string,
       heightUnit: formData.get('heightUnit') as MeasurementUnit,
       weight: formData.get('weight') as string,
       weightUnit: formData.get('weightUnit') as MeasurementUnit,
+      age: formData.get('age') as string,
     };
-    // In a real app, you would validate and save this to your database
-    // unit are stirng change to numbers !!!!!
 
     const validatedData = userProfileSchema.parse(rawData);
-    console.log('Saving user profile:', validatedData);
+    // todo api call here
 
+    // should be defined outside catch block ?
     revalidatePath('/settings');
 
     return {
@@ -91,9 +80,7 @@ export async function saveUserProfile(_: ActionResponse, formData: FormData) {
   } catch (error) {
     console.error('Error saving profile:', error);
 
-    // Handle Zod validation errors
     if (error instanceof ZodError) {
-      // Format errors into a user-friendly object
       const fieldErrors = error.errors.reduce(
         (acc, err) => {
           const fieldName = err.path.join('.') || 'form';

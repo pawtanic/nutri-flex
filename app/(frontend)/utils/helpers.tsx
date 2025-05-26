@@ -177,3 +177,74 @@ export function constructApiUrl(path: string): string {
   const baseUrl = process.env.NEXT_PUBLIC_PAYLOAD_URL || 'http://localhost:3000';
   return `${baseUrl}${path}`;
 }
+
+type Sex = 'male' | 'female';
+export type ActivityLevel = 'none' | 'light' | 'moderate' | 'heavy';
+export type FoodData = {
+  kcal: number;
+};
+
+export function calculateHydrationGoal(
+  weightKg: number,
+  activityLevel: ActivityLevel,
+  sex: Sex,
+  initialFoodDataKcal?: number
+): number {
+  // Baseline water intake (mL/kg)
+  const mlPerKgBaseline = sex === 'male' ? 40 : 35;
+  const baselineMl = weightKg * mlPerKgBaseline;
+
+  // Additional water for exercise (based on ~355 mL per 30 min)
+  const activityAdditionMl = (() => {
+    switch (activityLevel) {
+      case 'none':
+        return 0;
+      case 'light':
+        return 300; // ~15-30 min
+      case 'moderate':
+        return 600; // ~30-60 min
+      case 'heavy':
+        return 1000; // >60 min
+      default:
+        return 0;
+    }
+  })();
+
+  // Total plain water requirement before food adjustment
+  const totalMl = baselineMl + activityAdditionMl;
+
+  // Subtract metabolic water from food, if provided
+  let metabolicWaterMl = 0;
+  if (initialFoodDataKcal) {
+    metabolicWaterMl = initialFoodDataKcal * 0.12;
+  } else {
+  }
+
+  const adjustedMl = totalMl - metabolicWaterMl;
+
+  // Ensure non-negative and round
+  return Math.max(0, Math.round(adjustedMl));
+}
+
+export function calculatedProteinIntake(weight: number, activity: ActivityLevel, sex: Sex) {
+  let proteinPerKg: number;
+
+  switch (activity) {
+    case 'none':
+      proteinPerKg = 0.8;
+      break;
+    case 'light':
+      proteinPerKg = 1.2;
+      break;
+    case 'moderate':
+      proteinPerKg = 1.4;
+      break;
+    case 'heavy':
+      proteinPerKg = 1.6;
+      break;
+    default:
+      proteinPerKg = 0.8;
+  }
+
+  return weight * proteinPerKg;
+}

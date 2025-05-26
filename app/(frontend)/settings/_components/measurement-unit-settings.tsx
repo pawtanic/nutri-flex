@@ -38,7 +38,7 @@ export function MeasurementUnitSettings() {
         description: state.message,
       });
     }
-  }, [state.success, state.message]);
+  }, [state]);
 
   return (
     <Card>

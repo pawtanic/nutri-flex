@@ -12,14 +12,20 @@ import {
 import { Button } from '@/components/ui/button';
 import { RoutesConfig } from '@/components/common/navigation/navigation';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export function Settings() {
   const { data: session } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
   const isSettingsPage = pathname === RoutesConfig.settings;
 
   if (!session?.user) return null;
+
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: '/' });
+    router.replace('/');
+  };
 
   return (
     <div className="flex justify-between items-center">
@@ -55,7 +61,7 @@ export function Settings() {
             </DropdownMenuItem>
           )}
           <DropdownMenuItem
-            onClick={() => signOut()}
+            onClick={() => handleLogout()}
             className="cursor-pointer text-calories focus:text-calories"
           >
             <LogOut />
