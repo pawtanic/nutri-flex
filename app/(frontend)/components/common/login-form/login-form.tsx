@@ -10,6 +10,7 @@ import { SocialLoginButtons } from '@/components/common/social-login-button/soci
 import { useFocusError } from '@/hooks/use-focus-error';
 import FormErrorMessage from '@/components/common/form-error-message/form-error-message';
 import WarningAlert from '@/components/common/warning-alert/warning-alert';
+import AuthClientService from '@/lib/services/AuthClientService';
 
 const initialState = {
   errors: {},
@@ -62,7 +63,7 @@ export default function LoginForm({ onTabChangeAction }: { onTabChangeAction: ()
           {isPending ? 'Logging in...' : 'Log In'}
         </Button>
       </form>
-      <SocialLoginButtons />
+      <SocialLoginButtons action={AuthClientService.login}/>
       <FormFooter
         text="Don't have an account?"
         linkText="Sign up here"

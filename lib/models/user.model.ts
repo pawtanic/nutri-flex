@@ -7,7 +7,7 @@ export interface IUser {
   password: string
   avatar?: string
   authJSId?: string
-  roles: 'user' | 'editor' | 'admin'
+  roles: ('user' | 'editor' | 'admin')[]
 }
 
 // 🔹 Create & Update interfaces
@@ -30,13 +30,24 @@ const UserSchema: Schema<IUserDoc> = new Schema(
     avatar: { type: String }, // could be a URL
     authJSId: { type: String },
     roles: {
-      type: String,
-      enum: ['user', 'editor', 'admin'],
-      default: 'user',
+      type: [String],                  // Array of strings
+      enum: ['user', 'editor', 'admin'], // enum applies to each string in array
+      default: ['user'],
       required: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true, // include virtuals like id
+      versionKey: false,
+      transform: (_, ret) => {
+        ret.id = ret._id.toString()
+        delete ret._id
+        return ret
+      },
+    },
+  }
 )
 
 export const User: Model<IUserDoc> = mongoose.models.User || mongoose.model<IUserDoc>('User', UserSchema)

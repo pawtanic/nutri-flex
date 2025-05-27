@@ -2,10 +2,17 @@
 
 import { Button } from '@/components/ui/button';
 import { signIn, useSession } from 'next-auth/react';
+import { Session } from 'next-auth';
+import { LoginInput } from '@/lib/services/AuthClientService';
 
 // TODO: improve accessibility of icons etc
+interface SocialLoginButtonParams {
+  action:
+    | (() => Promise<Session | null>) // e.g., Google login with no params
+    | ((params: LoginInput) => Promise<Session | null> | void); // e.g., Credentials login with params
+}
 
-export function SocialLoginButtons() {
+export function SocialLoginButtons({ action }: SocialLoginButtonParams) {
   const { data: session } = useSession();
 
   return (
@@ -22,7 +29,7 @@ export function SocialLoginButtons() {
         <div className="grid grid-cols-1 gap-4">
           <Button
             variant="outline"
-            onClick={() => signIn('google')}
+            onClick={() => action({ provider: 'google' })}
             className="w-full"
             type="button"
           >

@@ -2,9 +2,9 @@
 
 import { loginSchema, signupSchema } from '@/app/(frontend)/auth/auth-schema';
 import { ActionResponse } from '../types/common-types';
-import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { constructApiUrl } from '@/app/(frontend)/utils/helpers';
+import AuthClientService from '@/lib/services/AuthClientService';
 
 export type { LoginFormValues, SignupFormValues } from './auth-schema';
 
@@ -30,9 +30,10 @@ const handleApiError = (error: unknown, defaultMessage: string): ActionResponse 
     message: defaultMessage,
   };
 };
+
 export async function loginAction(
   _: ActionResponse | null,
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionResponse> {
   try {
     // Validate form data
@@ -50,28 +51,42 @@ export async function loginAction(
       };
     }
 
-    const response = await fetch(constructApiUrl('/api/users/login'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    const session = await AuthClientService.login({
+      provider: 'credentials', options: {
         email: result.data.email,
         password: result.data.password,
-      }),
-      credentials: 'include',
-      cache: 'no-store',
+      },
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
+    if (!session?.user) {
       return {
         success: false,
-        message: data.message || 'Invalid email or password',
+        message: 'Invalid email or password',
         inputs: result.data,
-      };
+      }
     }
+
+    // const response = await fetch(constructApiUrl('/api/users/login'), {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     email: result.data.email,
+    //     password: result.data.password,
+    //   }),
+    //   credentials: 'include',
+    //   cache: 'no-store',
+    // });
+
+    // const data = await response.json();
+
+    // if (!response.ok) {
+    //   return {
+    //     success: false,
+    //     message: data.message || 'Invalid email or password',
+    //     inputs: result.data,
+    //   };
+    // }
 
     return {
       success: true,
@@ -87,7 +102,7 @@ export async function loginAction(
 
 export async function signupAction(
   _: ActionResponse | null,
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionResponse> {
   try {
     // Get form data
