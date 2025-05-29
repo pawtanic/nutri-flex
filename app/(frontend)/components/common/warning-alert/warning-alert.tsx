@@ -8,7 +8,7 @@ function WarningAlert({ children, description }: WarningAlertProps) {
   return (
     <div role="alert" className="tip bg-red-50 border border-red-400">
       <p className="text-md inline ">
-        <span className="text-red-600 font-bold">Warning</span>: {description}
+        <strong className="text-red-600 font-bold">Warning</strong>: {description}
       </p>
       {children}
     </div>

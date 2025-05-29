@@ -17,7 +17,7 @@
 // import { ScrollArea } from '@/components/ui/scroll-area';
 // import { Copy, Save } from 'lucide-react';
 // import { useToast } from '@/hooks/use-toast';
-// import { Workout } from '@/app/(frontend)/workouts/_components/WorkoutsPageClient';
+// import { Workout } from '@/app/(frontend)/workouts/_components/Workouts';
 //
 // // Sample template data - in a real app, this would come from your database
 // const initialTemplates = [

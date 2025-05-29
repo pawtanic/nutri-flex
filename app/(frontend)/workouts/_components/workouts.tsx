@@ -28,7 +28,7 @@ function normalizeDate(date: Date | string): string {
   return `${year}-${month}-${day}`;
 }
 
-export default function WorkoutsPageClient({
+export default function Workouts({
   initialWorkouts = [],
   initialTab = 'workout',
 }: WorkoutsPageClientProps) {

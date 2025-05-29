@@ -1,4 +1,4 @@
-import WorkoutsPageClient from '@/app/(frontend)/workouts/_components/WorkoutsPageClient';
+import Workouts from '@/app/(frontend)/workouts/_components/workouts';
 import { fetchWorkouts } from '@/app/(frontend)/workouts/_api/fetch-workouts';
 
 export default async function WorkoutsPage({
@@ -10,10 +10,10 @@ export default async function WorkoutsPage({
 
   // ideally show not found page ?
   if (!date) {
-    return <WorkoutsPageClient initialWorkouts={[]} initialTab="workout" />;
+    return <Workouts initialWorkouts={[]} initialTab="workout" />;
   }
 
   const payloadWorkouts = await fetchWorkouts(date);
 
-  return <WorkoutsPageClient initialWorkouts={payloadWorkouts} initialTab="workout" />;
+  return <Workouts initialWorkouts={payloadWorkouts} initialTab="workout" />;
 }

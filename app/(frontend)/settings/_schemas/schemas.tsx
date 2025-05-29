@@ -7,7 +7,19 @@ export type MeasurementUnit = z.infer<typeof measurementUnitSchema>;
 export const userProfileSchema = z
   .object({
     name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name is too long'),
-    email: z.string().email('Please enter a valid email address'),
+    // email: z.string().email('Please enter a valid email address'),
+    age: z
+      .string()
+      .refine(
+        val => {
+          const age = Number(val);
+          return Number.isInteger(age) && age >= 12 && age <= 120;
+        },
+        {
+          message: 'Age must be an integer between 12 and 120',
+        }
+      )
+      .optional(),
     heightUnit: measurementUnitSchema,
     weightUnit: measurementUnitSchema,
     height: z.string().optional(),
@@ -78,3 +90,76 @@ export const fitnessGoalsSchema = z.object({
 });
 
 export type FitnessGoals = z.infer<typeof fitnessGoalsSchema>;
+
+export const hydrationIntakeSchema = z
+  .object({
+    weight: z.coerce
+      .number()
+      .min(20, 'Weight must be at least 20kg')
+      .max(200, 'Weight must be less than 200kg'),
+    sex: z.enum(['male', 'female'], {
+      errorMap: () => ({ message: 'Please select your sex' }),
+    }),
+    activity: z.enum(['none', 'light', 'moderate', 'heavy'], {
+      errorMap: () => ({ message: 'Please select your activity level' }),
+    }),
+    includeFood: z.boolean().optional().default(false),
+    initialFoodDataKcal: z.number().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.includeFood && data.initialFoodDataKcal === undefined) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          'Please provide your daily kcal intake in the user profile settings if you want to use this option',
+        path: ['includeFood'],
+      });
+    }
+  });
+
+export type HydrationIntakeData = z.infer<typeof hydrationIntakeSchema>;
+
+export const proteinIntakeSchema = z.object({
+  weight: z.coerce
+    .number()
+    .min(20, 'Weight must be at least 20kg')
+    .max(200, 'Weight must be less than 200kg'),
+  sex: z.enum(['male', 'female'], {
+    errorMap: () => ({ message: 'Please select your sex' }),
+  }),
+  activity: z.enum(['none', 'light', 'moderate', 'heavy'], {
+    errorMap: () => ({ message: 'Please select your activity level' }),
+  }),
+  age: z.coerce
+    .number()
+    .min(12, 'Age must be at least 12 years')
+    .max(120, 'Age must be less than 120 years'),
+});
+
+export type ProteinIntakeData = z.infer<typeof proteinIntakeSchema>;
+
+export const caloriesIntakeSchema = z.object({
+  weight: z.coerce
+    .number()
+    .min(20, 'Weight must be at least 20kg')
+    .max(200, 'Weight must be less than 200kg'),
+  height: z.coerce
+    .number()
+    .min(100, 'Height must be at least 100cm')
+    .max(250, 'Height must be less than 250cm'),
+  age: z.coerce
+    .number()
+    .min(12, 'Age must be at least 12 years')
+    .max(120, 'Age must be less than 120 years'),
+  sex: z.enum(['male', 'female'], {
+    errorMap: () => ({ message: 'Please select your sex' }),
+  }),
+  activity: z.enum(['none', 'light', 'moderate', 'heavy'], {
+    errorMap: () => ({ message: 'Please select your activity level' }),
+  }),
+  goal: z.enum(['lose', 'maintain', 'gain'], {
+    errorMap: () => ({ message: 'Please select your goal' }),
+  }),
+});
+
+export type CaloriesIntakeData = z.infer<typeof caloriesIntakeSchema>;

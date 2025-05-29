@@ -3,4 +3,5 @@ export type ActionResponse = {
   message: string;
   errors?: any;
   inputs?: any;
+  calculatedGoal?: number | null;
 };

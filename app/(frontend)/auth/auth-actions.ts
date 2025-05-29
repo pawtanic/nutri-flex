@@ -5,6 +5,7 @@ import { ActionResponse } from '../types/common-types';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { constructApiUrl } from '@/app/(frontend)/utils/helpers';
+import { RoutesConfig } from '@/components/common/navigation/navigation';
 
 export type { LoginFormValues, SignupFormValues } from './auth-schema';
 
@@ -81,8 +82,8 @@ export async function loginAction(
     return handleApiError(error, 'An error occurred during login. Please try again.');
   }
 
-  revalidatePath('/');
-  redirect('/');
+  // revalidatePath(RoutesConfig.settings);
+  redirect(RoutesConfig.settings);
 }
 
 export async function signupAction(

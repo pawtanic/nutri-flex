@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { WaterIntakeHistory } from '@/app/(frontend)/hydration/_components/water-intake-history';
-import { WaterGoalSetting } from '@/app/(frontend)/hydration/_components/water-goal-setting';
 import { WaterQuickAdd } from '@/app/(frontend)/hydration/_components/water-quick-add';
 import { DateHeader } from '@/components/date-header';
 import { CircularWaterTracker } from '@/app/(frontend)/hydration/_components/circular-water-tracker';
@@ -61,12 +60,12 @@ export default function WaterPage() {
         </TabsContent>
 
         <TabsContent value="settings" className="mt-4">
-          <WaterGoalSetting
-            currentGoal={waterGoal}
-            currentIntake={waterIntake}
-            onUpdateGoalAction={updateWaterGoal}
-            onUpdateIntakeAction={handleWaterChange}
-          />
+          {/*<WaterGoalSetting*/}
+          {/*  currentGoal={waterGoal}*/}
+          {/*  currentIntake={waterIntake}*/}
+          {/*  onUpdateGoalAction={updateWaterGoal}*/}
+          {/*  onUpdateIntakeAction={handleWaterChange}*/}
+          {/*/>*/}
         </TabsContent>
       </Tabs>
     </div>

@@ -4,15 +4,16 @@ import { useEffect, useRef } from 'react';
 
 export function useFocusError(errors: Record<string, any> | null | undefined) {
   const previousErrorKeys = useRef<string[]>([]);
+  const errorKeys = errors ? Object.keys(errors).filter(key => !!errors[key]) : [];
 
   useEffect(() => {
     // If no errors or empty errors object, nothing to focus
-    if (!errors || Object.keys(errors).length === 0) {
+    if (errorKeys.length === 0) {
       previousErrorKeys.current = [];
       return;
     }
 
-    const currentErrorKeys = Object.keys(errors);
+    const currentErrorKeys = errors ? Object.keys(errors) : [];
 
     // Check if the errors are the same as before
     const sameErrors =
