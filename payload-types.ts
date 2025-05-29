@@ -168,7 +168,7 @@ export interface Media {
  */
 export interface Exercise {
   id: string;
-  exerciseName: string;
+  name: string;
   /**
    * Sets for this exercise
    */
@@ -210,39 +210,7 @@ export interface Workout {
   /**
    * Add exercises to this workout
    */
-  exercises?:
-    | {
-        exerciseName: string;
-        /**
-         * Add sets to this exercise
-         */
-        sets: {
-          reps?: number | null;
-          weight?: number | null;
-          id?: string | null;
-        }[];
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Additional notes or instructions for the workout
-   */
-  notes?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  createdBy?: (string | null) | User;
+  exercises?: (string | null) | Exercise;
   updatedAt: string;
   createdAt: string;
 }
@@ -625,7 +593,7 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "exercises_select".
  */
 export interface ExercisesSelect<T extends boolean = true> {
-  exerciseName?: T;
+  name?: T;
   sets?:
     | T
     | {
@@ -648,21 +616,7 @@ export interface ExercisesSelect<T extends boolean = true> {
 export interface WorkoutsSelect<T extends boolean = true> {
   name?: T;
   date?: T;
-  exercises?:
-    | T
-    | {
-        exerciseName?: T;
-        sets?:
-          | T
-          | {
-              reps?: T;
-              weight?: T;
-              id?: T;
-            };
-        id?: T;
-      };
-  notes?: T;
-  createdBy?: T;
+  exercises?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -3,15 +3,14 @@ import type { CollectionConfig } from 'payload';
 export const Exercises: CollectionConfig = {
   slug: 'exercises',
   admin: {
-    useAsTitle: 'exerciseName',
-    defaultColumns: ['exerciseName'],
+    useAsTitle: 'name',
   },
   access: {
     read: () => true,
   },
   fields: [
     {
-      name: 'exerciseName',
+      name: 'name',
       type: 'text',
       required: true,
     },

@@ -3,6 +3,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import UserService from '@/lib/services/UserService'
 import { handleError } from '@/lib/utils/error-handler'
+import dbConnect from '@/lib/config/db.config';
+dbConnect();
 
 export async function GET(req: NextRequest) {
   try {

@@ -1,6 +1,8 @@
 import { UserService } from './UserService';
 import { authConfig } from '@/lib/config/auth.config';
-import { getServerSession } from 'next-auth/next'
+import { getServerSession } from 'next-auth/next';
+import { IUser } from '@/lib/models/user.model';
+import { NextRequest } from 'next/server';
 
 export class AuthService {
   userService = new UserService();
@@ -19,23 +21,6 @@ export class AuthService {
     // No direct login here, delegate to NextAuth in route (credentials provider)
     // You could validate manually here if you want
     throw new Error('Use NextAuth credential provider for login');
-  }
-
-
-  async getCurrentUser(req: Request) {
-    // Fix: spread req and add undefined for res to satisfy Pages Router overload
-    // This ensures the param matches [NextApiRequest, NextApiResponse, AuthOptions] tuple
-    // if running in Pages Router context. If App Router, pass { req } only.
-    // Adjust based on the environment, here forcing Pages Router style:
-    const session = await getServerSession(req as any, undefined as any, authConfig)
-
-    if (!session?.user) return null
-
-    const userId = (session.user as any).id
-    if (!userId) return null
-
-    const user = await this.userService.findById(userId)
-    return user
   }
 
 
