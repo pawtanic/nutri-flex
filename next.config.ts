@@ -20,6 +20,9 @@ const nextConfig: NextConfig = {
   turbopack: {
     resolveExtensions: ['.mdx', '.tsx', '.ts', '.jsx', '.js', '.mjs', '.json'],
   },
+  experimental: {
+    reactCompiler: true,
+  },
 };
 
 export default withPayload(nextConfig);
