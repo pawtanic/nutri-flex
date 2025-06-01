@@ -1,6 +1,4 @@
-import type { CollectionConfig } from 'payload';
-
-export const MealPlans: CollectionConfig = {
+export const MealPlans = {
   slug: 'mealPlans',
   admin: {
     useAsTitle: 'name',

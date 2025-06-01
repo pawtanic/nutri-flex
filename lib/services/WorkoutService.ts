@@ -1,14 +1,17 @@
-import { ClientSession, Types, UpdateQuery } from 'mongoose';
+import mongoose, { ClientSession, Types, UpdateQuery } from 'mongoose';
 import { CrudService } from './CrudService'
 import { Workout, IWorkoutDoc, IWorkout } from '../models/Workouts'
 import { ExerciseService } from './ExerciseService'
+import dbConnect from '@/lib/config/db.config';
+import { IExercise } from '@/lib/models/Exercises';
 
 export class WorkoutService extends CrudService<IWorkoutDoc, IWorkout> {
   private exerciseService = new ExerciseService()
 
   constructor() {
     // Populate exercises when querying workouts
-    super(Workout, { populate: 'exercises' })
+    super(Workout, { populate: 'exercises' });
+    dbConnect();
   }
 
   // Override create to validate exercises exist before creating workout
@@ -39,8 +42,32 @@ export class WorkoutService extends CrudService<IWorkoutDoc, IWorkout> {
   }
 
   // Validate all exercise IDs exist in DB
-  private async validateExerciseIds(exerciseIds: Types.ObjectId[] | string[]): Promise<void> {
-    const validIds = exerciseIds.filter(id => Types.ObjectId.isValid(id))
+  private async validateExerciseIds(exerciseIds: Types.ObjectId[] | string[] | IExercise[]): Promise<void> {
+    if (exerciseIds.length === 0) return;
+
+    const isObjectIdLike = (val: any) =>
+      typeof val === 'string' && mongoose.Types.ObjectId.isValid(val) ||
+      val instanceof mongoose.Types.ObjectId;
+
+    const isExercise = (val: any): val is IExercise =>
+      typeof val === 'object' && val !== null && 'someExerciseProp' in val;
+
+    // type guard based on first item
+    const first = exerciseIds[0];
+
+    if (isExercise(first)) {
+      // do nothing or handle differently?
+      return;
+    }
+
+    if (!isObjectIdLike(first)) {
+      throw new Error('Invalid exercise ID format');
+    }
+
+    const validIds = exerciseIds.filter(
+      (id): id is string | mongoose.Types.ObjectId =>
+        typeof id === 'string' || id instanceof mongoose.Types.ObjectId
+    ).filter(id => mongoose.Types.ObjectId.isValid(id));
     if (validIds.length !== exerciseIds.length) {
       throw new Error('One or more exercise IDs are invalid.')
     }
@@ -52,3 +79,5 @@ export class WorkoutService extends CrudService<IWorkoutDoc, IWorkout> {
     }
   }
 }
+
+export default new WorkoutService();

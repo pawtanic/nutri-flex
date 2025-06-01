@@ -9,12 +9,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { linkAkaBtnStyles } from '@/app/(frontend)/utils/constants';
 import { RoutesConfig } from '@/components/common/navigation/navigation';
 import { useTabWithUrl } from '@/hooks/use-tab-with-url';
-import type { Workout } from '@/payload-types';
 import { useDate } from '@/app/(frontend)/context/date-context';
 import { useEffect } from 'react';
+import { IWorkout } from '@/lib/models/Workouts';
+import { IExercise } from '@/lib/models/Exercises';
 
 interface WorkoutsPageClientProps {
-  initialWorkouts: Workout[];
+  initialWorkouts: IWorkout[];
   initialTab: string;
 }
 
@@ -71,8 +72,8 @@ export default function WorkoutsPageClient({
           </div>
 
           {hasWorkouts ? (
-            initialWorkouts.map(workout => (
-              <Card key={workout.id} className="mb-4">
+            initialWorkouts.map((workout: IWorkout, index: number) => (
+              <Card key={index} className="mb-4">
                 <CardHeader className="pb-2">
                   <div className="flex justify-between items-start">
                     <CardTitle className="text-lg">{workout.name}</CardTitle>
@@ -85,29 +86,29 @@ export default function WorkoutsPageClient({
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2">
-                    {workout?.exercises?.map((exercise, index) => (
-                      <li key={exercise.id} className="text-sm">
-                        <div className="flex justify-between">
-                          <span>{exercise.exerciseName}</span>
-                          {/*<span className="text-muted-foreground">*/}
-                          {/*  {exercise.sets[index].reps} × {exercise.sets[index].weight}*/}
-                          {/*</span>*/}
-                          {exercise.sets.map(set => (
-                            <span key={set.id} className="text-muted-foreground">
-                              {set.reps} × {set.weight}
-                            </span>
-                          ))}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    href={`${RoutesConfig.editWorkout}/${workout.id}`}
-                    className={`${linkAkaBtnStyles} w-full mt-6`}
-                  >
-                    View Details
-                  </Link>
+                  {/*<ul className="space-y-2">*/}
+                  {/*  {workout?.exercises?.map((exercise: IExercise, index: number) => (*/}
+                  {/*    <li key={index} className="text-sm">*/}
+                  {/*      <div className="flex justify-between">*/}
+                  {/*        <span>{exercise.name}</span>*/}
+                  {/*        /!*<span className="text-muted-foreground">*!/*/}
+                  {/*        /!*  {exercise.sets[index].reps} × {exercise.sets[index].weight}*!/*/}
+                  {/*        /!*</span>*!/*/}
+                  {/*        {exercise.sets?.map(set => (*/}
+                  {/*          <span key={set._id} className="text-muted-foreground">*/}
+                  {/*            {set.reps} × {set.weight}*/}
+                  {/*          </span>*/}
+                  {/*        ))}*/}
+                  {/*      </div>*/}
+                  {/*    </li>*/}
+                  {/*  ))}*/}
+                  {/*</ul>*/}
+                  {/*<Link*/}
+                  {/*  href={`${RoutesConfig.editWorkout}/${workout.id}`}*/}
+                  {/*  className={`${linkAkaBtnStyles} w-full mt-6`}*/}
+                  {/*>*/}
+                  {/*  View Details*/}
+                  {/*</Link>*/}
                 </CardContent>
               </Card>
             ))

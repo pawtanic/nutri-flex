@@ -1,6 +1,4 @@
-import type { CollectionConfig } from 'payload';
-
-export const Workouts: CollectionConfig = {
+export const Workouts = {
   slug: 'workouts',
   admin: {
     useAsTitle: 'name',

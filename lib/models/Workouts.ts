@@ -1,10 +1,11 @@
 import { Schema, model, models, Types, Document } from 'mongoose';
+import { IExercise } from '@/lib/models/Exercises';
 
 export interface IWorkout {
   _id: Types.ObjectId;
   name: string;
   date: Date;
-  exercises?: Types.ObjectId[];
+  exercises: Types.ObjectId[] | IExercise[];
   createdAt: Date;
   updatedAt: Date;
 }

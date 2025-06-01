@@ -4,7 +4,7 @@ import configPromise from '@payload-config';
 import { RequiredDataFromCollectionSlug } from 'payload';
 import BotService from "@/lib/services/BotService";
 import { DataUtils } from '@/lib/utils/data';
-import {RecipeIngredient, RecipeInstruction} from "@/lib/collections/types";
+import {RecipeIngredient, RecipeInstruction} from "@/lib/models/types";
 
 /**
  * Interface for the recipe request body

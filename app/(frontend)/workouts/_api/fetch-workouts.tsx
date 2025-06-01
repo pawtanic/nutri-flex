@@ -1,8 +1,5 @@
 'use server';
 
-import { getPayload } from 'payload';
-import config from '@payload-config';
-
 export async function fetchWorkouts(date: string) {
   const payload = await getPayload({ config });
   const startOfDay = new Date(date);
