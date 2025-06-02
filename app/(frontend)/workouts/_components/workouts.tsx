@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus } from 'lucide-react';
@@ -10,15 +10,14 @@ import { linkAkaBtnStyles } from '@/app/(frontend)/utils/constants';
 import { RoutesConfig } from '@/components/common/navigation/navigation';
 import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 import type { Workout } from '@/payload-types';
-import { useDate } from '@/app/(frontend)/context/date-context';
-import { useEffect } from 'react';
 
 interface WorkoutsPageClientProps {
   initialWorkouts: Workout[];
   initialTab: string;
 }
 
-function normalizeDate(date: Date | string): string {
+// need data from api to test data change when date is changed
+export function normalizeDate(date: Date | string): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
 
   const year = dateObj.getFullYear();
@@ -33,21 +32,7 @@ export default function Workouts({
   initialTab = 'workout',
 }: WorkoutsPageClientProps) {
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const { selectedDate } = useDate();
-
-  // append to url selectedDate
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
-    const formattedDate = normalizeDate(selectedDate);
-    params.set('date', formattedDate);
-
-    // Update the URL without causing a page reload - cleaner way ?
-    router.replace(`${window.location.pathname}?${params.toString()}`, { scroll: false });
-  }, [selectedDate, searchParams, router]);
-
   const urlTab = searchParams.get('tab') || initialTab;
-
   const { tab, setTab } = useTabWithUrl({ defaultTab: urlTab });
   const hasWorkouts = initialWorkouts.length > 0;
 
@@ -60,7 +45,7 @@ export default function Workouts({
           {/*<TabsTrigger value="templates">Templates</TabsTrigger>*/}
         </TabsList>
 
-        <p>You can find all your workouts here.</p>
+        <p className="mt-4 text-center">You can find all your workouts here.</p>
 
         <TabsContent value="workout" className="mt-4">
           <div className="flex justify-end mb-4">

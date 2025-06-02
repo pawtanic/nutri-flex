@@ -1,12 +1,13 @@
 'use client';
 
-import { Droplet } from 'lucide-react';
+import { Droplet, ThumbsUp } from 'lucide-react';
 import React, { RefObject, useEffect, useRef } from 'react';
 
 interface CircularWaterTrackerProps {
   percentage: number;
-  current: number;
+  waterIntake: number;
   goal: number;
+  goalReached: boolean;
 }
 
 const getKeyFrames = (waterLevel: number): string => {
@@ -39,12 +40,13 @@ const calculateWaterLevel = (percentage: number): number => {
   return 180 - (percentage / 100) * 180;
 };
 
-export function CircularWaterTracker({ percentage, current, goal }: CircularWaterTrackerProps) {
+export function CircularWaterTracker({
+  percentage,
+  waterIntake,
+  goal,
+  goalReached,
+}: CircularWaterTrackerProps) {
   const { radius, circumference, strokeDashoffset } = calculateCircleProperties(percentage);
-  console.log(current);
-  // Calculate hydration in ml
-  const goalMl = goal * 250;
-
   // Animation refs
   const waveRef = useRef<SVGPathElement>(null);
   const styleRef = useRef<HTMLStyleElement | null>(null);
@@ -88,14 +90,20 @@ export function CircularWaterTracker({ percentage, current, goal }: CircularWate
           radius={radius}
           circumference={circumference}
           strokeDashoffset={strokeDashoffset}
+          goalReached={goalReached}
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-          <Droplet className="h-10 w-10 text-blue-500 mb-2" />
-          {/*<p className="text-4xl font-bold">*/}
-          {/*  {current}/{goal}*/}
-          {/*</p>*/}
-          {/*<p>glasses</p>*/}
-          <p className="mt-1 text-2xl">{goalMl / 1000}l</p>
+          {goalReached ? (
+            <ThumbsUp className="h-10 w-10 mb-2 text-protein" />
+          ) : (
+            <Droplet className="h-10 w-10 text-blue-500 mb-2" />
+          )}
+          <p className="text-2xl font-medium">
+            {waterIntake}ml / {goal}ml
+          </p>
+          <p className="mt-1 text-lg">
+            {(waterIntake / 1000).toFixed(1)}l / {(goal / 1000).toFixed(1)}l
+          </p>
         </div>
       </div>
       <div className="mt-2 text-center">
@@ -110,10 +118,12 @@ function CircleWaveProgressBar({
   circumference,
   strokeDashoffset,
   waveRef,
+  goalReached,
 }: {
   radius: number;
   circumference: number;
   strokeDashoffset: number;
+  goalReached: boolean;
   waveRef: RefObject<SVGPathElement | null>;
 }) {
   return (
@@ -135,7 +145,7 @@ function CircleWaveProgressBar({
       <g clipPath="url(#circleClip)">
         <path
           ref={waveRef}
-          fill="rgba(59, 130, 246, 0.3)"
+          fill={goalReached ? 'rgba(169, 244, 103, 0.5)' : 'rgba(59, 130, 246, 0.3)'}
           style={{
             transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
@@ -155,7 +165,7 @@ function CircleWaveProgressBar({
         cy="90"
         r={radius}
         fill="none"
-        stroke="rgb(59, 130, 246)"
+        stroke={goalReached ? 'rgba(169, 244, 103, 1)' : '#3b82f6'}
         strokeWidth="12"
         strokeLinecap="round"
         strokeDasharray={circumference}

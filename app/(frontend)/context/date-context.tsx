@@ -3,6 +3,7 @@
 import { createContext, use, useState, type ReactNode, useEffect } from 'react';
 import { useUrlParams } from '@/hooks/useUrlParams';
 import { format } from 'date-fns';
+import { useSearchParams } from 'next/navigation';
 
 type DateContextType = {
   selectedDate: Date;
@@ -12,12 +13,9 @@ type DateContextType = {
 const DateContext = createContext<DateContextType | undefined>(undefined);
 
 export function DateProvider({ children }: { children: ReactNode }) {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  // const { updateParams } = useUrlParams();
-  //
-  // useEffect(() => {
-  //   updateParams({ date: format(selectedDate, 'yyyy-MM-dd') });
-  // }, [selectedDate, updateParams]);
+  const searchParams = useSearchParams();
+  const date = searchParams.get('date');
+  const [selectedDate, setSelectedDate] = useState<Date>(date ? new Date(date) : new Date());
 
   return (
     <DateContext.Provider value={{ selectedDate, setSelectedDate }}>

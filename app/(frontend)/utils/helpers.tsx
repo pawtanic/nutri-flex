@@ -12,6 +12,7 @@ import {
 } from '@/app/(frontend)/utils/constants';
 import type { Exercises } from '@/app/(frontend)/workouts/_components/workout-form-types';
 import { goals } from '@/components/goal-progress';
+import { CaloriesIntakeData, ProteinIntakeData } from '@/app/(frontend)/settings/_schemas/schemas';
 
 export const capitalizeAll = (str: string): string => {
   return str
@@ -180,9 +181,6 @@ export function constructApiUrl(path: string): string {
 
 type Sex = 'male' | 'female';
 export type ActivityLevel = 'none' | 'light' | 'moderate' | 'heavy';
-export type FoodData = {
-  kcal: number;
-};
 
 export function calculateHydrationGoal(
   weightKg: number,
@@ -226,25 +224,151 @@ export function calculateHydrationGoal(
   return Math.max(0, Math.round(adjustedMl));
 }
 
-export function calculatedProteinIntake(weight: number, activity: ActivityLevel, sex: Sex) {
+export function calculateProteinIntake(validatedData: ProteinIntakeData): number {
   let proteinPerKg: number;
 
-  switch (activity) {
+  switch (validatedData.activity) {
     case 'none':
-      proteinPerKg = 0.8;
-      break;
-    case 'light':
       proteinPerKg = 1.2;
       break;
-    case 'moderate':
+    case 'light':
       proteinPerKg = 1.4;
       break;
-    case 'heavy':
+    case 'moderate':
       proteinPerKg = 1.6;
       break;
+    case 'heavy':
+      proteinPerKg = 1.8;
+      break;
     default:
-      proteinPerKg = 0.8;
+      proteinPerKg = 1.2;
   }
 
-  return weight * proteinPerKg;
+  // Adjust for sex (slightly higher for males)
+  if (validatedData.sex === 'male') {
+    proteinPerKg += 0.1;
+  }
+
+  // Adjust for age (higher for older adults)
+  if (validatedData.age >= 65) {
+    proteinPerKg = Math.max(proteinPerKg, 1.2); // Ensure minimum of 1.2g/kg for older adults
+    proteinPerKg += 0.1; // Additional 0.1g/kg for older adults
+  }
+
+  return Math.round(validatedData.weight * proteinPerKg);
+}
+
+export function calculateTDEE(validatedData: CaloriesIntakeData): number {
+  // Calculate BMR using Harris-Benedict equation
+  let bmr: number;
+
+  if (validatedData.sex === 'male') {
+    // BMR for men = 66.5 + (13.75 × weight in kg) + (5.003 × height in cm) - (6.75 × age)
+    bmr =
+      66.5 + 13.75 * validatedData.weight + 5.003 * validatedData.height - 6.75 * validatedData.age;
+  } else {
+    // BMR for women = 655.1 + (9.563 × weight in kg) + (1.850 × height in cm) - (4.676 × age)
+    bmr =
+      655.1 +
+      9.563 * validatedData.weight +
+      1.85 * validatedData.height -
+      4.676 * validatedData.age;
+  }
+
+  // Calculate TDEE based on activity level
+  let activityMultiplier: number;
+
+  switch (validatedData.activity as ActivityLevel) {
+    case 'none':
+      activityMultiplier = 1.2; // Sedentary (little or no exercise)
+      break;
+    case 'light':
+      activityMultiplier = 1.375; // Light exercise (1-3 days per week)
+      break;
+    case 'moderate':
+      activityMultiplier = 1.55; // Moderate exercise (3-5 days per week)
+      break;
+    case 'heavy':
+      activityMultiplier = 1.725; // Heavy exercise (6-7 days per week)
+      break;
+    default:
+      activityMultiplier = 1.2;
+  }
+
+  let tdee = Math.round(bmr * activityMultiplier);
+
+  // Adjust based on goal
+  let calculatedCalories: number;
+
+  switch (validatedData.goal) {
+    case 'lose':
+      calculatedCalories = Math.round(tdee * 0.8); // 20% deficit for weight loss
+      break;
+    case 'maintain':
+      calculatedCalories = tdee; // Maintenance calories
+      break;
+    case 'gain':
+      calculatedCalories = Math.round(tdee * 1.1); // 10% surplus for weight gain
+      break;
+    default:
+      calculatedCalories = tdee;
+  }
+
+  return calculatedCalories;
+}
+
+interface WaterIntakeUpdate {
+  newIntake: number;
+  shouldUpdate: boolean;
+  toastMessage?: {
+    title: string;
+    description: string;
+  };
+}
+
+export function calculateWaterIntakeUpdate(
+  currentIntake: number,
+  amountToAdd: number,
+  goal: number
+): WaterIntakeUpdate {
+  if (currentIntake >= goal) {
+    return {
+      newIntake: currentIntake,
+      shouldUpdate: false,
+      toastMessage: {
+        title: 'Hydration Goal Reached',
+        description: "You've already met your daily water intake goal! ",
+      },
+    };
+  }
+
+  const newTotal = currentIntake + amountToAdd;
+
+  if (newTotal > goal) {
+    const remaining = goal - currentIntake;
+    if (remaining > 0) {
+      return {
+        newIntake: goal,
+        shouldUpdate: true,
+        toastMessage: {
+          title: 'Goal Achieved!',
+          description: `Added ${remaining}ml to reach your daily goal of ${goal}ml! `,
+        },
+      };
+    }
+    return { newIntake: currentIntake, shouldUpdate: false };
+  }
+
+  if (newTotal === goal) {
+    return {
+      newIntake: newTotal,
+      shouldUpdate: true,
+      toastMessage: {
+        title: 'Goal Achieved!',
+        description: "Perfect! You've reached your daily water intake goal! ",
+      },
+    };
+  }
+
+  return { newIntake: newTotal, shouldUpdate: true };
 }

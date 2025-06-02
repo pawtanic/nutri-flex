@@ -72,12 +72,7 @@ export function WorkoutForm({ exercises, setExercises }: WorkoutFormProps) {
           )}
         </div>
         {hasExercises && (
-          <AuthRequiredButton
-            loadingText="Saving workout..."
-            className="w-full"
-            isBusy={isPending}
-            aria-label="Save workout"
-          >
+          <AuthRequiredButton loadingText="Saving workout..." className="w-full" isBusy={isPending}>
             Save Workout
           </AuthRequiredButton>
         )}

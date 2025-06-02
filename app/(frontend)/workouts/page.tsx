@@ -1,5 +1,6 @@
 import Workouts from '@/app/(frontend)/workouts/_components/workouts';
 import { fetchWorkouts } from '@/app/(frontend)/workouts/_api/fetch-workouts';
+import { Workout } from '@/payload-types';
 
 export default async function WorkoutsPage({
   searchParams,
