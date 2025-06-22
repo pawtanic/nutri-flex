@@ -5,6 +5,8 @@ import type { Exercises } from '@/app/(frontend)/workouts/_components/workout-fo
 import { ActionResponse } from '@/app/(frontend)/types/common-types';
 import { createWorkout } from '@/app/(frontend)/workouts/_api/create-workout';
 import { revalidatePath } from 'next/cache';
+import WorkoutService from '@/lib/services/WorkoutService';
+import { Workout } from '@/lib/models/workouts.model';
 
 export async function addExercisesAction(
   _: ActionResponse,
@@ -18,7 +20,7 @@ export async function addExercisesAction(
     const validationResults = exercises.map(exercise => {
       return exerciseSchema.safeParse({
         workoutName,
-        exerciseName: exercise.exerciseName,
+        name: exercise.name,
         sets: exercise.sets.map(set => ({
           reps: set.reps,
           weight: set.weight,
@@ -86,9 +88,9 @@ export async function addExercisesAction(
     }
 
     // Transform validation results into the proper workout format
-    const workoutData = {
+    const workoutData: Workout = {
       name: workoutName as string,
-      date: new Date().toISOString(),
+      date: new Date(),
       exercises: validationResults.map(result => {
         // Since we've already validated, we know these are all success: true
         const data = (result as any).data;
@@ -100,7 +102,7 @@ export async function addExercisesAction(
         }));
 
         return {
-          exerciseName: data.exerciseName,
+          name: data.name,
           sets: sets,
         };
       }),
@@ -109,7 +111,7 @@ export async function addExercisesAction(
     console.log('Sending workout data:', JSON.stringify(workoutData));
 
     // Create the workout first
-    await createWorkout({ newWorkout: workoutData });
+    const newWorkout = await WorkoutService.create(workoutData);
 
     revalidatePath('/workouts');
 

@@ -29,7 +29,7 @@ export async function updateWorkout(
     const validationResults = exercises.map(exercise => {
       return exerciseSchema.safeParse({
         workoutName,
-        exerciseName: exercise.exerciseName,
+        name: exercise.name,
         sets: exercise.sets,
       });
     });
@@ -95,7 +95,7 @@ export async function updateWorkout(
     await updateExistingWorkout(workoutId, {
       name: workoutName,
       exercises: exercises.map(exercise => ({
-        exerciseName: exercise.exerciseName,
+        name: exercise.name,
         sets: exercise.sets.map(set => ({
           reps: Number(set.reps),
           weight: Number(set.weight),

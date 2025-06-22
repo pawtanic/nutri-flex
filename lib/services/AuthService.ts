@@ -1,33 +1,54 @@
+import { BadRequestError, NotFoundError } from './CrudService';
 import { UserService } from './UserService';
-import { authConfig } from '@/lib/config/auth.config';
-import { getServerSession } from 'next-auth/next';
-import { IUser } from '@/lib/models/user.model';
-import { NextRequest } from 'next/server';
+import bcrypt from 'bcryptjs';
+import { env } from '@/lib/config/env.config';
+import { signIn } from 'next-auth/react';
 
 export class AuthService {
   userService = new UserService();
 
   async register(data: { email: string; password: string; name?: string }) {
-    // You need to hash password here (bcrypt)
-    return await this.userService.create({
+    if (!data.email || !data.password) throw new BadRequestError('Email and password required');
+
+    const existing = await this.userService.findByEmail(data.email);
+    if (existing) throw new BadRequestError('User already exists');
+
+    const hashed = await bcrypt.hash(data.password, env.SALT);
+
+    return this.userService.create({
       email: data.email,
-      password: data.password, // hash before saving in real code
-      name: data.name || '',
+      password: hashed,
+      name: data.name ?? '',
       roles: ['user'],
     });
   }
 
   async login(credentials: { email: string; password: string }) {
-    // No direct login here, delegate to NextAuth in route (credentials provider)
-    // You could validate manually here if you want
-    throw new Error('Use NextAuth credential provider for login');
+    if (!credentials.email || !credentials.password) throw new BadRequestError('Email and password required');
+
+    const user = await this.userService.findByEmail(credentials.email);
+    if (!user) throw new NotFoundError('User not found');
+    signIn()
+
+    const match = await bcrypt.compare(credentials.password, user.password);
+    if (!match) throw new BadRequestError('Invalid credentials');
+
+    // 🔐 Placeholder for token/session management
+    return {
+      message: 'Login successful',
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        roles: user.roles,
+      },
+      // token: generateJWT(user) <- implement when needed
+    };
   }
 
-
-  async logout() {
-    // next-auth signout is client-side or API call to /api/auth/signout
-    // Here, just a placeholder or can clear cookie/token if manual
-    return true;
+  async logout(): Promise<{ message: string }> {
+    // No-op unless you're using JWT or cookies — typically client handles logout
+    return { message: 'Logged out (client should clear token/session)' };
   }
 }
 

@@ -23,7 +23,11 @@ async function dbConnect() {
   try {
     if (!cached.promise) {
       cached.promise = mongoose.connect(MONGODB_URI).then(mongoose => {
-        console.log("Connected to MongoDB.");
+        if (env.isDevelopment()) {
+          console.log(`Connected to MongoDB in development mode - ${MONGODB_URI}.`);
+        } else {
+          console.log("Connected to MongoDB in production mode.");
+        }
         return mongoose;
       });
     }

@@ -1,8 +1,6 @@
-import { getPayload } from 'payload';
-import config from '@payload-config';
-import { Workout } from '@/payload-types';
-
 // Define a type that matches what Payload expects for workout creation
+import { Workout } from '@/lib/models/workouts.model';
+
 type CreateWorkoutData = Omit<Workout, 'id' | 'updatedAt' | 'createdAt'>;
 
 interface CreateWorkoutProps {
@@ -12,11 +10,10 @@ interface CreateWorkoutProps {
 export async function createWorkout({ newWorkout }: CreateWorkoutProps) {
   try {
     console.log('Creating workout with data:', JSON.stringify(newWorkout));
-    const payload = await getPayload({ config });
 
-    const result = await payload.create({
-      collection: 'workouts',
-      data: newWorkout,
+    const result = await fetch('/api/workouts', {
+      method: 'POST',
+      body: JSON.stringify(newWorkout),
     });
 
     console.log('Workout created successfully:', result);

@@ -40,7 +40,7 @@ export function ExerciseAccordion({
       className="space-y-3 bg-white"
     >
       {exercises.map((exercise, index) => {
-        const exerciseName = getExerciseDisplayName(exercise, index);
+        const name = getExerciseDisplayName(exercise, index);
         const isExpanded = expandedSections.includes(`exercise-${index}`);
         const accordionId = `exercise-${index}`;
 
@@ -55,7 +55,7 @@ export function ExerciseAccordion({
               aria-expanded={isExpanded}
               aria-controls={`content-${accordionId}`}
             >
-              {!isExpanded && exerciseName}
+              {!isExpanded && name}
             </AccordionTrigger>
             <AccordionContent id={`content-${accordionId}`}>
               <div className="px-4">

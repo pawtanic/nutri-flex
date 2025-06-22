@@ -39,7 +39,7 @@ export function useEditWorkoutForm(workout: Workout): UseEditWorkoutFormReturn {
     () =>
       workout.exercises?.map(exercise => ({
         id: exercise.id,
-        exerciseName: exercise.exerciseName,
+        name: exercise.name,
         sets: exercise.sets.map(set => ({
           reps: set.reps,
           weight: set.weight,
@@ -95,7 +95,7 @@ export function useEditWorkoutForm(workout: Workout): UseEditWorkoutFormReturn {
       // When updating the entire sets array
       newExercises[index] = { ...newExercises[index], sets: value as Set[] };
     } else {
-      // For other fields like exerciseName
+      // For other fields like name
       newExercises[index] = { ...newExercises[index], [field]: value };
     }
 
@@ -123,7 +123,7 @@ export function useEditWorkoutForm(workout: Workout): UseEditWorkoutFormReturn {
     const newExercises = [
       ...exercises,
       {
-        exerciseName: `Exercise ${exercises.length + 1}`,
+        name: `Exercise ${exercises.length + 1}`,
         sets: [{ reps: 1, weight: 1 }],
       },
     ];

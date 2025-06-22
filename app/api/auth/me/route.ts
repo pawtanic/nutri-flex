@@ -16,10 +16,18 @@ import { UnauthorizedError } from '@/lib/errors/http-errors';
 import { getServerSession } from "next-auth"
 import { authConfig } from '@/lib/config/auth.config';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { env } from '@/lib/config/env.config';
+import {getToken} from 'next-auth/jwt';
+import { User, UserModel } from '@/lib/models/user.model';
 
-// FIXME: Doesn't work.
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getServerSession(req, res, authConfig)
-  res.json(session)
+  // const session = await getServerSession(req, res, authConfig)
+  // res.json(session)
+  const token = await getToken({req, secret: env.NEXTAUTH_SECRET});
+  if (!token?.id) {
+    return NextResponse.json({message: "Unauthorized"}, {status: 401});
+  }
+  const user = await UserModel.findOne({email: token.email}).select('-password');
+  return NextResponse.json(token);
 }
 

@@ -80,7 +80,7 @@ export function ExerciseSelector({ setExercisesAction }: ExerciseSelectorProps) 
   const addSelectedExercise = () => {
     if (selectedExercise) {
       const formattedExercise: Exercises[number] = {
-        exerciseName: selectedExercise.name,
+        name: selectedExercise.name,
         sets: [
           {
             reps: 1,

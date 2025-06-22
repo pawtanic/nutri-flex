@@ -11,11 +11,11 @@ import { RoutesConfig } from '@/components/common/navigation/navigation';
 import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 import { useDate } from '@/app/(frontend)/context/date-context';
 import { useEffect } from 'react';
-import { IWorkout } from '@/lib/models/Workouts';
-import { IExercise } from '@/lib/models/Exercises';
+import { Workout } from '@/lib/models/workouts.model';
+import { IExercise } from '@/lib/models/exercises.model';
 
 interface WorkoutsPageClientProps {
-  initialWorkouts: IWorkout[];
+  initialWorkouts: Workout[];
   initialTab: string;
 }
 
@@ -72,7 +72,7 @@ export default function WorkoutsPageClient({
           </div>
 
           {hasWorkouts ? (
-            initialWorkouts.map((workout: IWorkout, index: number) => (
+            initialWorkouts.map((workout: Workout, index: number) => (
               <Card key={index} className="mb-4">
                 <CardHeader className="pb-2">
                   <div className="flex justify-between items-start">

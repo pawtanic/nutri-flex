@@ -1,53 +1,64 @@
-import mongoose, { Schema, Document, Model } from 'mongoose'
+import { prop, modelOptions, pre, getModelForClass, DocumentType, Severity } from '@typegoose/typegoose';
+import crypto from 'crypto';
+import { env } from '@/lib/config/env.config';
+import bcrypt from 'bcryptjs';
+import { schemaOptions } from '@/lib/models/utils.model';
+import mongoose from 'mongoose';
 
-// 🔹 Base interface
-export interface IUser {
-  name?: string
-  email: string
-  password: string
-  avatar?: string
-  authJSId?: string
-  roles: ('user' | 'editor' | 'admin')[]
+export enum UserRole {
+  USER = 'user',
+  EDITOR = 'editor',
+  ADMIN = 'admin',
 }
 
-// 🔹 Create & Update interfaces
-export interface ICreateUser extends Omit<IUser, 'password'> {
-  password: string
-}
+@modelOptions(schemaOptions)
 
-export interface IUpdateUser extends Partial<IUser> {
-  password?: string
-}
-
-// 🔹 Mongoose Document type
-export interface IUserDoc extends IUser, Document {}
-
-const UserSchema: Schema<IUserDoc> = new Schema(
-  {
-    name: { type: String },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true }, // managed by NextAuth or local
-    avatar: { type: String }, // could be a URL
-    authJSId: { type: String },
-    roles: {
-      type: [String],                  // Array of strings
-      enum: ['user', 'editor', 'admin'], // enum applies to each string in array
-      default: ['user'],
-      required: true,
-    },
-  },
-  {
-    timestamps: true,
-    toJSON: {
-      virtuals: true, // include virtuals like id
-      versionKey: false,
-      transform: (_, ret) => {
-        ret.id = ret._id.toString()
-        delete ret._id
-        return ret
-      },
-    },
+@pre<User>('save', async function (next) {
+  if (this.isNew) {
+    await this.setPassword(crypto.randomBytes(12).toString('hex'));
+  } else if (this.isModified('password')) {
+    await this.setPassword(this.password);
   }
-)
+  next();
+})
 
-export const User: Model<IUserDoc> = mongoose.models.User || mongoose.model<IUserDoc>('User', UserSchema)
+export class User {
+  @prop({ trim: true })
+  public name?: string;
+
+  @prop({ 
+    required: [true, 'Email is required'],
+    unique: true, 
+    trim: true,
+    lowercase: true,
+    match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please provide a valid email address']
+  })
+  public email!: string;
+
+  @prop({ 
+    required: [true, 'Password is required'],
+    minlength: [6, 'Password must be at least 6 characters long']
+  })
+  public password!: string;
+
+  @prop()
+  public avatar?: string;
+
+  @prop()
+  public socialAuthId?: string;
+
+  @prop({ 
+    type: String, 
+    enum: UserRole, 
+    required: true, 
+    default: UserRole.USER 
+  })
+  public roles!: UserRole[];
+
+  public async setPassword(this: DocumentType<User>, password: string) {
+    this.password = await bcrypt.hash(password, env.SALT);
+  }
+}
+
+export const UserModel =
+  mongoose.models.User || getModelForClass(User, { existingMongoose: mongoose });

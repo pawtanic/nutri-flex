@@ -26,11 +26,11 @@ export function Settings() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="rounded-full h-9 w-9">
-            {session.user.image ? (
+            {session.user?.avatar ? (
               <Image
                 width={36}
                 height={36}
-                src={session.user.image || ''}
+                src={session.user.avatar || ''}
                 alt={session.user.name || 'User Image'}
                 className="h-9 w-9 rounded-full"
               />

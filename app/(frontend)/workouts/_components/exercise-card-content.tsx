@@ -34,9 +34,9 @@ export function ExerciseCardContent({
 }: ExerciseCardProps) {
   const exerciseErrors = state.errors?.[index] || null;
   const errorMessage = state.message || null;
-  const exerciseNameError = exerciseErrors?.exerciseName?.[0];
+  const exerciseNameError = exerciseErrors?.name?.[0];
   const isOnlyExercise = exercises.length === 1;
-  const savedExerciseName = state?.inputs?.exercises?.[index]?.exerciseName;
+  const savedExerciseName = state?.inputs?.exercises?.[index]?.name;
   const currentExercise = exercises[index];
 
   return (
@@ -44,9 +44,9 @@ export function ExerciseCardContent({
       <div className="grid grid-cols-[1fr,auto] gap-2">
         <Input
           placeholder="Exercise name"
-          name="exerciseName"
-          value={currentExercise.exerciseName}
-          onChange={e => onUpdateExercise(index, 'exerciseName', e.target.value)}
+          name="name"
+          value={currentExercise.name}
+          onChange={e => onUpdateExercise(index, 'name', e.target.value)}
           defaultValue={savedExerciseName}
           aria-invalid={!!exerciseNameError}
           aria-describedby={exerciseNameError ? `exercise-name-error-${index}` : undefined}

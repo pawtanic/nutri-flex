@@ -45,10 +45,10 @@ export function EditExerciseAccordion({
       className="space-y-3 bg-white mb-2"
     >
       {exercises.map((exercise, index) => {
-        const exerciseName = exercise.exerciseName || `Exercise ${index + 1}`;
+        const name = exercise.name || `Exercise ${index + 1}`;
         const isExpanded = expandedSections.includes(`exercise-${index}`);
         const exerciseErrors = state.errors?.[index] || null;
-        const savedExerciseName = state?.inputs?.exercises?.[index]?.exerciseName;
+        const savedname = state?.inputs?.exercises?.[index]?.name;
 
         return (
           <AccordionItem
@@ -59,7 +59,7 @@ export function EditExerciseAccordion({
             <AccordionTrigger
               className={`px-4 py-3 hover:no-underline ${isExpanded ? 'before:content-[""] before:flex-1' : ''}`}
             >
-              {!isExpanded && exerciseName}
+              {!isExpanded && name}
             </AccordionTrigger>
             <AccordionContent>
               <div className="px-4 pt-2 pb-4">
@@ -67,11 +67,11 @@ export function EditExerciseAccordion({
                   <Input
                     id={`exercise-name-${index}`}
                     placeholder="Exercise name"
-                    name="exerciseName"
-                    value={exerciseName}
-                    onChange={e => onUpdateExercise(index, 'exerciseName', e.target.value)}
-                    defaultValue={savedExerciseName}
-                    aria-invalid={!!exerciseErrors?.exerciseName}
+                    name="name"
+                    value={name}
+                    onChange={e => onUpdateExercise(index, 'name', e.target.value)}
+                    defaultValue={savedname}
+                    aria-invalid={!!exerciseErrors?.name}
                   />
                   <Button
                     type="button"
@@ -81,10 +81,10 @@ export function EditExerciseAccordion({
                   >
                     <Trash2 style={{ width: '24px', height: '24px' }} aria-hidden="true" />
                   </Button>
-                  {exerciseErrors?.exerciseName && (
+                  {exerciseErrors?.name && (
                     <FormErrorMessage
                       id={`exercise-name-${index}`}
-                      errorMessage={exerciseErrors.exerciseName[0] || state.message}
+                      errorMessage={exerciseErrors.name[0] || state.message}
                     />
                   )}
 

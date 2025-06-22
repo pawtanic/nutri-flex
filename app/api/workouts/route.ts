@@ -1,25 +1,18 @@
 import dbConnect from '@/lib/config/db.config';
 import { NextRequest, NextResponse } from 'next/server';
 import { WorkoutService } from '@/lib/services/WorkoutService';
+import { Workout } from '@/lib/models/workouts.model';
 
 const workoutService = new WorkoutService();
 
 export async function GET() {
-  await dbConnect();
-  const workouts = await workoutService.findAll();
+  const workouts = await workoutService.findPaginated();
   return NextResponse.json(workouts);
 }
 
 export async function POST(request: NextRequest) {
-  await dbConnect();
-  const body = await request.json();
+  const body: Workout = await request.json();
 
-  const { name, date, exercises } = body;
-
-  if (!name || !date) {
-    return NextResponse.json({ error: 'Name and date are required' }, { status: 400 });
-  }
-
-  const newWorkout = await workoutService.create({ name, date, exercises });
+  const newWorkout = await workoutService.create(body);
   return NextResponse.json(newWorkout, { status: 201 });
 }

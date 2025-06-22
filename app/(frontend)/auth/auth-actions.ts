@@ -96,8 +96,8 @@ export async function loginAction(
     return handleApiError(error, 'An error occurred during login. Please try again.');
   }
 
-  revalidatePath('/');
-  redirect('/');
+  // revalidatePath('/');
+  // redirect('/');
 }
 
 export async function signupAction(
@@ -157,8 +157,8 @@ export async function signupAction(
     return handleApiError(error, 'An error occurred during signup. Please try again.');
   }
 
-  revalidatePath('/');
-  redirect('/');
+  // revalidatePath('/');
+  // redirect('/');
 }
 
 /**

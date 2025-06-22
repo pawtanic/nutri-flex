@@ -11,7 +11,7 @@ export type SetSchema = z.infer<typeof setSchema>;
 
 export const exerciseSchema = z.object({
   workoutName: z.string().min(3, 'Workout name must be at least 3 characters'),
-  exerciseName: z.string().min(3, 'Exercise name must be at least 3 characters'),
+  name: z.string().min(3, 'Exercise name must be at least 3 characters'),
   sets: z.array(setSchema).min(1, 'At least one set is required'),
 });
 

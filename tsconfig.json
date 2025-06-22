@@ -7,6 +7,8 @@
       "esnext"
     ],
     "allowJs": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "noImplicitAny": false,
     "noUnusedLocals": false,
     "skipLibCheck": true,
@@ -36,9 +38,6 @@
       ],
       "@/hooks/*": [
         "./app/(frontend)/hooks/*"
-      ],
-      "@payload-config": [
-        "./payload.config.ts"
       ]
     }
   },

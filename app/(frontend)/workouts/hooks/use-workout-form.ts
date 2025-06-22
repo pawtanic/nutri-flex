@@ -41,7 +41,7 @@ export function useWorkoutForm(
     const newExercises = [
       ...exercises,
       {
-        exerciseName: '',
+        name: '',
         sets: [{ reps: null, weight: null }],
       },
     ];
@@ -68,7 +68,7 @@ export function useWorkoutForm(
       // When updating the entire sets array
       newExercises[index] = { ...newExercises[index], sets: value as Set[] };
     } else {
-      // For other fields like exerciseName
+      // For other fields like name
       newExercises[index] = { ...newExercises[index], [field]: value };
     }
 

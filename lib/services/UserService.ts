@@ -1,13 +1,13 @@
-import { IUser, IUserDoc, User } from '../models/user.model';
 import { CrudService } from './CrudService';
+import { User, UserModel } from '@/lib/models/user.model';
 
-export class UserService extends CrudService<IUserDoc, IUser> {
+export class UserService extends CrudService<User> {
   constructor() {
-    super(User)
+    super(UserModel);
   }
 
   async findByEmail(email: string) {
-    return await this.findOne({ email })
+    return await this.model.findOne({ email }).exec();
   }
 }
 
