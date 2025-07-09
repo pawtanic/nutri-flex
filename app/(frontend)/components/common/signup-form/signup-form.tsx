@@ -10,6 +10,7 @@ import { SocialLoginButtons } from '@/components/common/social-login-button/soci
 import FormErrorMessage from '@/components/common/form-error-message/form-error-message';
 import WarningAlert from '@/components/common/warning-alert/warning-alert';
 import { useFocusError } from '@/hooks/use-focus-error';
+import AuthClientService from '@/lib/services/AuthClientService';
 
 const initialState = {
   errors: {},
@@ -83,7 +84,7 @@ export default function SignupForm({ onTabChangeAction }: { onTabChangeAction: (
         </Button>
       </form>
 
-      <SocialLoginButtons />
+      <SocialLoginButtons action={({ provider }) => AuthClientService.login({ provider })} />
       <FormFooter
         text="Already have an account?"
         linkText="Log in here"

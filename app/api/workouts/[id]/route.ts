@@ -5,9 +5,9 @@ import dbConnect from '@/lib/config/db.config';
 
 const workoutService = new WorkoutService();
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, context: { params: { id: string } }) {
   await dbConnect();
-  const { id } = params;
+  const { id } = await context.params;
 
   if (!Types.ObjectId.isValid(id)) {
     return NextResponse.json({ error: 'Invalid workout id' }, { status: 400 });
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   if (!workout) {
     return NextResponse.json({ error: 'Workout not found' }, { status: 404 });
   }
-  return NextResponse.json(workout);
+  return NextResponse.json(JSON.parse(JSON.stringify(workout)));
 }
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {

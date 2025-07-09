@@ -5,12 +5,13 @@ import { GET as getAllWorkouts, POST as createWorkout } from '@/app/api/workouts
 import { DELETE as deleteWorkout, GET as getWorkoutById, PUT as updateWorkout } from '@/app/api/workouts/[id]/route';
 import { ExerciseModel } from '@/lib/models/exercises.model';
 import { WorkoutModel } from '@/lib/models/workouts.model';
+import { env } from '@/lib/config/env.config';
 
 // Mock NextRequest
 const createMockRequest = (body?: any): NextRequest => {
   return {
     json: jest.fn().mockResolvedValue(body),
-    nextUrl: { pathname: '/api/workouts' },
+    nextUrl: { pathname: `${env.APP_URL}/api/workouts` },
   } as unknown as NextRequest;
 };
 
@@ -45,7 +46,7 @@ describe('Workouts API', () => {
   const testWorkout = {
     name: 'Test Workout',
     date: new Date(),
-    exercises: [] as mongoose.Types.ObjectId[],
+    exercises: [] as { exercise: mongoose.Types.ObjectId, sets: { reps: number, weight: number }[], notes?: string }[],
   };
 
   // Helper function to create a test exercise
@@ -56,9 +57,10 @@ describe('Workouts API', () => {
 
   // Helper function to create a test workout
   const createTestWorkout = async (exerciseIds: mongoose.Types.ObjectId[] = []) => {
+    const exercises = exerciseIds.map(id => ({ exercise: id, sets: [{ reps: 10, weight: 50 }] }));
     const workout = await WorkoutModel.create({
       ...testWorkout,
-      exercises: exerciseIds,
+      exercises,
     });
     return workout;
   };
@@ -108,7 +110,7 @@ describe('Workouts API', () => {
       // Create workout with the exercise
       const workoutWithExercise = {
         ...testWorkout,
-        exercises: [exercise._id],
+        exercises: [{ exercise: exercise._id, sets: [{ reps: 10, weight: 50 }] }],
       };
 
       const request = createMockRequest(workoutWithExercise);
@@ -120,10 +122,10 @@ describe('Workouts API', () => {
       expect(data.name).toBe(testWorkout.name);
 
       // Verify workout was created with the exercise
-      const workouts = await WorkoutModel.find().populate('exercises');
+      const workouts = await WorkoutModel.find().populate('exercises.exercise');
       expect(workouts).toHaveLength(1);
       expect(workouts[0].exercises).toHaveLength(1);
-      expect(workouts[0].exercises[0].name).toBe(testExercise.name);
+      expect(workouts[0].exercises[0].exercise.name).toBe(testExercise.name);
     });
 
     it('should handle invalid exercise IDs', async () => {
@@ -131,7 +133,7 @@ describe('Workouts API', () => {
       const nonExistentId = new mongoose.Types.ObjectId().toString();
       const workoutWithInvalidExercise = {
         ...testWorkout,
-        exercises: [nonExistentId],
+        exercises: [{ exercise: nonExistentId, sets: [{ reps: 10, weight: 50 }] }],
       };
 
       const request = createMockRequest(workoutWithInvalidExercise);
@@ -164,7 +166,7 @@ describe('Workouts API', () => {
   describe('GET /api/workouts/[id]', () => {
     it('should return a workout by id', async () => {
       // Create a test workout
-      const workout = await createTestWorkout();
+      const workout = await createTestWorkout([]);
 
       const response = await getWorkoutById(
         createMockRequest(),
@@ -200,7 +202,7 @@ describe('Workouts API', () => {
   describe('PUT /api/workouts/[id]', () => {
     it('should update a workout', async () => {
       // Create a test workout
-      const workout = await createTestWorkout();
+      const workout = await createTestWorkout([]);
 
       const updateData = {
         name: 'Updated Workout Name',
@@ -224,7 +226,7 @@ describe('Workouts API', () => {
 
     it('should update a workout with exercises', async () => {
       // Create a test workout without exercises
-      const workout = await createTestWorkout();
+      const workout = await createTestWorkout([]);
 
       // Create a test exercise
       const exercise = await createTestExercise();
@@ -232,7 +234,7 @@ describe('Workouts API', () => {
       // Update workout to include the exercise
       const updateData = {
         name: 'Updated Workout with Exercise',
-        exercises: [exercise._id],
+        exercises: [{ exercise: exercise._id, sets: [{ reps: 10, weight: 50 }] }],
       };
 
       const request = createMockRequest(updateData);
@@ -247,10 +249,10 @@ describe('Workouts API', () => {
       expect(data.name).toBe(updateData.name);
 
       // Verify workout was updated with the exercise
-      const updatedWorkout = await WorkoutModel.findById(workout._id).populate('exercises');
+      const updatedWorkout = await WorkoutModel.findById(workout._id).populate('exercises.exercise');
       expect(updatedWorkout?.name).toBe(updateData.name);
       expect(updatedWorkout?.exercises).toHaveLength(1);
-      expect(updatedWorkout?.exercises[0].name).toBe(testExercise.name);
+      expect(updatedWorkout?.exercises[0].exercise.name).toBe(testExercise.name);
     });
 
     it('should return 404 if workout not found', async () => {
@@ -279,7 +281,7 @@ describe('Workouts API', () => {
 
     it('should return 400 if update data is empty', async () => {
       // Create a test workout
-      const workout = await createTestWorkout();
+      const workout = await createTestWorkout([]);
 
       const request = createMockRequest({});
 
@@ -293,13 +295,13 @@ describe('Workouts API', () => {
 
     it('should handle invalid exercise IDs when updating', async () => {
       // Create a test workout
-      const workout = await createTestWorkout();
+      const workout = await createTestWorkout([]);
 
       // Update with a non-existent exercise ID
       const nonExistentId = new mongoose.Types.ObjectId().toString();
       const updateData = {
         name: 'Updated Workout with Invalid Exercise',
-        exercises: [nonExistentId],
+        exercises: [{ exercise: nonExistentId, sets: [{ reps: 10, weight: 50 }] }],
       };
 
       const request = createMockRequest(updateData);
@@ -328,7 +330,7 @@ describe('Workouts API', () => {
   describe('DELETE /api/workouts/[id]', () => {
     it('should delete a workout', async () => {
       // Create a test workout
-      const workout = await createTestWorkout();
+      const workout = await createTestWorkout([]);
 
       const response = await deleteWorkout(
         createMockRequest(),

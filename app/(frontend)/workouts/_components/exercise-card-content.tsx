@@ -34,22 +34,22 @@ export function ExerciseCardContent({
 }: ExerciseCardProps) {
   const exerciseErrors = state.errors?.[index] || null;
   const errorMessage = state.message || null;
-  const exerciseNameError = exerciseErrors?.name?.[0];
+  const exerciseError = exerciseErrors?.exercise?.[0];
   const isOnlyExercise = exercises.length === 1;
-  const savedExerciseName = state?.inputs?.exercises?.[index]?.name;
+  const savedExercise = state?.inputs?.exercises?.[index]?.exercise;
   const currentExercise = exercises[index];
 
   return (
     <div className="pt-2 pb-4">
       <div className="grid grid-cols-[1fr,auto] gap-2">
         <Input
-          placeholder="Exercise name"
-          name="name"
-          value={currentExercise.name}
-          onChange={e => onUpdateExercise(index, 'name', e.target.value)}
-          defaultValue={savedExerciseName}
-          aria-invalid={!!exerciseNameError}
-          aria-describedby={exerciseNameError ? `exercise-name-error-${index}` : undefined}
+          placeholder="Exercise name or ID"
+          name="exercise"
+          value={typeof currentExercise.exercise === 'string' ? currentExercise.exercise : ''}
+          onChange={e => onUpdateExercise(index, 'exercise', e.target.value)}
+          defaultValue={savedExercise}
+          aria-invalid={!!exerciseError}
+          aria-describedby={exerciseError ? `exercise-error-${index}` : undefined}
         />
         <Button
           type="button"
@@ -60,10 +60,10 @@ export function ExerciseCardContent({
         >
           <Trash2 style={{ width: '24px', height: '24px' }} aria-hidden="true" />
         </Button>
-        {exerciseNameError && (
+        {exerciseError && (
           <FormErrorMessage
-            id={`exercise-name-error-${index}`}
-            errorMessage={exerciseNameError || errorMessage}
+            id={`exercise-error-${index}`}
+            errorMessage={exerciseError || errorMessage}
           />
         )}
 

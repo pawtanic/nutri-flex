@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/config/db.config';
-import FileService from '@/lib/services/FileService';
+import MediaService from '@/lib/services/MediaService';
 
 export async function POST(request: NextRequest) {
   await dbConnect();
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const uploadedFile = await FileService.uploadFile(
+    const uploadedFile = await MediaService.uploadMedia(
       {
         originalname: file.name,
         mimetype: file.type,
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    return NextResponse.json(uploadedFile, { status: 201 });
+    return NextResponse.json(JSON.parse(JSON.stringify(uploadedFile)), { status: 201 });
   } catch (error) {
     console.error('Error uploading file:', error);
     return NextResponse.json({ error: 'Error uploading file' }, { status: 500 });
@@ -58,8 +58,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Entity type and entity ID are required' }, { status: 400 });
     }
 
-    const files = await FileService.findByEntity(entityType, entityId);
-    return NextResponse.json(files);
+    const files = await MediaService.findByEntity(entityType, entityId);
+    return NextResponse.json(JSON.parse(JSON.stringify(files)));
   } catch (error) {
     console.error('Error fetching files:', error);
     return NextResponse.json({ error: 'Error fetching files' }, { status: 500 });
@@ -77,8 +77,8 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'File ID is required' }, { status: 400 });
     }
 
-    const deletedFile = await FileService.deleteFile(id);
-    return NextResponse.json(deletedFile);
+    const deletedFile = await MediaService.deleteMedia(id);
+    return NextResponse.json(JSON.parse(JSON.stringify(deletedFile)));
   } catch (error) {
     console.error('Error deleting file:', error);
     return NextResponse.json({ error: 'Error deleting file' }, { status: 500 });

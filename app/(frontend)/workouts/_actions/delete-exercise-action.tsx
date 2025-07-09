@@ -1,45 +1,29 @@
 'use server';
 
-import { getPayload } from 'payload';
-import config from '@payload-config';
 import { ActionResponse } from '@/app/(frontend)/types/common-types';
-import { Workout } from '@/payload-types';
+import { getWorkoutById } from '@/app/(frontend)/workouts/_api/fetch-workout-by-id';
+import { updateExistingWorkout } from '@/app/(frontend)/workouts/_api/update-workout';
 
 export async function deleteExerciseAction(
   workoutId: string,
   exerciseId: string
 ): Promise<ActionResponse> {
   try {
-    const payload = await getPayload({ config });
-
-    // First, fetch the current workout
-    const workout = (await payload.findByID({
-      collection: 'workouts',
-      id: workoutId,
-    })) as Workout;
-
+    // Fetch the current workout
+    const workout = await getWorkoutById(workoutId);
     if (!workout) {
-      console.log('Workout not found');
       return {
         success: false,
         message: 'Workout not found',
       };
     }
-
     // Filter out the exercise to be deleted
-    const updatedExercises = workout.exercises?.filter(exercise => exercise.id !== exerciseId);
-
-    console.log('Updated exercises after filter:', JSON.stringify(updatedExercises));
-
+    const updatedExercises = workout.exercises?.filter((exercise: any) => exercise.id !== exerciseId);
     // Update the workout with the filtered exercises
-    await payload.update({
-      collection: 'workouts',
-      id: workoutId,
-      data: {
-        exercises: updatedExercises,
-      },
+    await updateExistingWorkout(workoutId, {
+      ...workout,
+      exercises: updatedExercises,
     });
-
     return {
       success: true,
       message: 'Exercise deleted successfully',

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '@/lib/config/db.config';
 import { Types } from 'mongoose';
 import workoutService from '@/lib/services/WorkoutService';
 

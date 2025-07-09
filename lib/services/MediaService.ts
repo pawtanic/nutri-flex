@@ -1,6 +1,6 @@
 import { ClientSession } from 'mongoose';
 import { CrudService } from './CrudService';
-import { File, FileModel, FileType, IFile } from '../models/file.model';
+import { Media, MediaModel, MediaType, IMedia } from '../models/fileUpload.model';
 import dbConnect from '@/lib/config/db.config';
 import fs from 'fs';
 import path from 'path';
@@ -11,17 +11,17 @@ const mkdir = promisify(fs.mkdir);
 const writeFile = promisify(fs.writeFile);
 const unlink = promisify(fs.unlink);
 
-export interface FileUploadOptions {
-  entityType: string;
-  entityId: string;
+export interface MediaUploadOptions {
+  entityType?: string;
+  entityId?: string;
   description?: string;
 }
 
-export class FileService extends CrudService<File, IFile> {
+export class MediaService extends CrudService<Media, IMedia> {
   private uploadDir: string;
 
   constructor() {
-    super(FileModel);
+    super(MediaModel);
     dbConnect();
     this.uploadDir = path.join(process.cwd(), 'public', 'uploads');
     this.ensureUploadDirExists();
@@ -35,27 +35,27 @@ export class FileService extends CrudService<File, IFile> {
     }
   }
 
-  private getFileType(mimetype: string): FileType {
-    if (mimetype.startsWith('image/')) return FileType.IMAGE;
-    if (mimetype.startsWith('video/')) return FileType.VIDEO;
-    if (mimetype.startsWith('audio/')) return FileType.AUDIO;
+  private getMediaType(mimetype: string): MediaType {
+    if (mimetype.startsWith('image/')) return MediaType.IMAGE;
+    if (mimetype.startsWith('video/')) return MediaType.VIDEO;
+    if (mimetype.startsWith('audio/')) return MediaType.AUDIO;
     if (mimetype.startsWith('application/pdf') || 
         mimetype.startsWith('application/msword') || 
         mimetype.startsWith('application/vnd.openxmlformats-officedocument.wordprocessingml.document') ||
-        mimetype.startsWith('text/')) return FileType.DOCUMENT;
-    return FileType.OTHER;
+        mimetype.startsWith('text/')) return MediaType.DOCUMENT;
+    return MediaType.OTHER;
   }
 
-  async uploadFile(
+  async uploadMedia(
     file: {
       originalname: string;
       mimetype: string;
       buffer: Buffer;
       size: number;
     },
-    options: FileUploadOptions,
+    options: MediaUploadOptions = {},
     session?: ClientSession
-  ): Promise<IFile> {
+  ): Promise<IMedia> {
     // Generate a unique filename
     const fileExtension = path.extname(file.originalname);
     const filename = `${uuidv4()}${fileExtension}`;
@@ -65,25 +65,28 @@ export class FileService extends CrudService<File, IFile> {
     // Write the file to disk
     await writeFile(fullPath, file.buffer);
 
-    // Create a file record in the database
-    const fileData: Partial<IFile> = {
+    // Create a media record in the database
+    const mediaData: Partial<IMedia> = {
       filename,
-      originalFilename: file.originalname,
+      originalName: file.originalname,
       mimetype: file.mimetype,
       size: file.size,
       path: relativePath,
-      type: this.getFileType(file.mimetype),
+      url: `/uploads/${filename}`,
+      type: this.getMediaType(file.mimetype),
+      extension: fileExtension.replace('.', ''),
+      description: options.description,
       entityType: options.entityType,
       entityId: options.entityId,
-      description: options.description,
+      uploadedAt: new Date(),
     };
 
-    return this.create(fileData, session);
+    return this.create(mediaData);
   }
 
-  async deleteFile(id: string, session?: ClientSession): Promise<IFile> {
-    const file = await this.findById(id);
-    const fullPath = path.join(process.cwd(), 'public', file.path);
+  async deleteMedia(id: string, session?: ClientSession): Promise<IMedia> {
+    const media = await this.findById(id);
+    const fullPath = path.join(process.cwd(), 'public', media.path);
 
     try {
       await unlink(fullPath);
@@ -92,12 +95,12 @@ export class FileService extends CrudService<File, IFile> {
       // Continue with deletion from database even if file doesn't exist
     }
 
-    return super.delete(id, session);
+    return super.delete(id);
   }
 
-  async findByEntity(entityType: string, entityId: string): Promise<IFile[]> {
+  async findByEntity(entityType: string, entityId: string): Promise<IMedia[]> {
     return this.findAll({ entityType, entityId });
   }
 }
 
-export default new FileService();
+export default new MediaService();

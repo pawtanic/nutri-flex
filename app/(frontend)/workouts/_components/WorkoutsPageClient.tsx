@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus } from 'lucide-react';
+import { Copy, Plus } from 'lucide-react';
 import { DateHeader } from '@/components/date-header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { linkAkaBtnStyles } from '@/app/(frontend)/utils/constants';
@@ -12,7 +12,10 @@ import { useTabWithUrl } from '@/hooks/use-tab-with-url';
 import { useDate } from '@/app/(frontend)/context/date-context';
 import { useEffect } from 'react';
 import { Workout } from '@/lib/models/workouts.model';
+import { WorkoutExercise } from '@/lib/models/workoutExercises.model';
 import { IExercise } from '@/lib/models/exercises.model';
+import { Button } from '../../components/ui/button';
+import { WorkoutTemplates } from '@/app/(frontend)/workouts/_components/workout-templates';
 
 interface WorkoutsPageClientProps {
   initialWorkouts: Workout[];
@@ -58,7 +61,7 @@ export default function WorkoutsPageClient({
       <Tabs value={tab} onValueChange={setTab} defaultValue={initialTab} className="mb-6">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="workout">Workout</TabsTrigger>
-          {/*<TabsTrigger value="templates">Templates</TabsTrigger>*/}
+          <TabsTrigger value="templates">Templates</TabsTrigger>
         </TabsList>
 
         <p>You can find all your workouts here.</p>
@@ -77,38 +80,37 @@ export default function WorkoutsPageClient({
                 <CardHeader className="pb-2">
                   <div className="flex justify-between items-start">
                     <CardTitle className="text-lg">{workout.name}</CardTitle>
-                    {/*<Button onClick={() => console.log('copy')} variant="ghost" size="icon">*/}
-                    {/*  <Copy*/}
-                    {/*    aria-label={`Copy workout ${workout.name} to clipboard`}*/}
-                    {/*    className="h-4 w-4"*/}
-                    {/*  />*/}
-                    {/*</Button>*/}
+                    <Button onClick={() => console.log('copy')} variant="ghost" size="icon">
+                      <Copy
+                        aria-label={`Copy workout ${workout.name} to clipboard`}
+                        className="h-4 w-4"
+                      />
+                    </Button>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  {/*<ul className="space-y-2">*/}
-                  {/*  {workout?.exercises?.map((exercise: IExercise, index: number) => (*/}
-                  {/*    <li key={index} className="text-sm">*/}
-                  {/*      <div className="flex justify-between">*/}
-                  {/*        <span>{exercise.name}</span>*/}
-                  {/*        /!*<span className="text-muted-foreground">*!/*/}
-                  {/*        /!*  {exercise.sets[index].reps} × {exercise.sets[index].weight}*!/*/}
-                  {/*        /!*</span>*!/*/}
-                  {/*        {exercise.sets?.map(set => (*/}
-                  {/*          <span key={set._id} className="text-muted-foreground">*/}
-                  {/*            {set.reps} × {set.weight}*/}
-                  {/*          </span>*/}
-                  {/*        ))}*/}
-                  {/*      </div>*/}
-                  {/*    </li>*/}
-                  {/*  ))}*/}
-                  {/*</ul>*/}
-                  {/*<Link*/}
-                  {/*  href={`${RoutesConfig.editWorkout}/${workout.id}`}*/}
-                  {/*  className={`${linkAkaBtnStyles} w-full mt-6`}*/}
-                  {/*>*/}
-                  {/*  View Details*/}
-                  {/*</Link>*/}
+                  <ul className="space-y-2">
+                    {workout?.exercises?.map((exercise: WorkoutExercise, idx: number) => (
+                      <li key={idx} className="text-sm">
+                        <div className="flex justify-between">
+                          <span>{typeof exercise.exercise === 'object' && 'name' in exercise.exercise ? exercise.exercise.name : typeof exercise.exercise === 'string' ? exercise.exercise : 'Exercise'}</span>
+                          <span className="text-muted-foreground">
+                            {exercise.sets?.map((set, setIdx) => (
+                              <span key={setIdx} className="ml-2">
+                                {set.reps} × {set.weight}
+                              </span>
+                            ))}
+                          </span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href={`${RoutesConfig.editWorkout}/${workout._id}`}
+                    className={`${linkAkaBtnStyles} w-full mt-6`}
+                  >
+                    View Details
+                  </Link>
                 </CardContent>
               </Card>
             ))
@@ -121,13 +123,16 @@ export default function WorkoutsPageClient({
           )}
         </TabsContent>
 
-        {/*<TabsContent value="templates" className="mt-4">*/}
-        {/*  <WorkoutTemplates*/}
-        {/*    initialTemplates={initialTemplates}*/}
-        {/*    onUseTemplateAction={handleUseTemplate}*/}
-        {/*    currentWorkout={currentWorkout}*/}
-        {/*  />*/}
-        {/*</TabsContent>*/}
+        {/* Remove or comment out the templates tab if not defined */}
+        {/*
+        <TabsContent value="templates" className="mt-4">
+          <WorkoutTemplates
+            initialTemplates={initialTemplates}
+            onUseTemplateAction={handleUseTemplate}
+            currentWorkout={currentWorkout}
+          />
+        </TabsContent>
+        */}
       </Tabs>
     </div>
   );

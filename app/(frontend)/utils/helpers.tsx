@@ -136,8 +136,8 @@ export const applyFiltersAndSort = (
 };
 
 export const getExerciseDisplayName = (exercise: Exercises[number], index: number) => {
-  if (exercise.name) {
-    return exercise.name;
+  if (typeof exercise.exercise === 'string' && exercise.exercise) {
+    return exercise.exercise;
   }
   return `New Exercise ${index + 1}`;
 };

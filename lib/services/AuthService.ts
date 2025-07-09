@@ -3,6 +3,7 @@ import { UserService } from './UserService';
 import bcrypt from 'bcryptjs';
 import { env } from '@/lib/config/env.config';
 import { signIn } from 'next-auth/react';
+import { cookies } from 'next/headers';
 
 export class AuthService {
   userService = new UserService();
@@ -49,6 +50,16 @@ export class AuthService {
   async logout(): Promise<{ message: string }> {
     // No-op unless you're using JWT or cookies — typically client handles logout
     return { message: 'Logged out (client should clear token/session)' };
+  }
+}
+
+// Utility to get the current cookie header for server-side fetches
+export function getAuthCookieHeader() {
+  // Only available in server-side context
+  try {
+    return cookies().toString();
+  } catch {
+    return '';
   }
 }
 

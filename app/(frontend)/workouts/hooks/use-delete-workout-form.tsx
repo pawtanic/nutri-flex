@@ -1,5 +1,5 @@
 // In use-edit-workout-form.ts
-import { Workout } from '@/payload-types';
+import { Workout } from '@/lib/models/workouts.model';
 import { startTransition, useOptimistic, useTransition } from 'react';
 import { showErrorToast, showSuccessToast } from '@/app/(frontend)/utils/helpers';
 import { RoutesConfig } from '@/components/common/navigation/navigation';
@@ -24,7 +24,7 @@ export function useDeleteWorkoutForm(workout: Workout): UseDeleteWorkoutFormRetu
         removeOptimisticWorkout(null);
 
         try {
-          const result = await deleteWorkoutAction(workout.id);
+          const result = await deleteWorkoutAction(workout._id);
 
           if (!result.success) {
             showErrorToast({

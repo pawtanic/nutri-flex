@@ -5,10 +5,7 @@ import { ActionResponse } from '@/app/(frontend)/types/common-types';
 import { exerciseSchema } from '@/app/(frontend)/workouts/_schemas/exercise-schema';
 import { updateExistingWorkout } from '@/app/(frontend)/workouts/_api/update-workout';
 import type { Exercises } from '@/app/(frontend)/workouts/_components/workout-form-types';
-import { Workout } from '@/payload-types';
 import { revalidatePath } from 'next/cache';
-
-// todo - update in payload
 
 export async function updateWorkout(
   _: ActionResponse,
@@ -29,7 +26,7 @@ export async function updateWorkout(
     const validationResults = exercises.map(exercise => {
       return exerciseSchema.safeParse({
         workoutName,
-        name: exercise.name,
+        name: typeof exercise.exercise === 'string' ? exercise.exercise : '',
         sets: exercise.sets,
       });
     });
@@ -95,13 +92,14 @@ export async function updateWorkout(
     await updateExistingWorkout(workoutId, {
       name: workoutName,
       exercises: exercises.map(exercise => ({
-        name: exercise.name,
+        exercise: exercise.exercise,
         sets: exercise.sets.map(set => ({
           reps: Number(set.reps),
           weight: Number(set.weight),
         })),
+        notes: exercise.notes || '',
       })),
-    } as Workout);
+    });
 
     revalidatePath('/workouts');
 

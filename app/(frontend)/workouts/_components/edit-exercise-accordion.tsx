@@ -45,10 +45,11 @@ export function EditExerciseAccordion({
       className="space-y-3 bg-white mb-2"
     >
       {exercises.map((exercise, index) => {
-        const name = exercise.name || `Exercise ${index + 1}`;
+        const exerciseValue = typeof exercise.exercise === 'string' ? exercise.exercise : '';
+        const displayName = exerciseValue || `Exercise ${index + 1}`;
         const isExpanded = expandedSections.includes(`exercise-${index}`);
         const exerciseErrors = state.errors?.[index] || null;
-        const savedname = state?.inputs?.exercises?.[index]?.name;
+        const savedExercise = state?.inputs?.exercises?.[index]?.exercise;
 
         return (
           <AccordionItem
@@ -59,19 +60,19 @@ export function EditExerciseAccordion({
             <AccordionTrigger
               className={`px-4 py-3 hover:no-underline ${isExpanded ? 'before:content-[""] before:flex-1' : ''}`}
             >
-              {!isExpanded && name}
+              {!isExpanded && displayName}
             </AccordionTrigger>
             <AccordionContent>
               <div className="px-4 pt-2 pb-4">
                 <div className="grid grid-cols-[1fr,auto] gap-2">
                   <Input
                     id={`exercise-name-${index}`}
-                    placeholder="Exercise name"
-                    name="name"
-                    value={name}
-                    onChange={e => onUpdateExercise(index, 'name', e.target.value)}
-                    defaultValue={savedname}
-                    aria-invalid={!!exerciseErrors?.name}
+                    placeholder="Exercise name or ID"
+                    name="exercise"
+                    value={exerciseValue}
+                    onChange={e => onUpdateExercise(index, 'exercise', e.target.value)}
+                    defaultValue={savedExercise}
+                    aria-invalid={!!exerciseErrors?.exercise}
                   />
                   <Button
                     type="button"
@@ -81,10 +82,10 @@ export function EditExerciseAccordion({
                   >
                     <Trash2 style={{ width: '24px', height: '24px' }} aria-hidden="true" />
                   </Button>
-                  {exerciseErrors?.name && (
+                  {exerciseErrors?.exercise && (
                     <FormErrorMessage
                       id={`exercise-name-${index}`}
-                      errorMessage={exerciseErrors.name[0] || state.message}
+                      errorMessage={exerciseErrors.exercise[0] || state.message}
                     />
                   )}
 

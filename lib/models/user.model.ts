@@ -1,9 +1,10 @@
-import { prop, modelOptions, pre, getModelForClass, DocumentType, Severity } from '@typegoose/typegoose';
+import { prop, modelOptions, pre, getModelForClass, DocumentType, Severity, Ref } from '@typegoose/typegoose';
 import crypto from 'crypto';
 import { env } from '@/lib/config/env.config';
 import bcrypt from 'bcryptjs';
 import { schemaOptions } from '@/lib/models/utils.model';
 import mongoose from 'mongoose';
+import type { Media } from '@/lib/models/fileUpload.model';
 
 export enum UserRole {
   USER = 'user',
@@ -47,6 +48,15 @@ export class User {
   @prop()
   public socialAuthId?: string;
 
+  @prop()
+  public emailVerified?: Date;
+
+  @prop()
+  public lastLogin?: Date;
+
+  @prop({ default: true })
+  public isActive?: boolean;
+
   @prop({ 
     type: String, 
     enum: UserRole, 
@@ -54,6 +64,9 @@ export class User {
     default: UserRole.USER 
   })
   public roles!: UserRole[];
+
+  @prop({ ref: 'Media', default: [] })
+  media?: Ref<Media>[];
 
   public async setPassword(this: DocumentType<User>, password: string) {
     this.password = await bcrypt.hash(password, env.SALT);

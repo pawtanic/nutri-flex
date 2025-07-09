@@ -5,7 +5,6 @@ import type { Exercises } from '@/app/(frontend)/workouts/_components/workout-fo
 import { ActionResponse } from '@/app/(frontend)/types/common-types';
 import { createWorkout } from '@/app/(frontend)/workouts/_api/create-workout';
 import { revalidatePath } from 'next/cache';
-import WorkoutService from '@/lib/services/WorkoutService';
 import { Workout } from '@/lib/models/workouts.model';
 
 export async function addExercisesAction(
@@ -20,7 +19,7 @@ export async function addExercisesAction(
     const validationResults = exercises.map(exercise => {
       return exerciseSchema.safeParse({
         workoutName,
-        name: exercise.name,
+        name: typeof exercise.exercise === 'string' ? exercise.exercise : '',
         sets: exercise.sets.map(set => ({
           reps: set.reps,
           weight: set.weight,
@@ -88,34 +87,21 @@ export async function addExercisesAction(
     }
 
     // Transform validation results into the proper workout format
-    const workoutData: Workout = {
+    const workoutData: Partial<Workout> = {
       name: workoutName as string,
       date: new Date(),
-      exercises: validationResults.map(result => {
-        // Since we've already validated, we know these are all success: true
-        const data = (result as any).data;
-
-        // Make sure the sets have the correct structure
-        const sets = data.sets.map(set => ({
-          reps: Number(set.reps),
-          weight: Number(set.weight),
-        }));
-
-        return {
-          name: data.name,
-          sets: sets,
-        };
-      }),
+      exercises: exercises.map(ex => ({
+        exercise: ex.exercise,
+        sets: ex.sets.map(set => ({ reps: Number(set.reps), weight: Number(set.weight) })),
+        notes: ex.notes || '',
+      })),
     };
 
-    console.log('Sending workout data:', JSON.stringify(workoutData));
-
-    // Create the workout first
-    const newWorkout = await WorkoutService.create(workoutData);
+    // Create the workout via the API
+    await createWorkout({ newWorkout: workoutData });
 
     revalidatePath('/workouts');
 
-    // Then redirect - this will throw a NEXT_REDIRECT "error" that should not be caught
     return { success: true, message: 'Workout created successfully' };
   } catch (error: unknown) {
     console.error('Full error object:', error);

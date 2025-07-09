@@ -9,7 +9,7 @@ import { AuthRequiredButton } from '@/components/common/auth-button/auth-button'
 import { useFocusError } from '@/hooks/use-focus-error';
 import FormErrorMessage from '@/components/common/form-error-message/form-error-message';
 import WarningAlert from '@/components/common/warning-alert/warning-alert';
-import type { Workout } from '@/payload-types';
+import type { Workout } from '@/lib/models/workouts.model';
 import { EditExerciseAccordion } from './edit-exercise-accordion';
 import { useEditWorkoutForm } from '../hooks/use-edit-workout-form';
 import { useFormStatus } from 'react-dom';
@@ -38,7 +38,7 @@ export function EditWorkoutForm({ workout }: { workout: Workout }) {
   const { removeWorkout } = useDeleteWorkoutForm(workout);
   const handleDelete = async () => {
     const formData = new FormData();
-    formData.append('workoutId', workout.id as string);
+    formData.append('workoutId', workout._id as string);
     await removeWorkout(formData);
   };
 

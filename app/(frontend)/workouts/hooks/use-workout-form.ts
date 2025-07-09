@@ -5,7 +5,8 @@ import { ActionResponse } from '@/app/(frontend)/types/common-types';
 import { addExercisesAction } from '@/app/(frontend)/workouts/_actions/add-exercises-action';
 import { showSuccessToast } from '@/app/(frontend)/utils/helpers';
 import { RoutesConfig } from '@/components/common/navigation/navigation';
-import { Exercises, Set } from '../_components/workout-form-types';
+import type { Exercises } from '../_components/workout-form-types';
+import type { ExerciseSet } from '@/lib/models/exercises.model';
 
 interface UseWorkoutFormReturn {
   readonly state: ActionResponse;
@@ -17,7 +18,7 @@ interface UseWorkoutFormReturn {
   readonly handleAccordionChange: (newExpandedSections: string[]) => void;
   readonly addExercise: () => void;
   readonly removeExercise: (index: number) => void;
-  readonly updateExercise: (index: number, field: string, value: string | Set[]) => void;
+  readonly updateExercise: (index: number, field: string, value: string | ExerciseSet[]) => void;
   readonly updateSet: (exerciseIndex: number, setIndex: number, field: string, value: string) => void;
   readonly addSet: (exerciseIndex: number) => void;
   readonly removeSet: (exerciseIndex: number, setIndex: number) => void;
@@ -38,11 +39,12 @@ export function useWorkoutForm(
   const router = useRouter();
 
   function addExercise(): void {
-    const newExercises = [
+    const newExercises: Exercises = [
       ...exercises,
       {
-        name: '',
-        sets: [{ reps: null, weight: null }],
+        exercise: '' as any,
+        sets: [{ reps: 1, weight: 1 } as ExerciseSet],
+        notes: '',
       },
     ];
     setExercises(newExercises);
@@ -50,7 +52,7 @@ export function useWorkoutForm(
   }
 
   function removeExercise(index: number): void {
-    const newExercises = [...exercises];
+    const newExercises: Exercises = [...exercises];
     newExercises.splice(index, 1);
     setExercises(newExercises);
 
@@ -61,23 +63,23 @@ export function useWorkoutForm(
     }
   }
 
-  function updateExercise(index: number, field: string, value: string | Set[]): void {
-    const newExercises = [...exercises];
+  function updateExercise(index: number, field: string, value: string | ExerciseSet[]): void {
+    const newExercises: Exercises = [...exercises];
 
     if (field === 'sets') {
-      // When updating the entire sets array
-      newExercises[index] = { ...newExercises[index], sets: value as Set[] };
-    } else {
-      // For other fields like name
-      newExercises[index] = { ...newExercises[index], [field]: value };
+      newExercises[index] = { ...newExercises[index], sets: value as ExerciseSet[] };
+    } else if (field === 'notes') {
+      newExercises[index] = { ...newExercises[index], notes: value as string };
+    } else if (field === 'exercise') {
+      newExercises[index] = { ...newExercises[index], exercise: value as any };
     }
 
     setExercises(newExercises);
   }
 
   function updateSet(exerciseIndex: number, setIndex: number, field: string, value: string): void {
-    const newExercises = [...exercises];
-    const newSets = [...newExercises[exerciseIndex].sets];
+    const newExercises: Exercises = [...exercises];
+    const newSets: ExerciseSet[] = [...newExercises[exerciseIndex].sets];
 
     newSets[setIndex] = {
       ...newSets[setIndex],
@@ -93,8 +95,8 @@ export function useWorkoutForm(
   }
 
   function addSet(exerciseIndex: number): void {
-    const newExercises = [...exercises];
-    const newSets = [...newExercises[exerciseIndex].sets, { reps: null, weight: null }];
+    const newExercises: Exercises = [...exercises];
+    const newSets: ExerciseSet[] = [...newExercises[exerciseIndex].sets, { reps: 1, weight: 1 } as ExerciseSet];
 
     newExercises[exerciseIndex] = {
       ...newExercises[exerciseIndex],
@@ -109,8 +111,8 @@ export function useWorkoutForm(
       return; // Early return for error condition
     }
 
-    const newExercises = [...exercises];
-    const newSets = [...newExercises[exerciseIndex].sets];
+    const newExercises: Exercises = [...exercises];
+    const newSets: ExerciseSet[] = [...newExercises[exerciseIndex].sets];
 
     newSets.splice(setIndex, 1);
 

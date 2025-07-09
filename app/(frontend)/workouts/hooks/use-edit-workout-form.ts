@@ -7,7 +7,7 @@ import { deleteExerciseAction } from '@/app/(frontend)/workouts/_actions/delete-
 import { showErrorToast, showSuccessToast } from '@/app/(frontend)/utils/helpers';
 import { RoutesConfig } from '@/components/common/navigation/navigation';
 import { Exercises, Set } from '../_components/workout-form-types';
-import { Workout } from '@/payload-types';
+import { Workout } from '@/lib/models/workouts.model';
 
 interface UseEditWorkoutFormReturn {
   readonly state: ActionResponse;
@@ -38,12 +38,12 @@ export function useEditWorkoutForm(workout: Workout): UseEditWorkoutFormReturn {
   const [exercises, setExercises] = useState<Exercises>(
     () =>
       workout.exercises?.map(exercise => ({
-        id: exercise.id,
-        name: exercise.name,
+        exercise: exercise.exercise,
         sets: exercise.sets.map(set => ({
           reps: set.reps,
           weight: set.weight,
         })),
+        notes: exercise.notes,
       })) || []
   );
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
@@ -52,10 +52,10 @@ export function useEditWorkoutForm(workout: Workout): UseEditWorkoutFormReturn {
   async function removeExercise(index: number): Promise<void> {
     const exerciseToRemove = exercises[index];
 
-    // Only call the server action if the exercise has an ID (exists in the database)
-    if (exerciseToRemove.id) {
+    // Only call the server action if the exercise has an exercise ref (exists in the database)
+    if (exerciseToRemove.exercise) {
       try {
-        const result = await deleteExerciseAction(workout.id as string, exerciseToRemove.id);
+        const result = await deleteExerciseAction(workout._id as string, exerciseToRemove.exercise as any);
         
         if (!result.success) {
           showErrorToast({
@@ -123,11 +123,12 @@ export function useEditWorkoutForm(workout: Workout): UseEditWorkoutFormReturn {
     const newExercises = [
       ...exercises,
       {
-        name: `Exercise ${exercises.length + 1}`,
+        exercise: '' as any,
         sets: [{ reps: 1, weight: 1 }],
+        notes: '',
       },
     ];
-    setExercises(newExercises);
+    setExercises(newExercises as Exercises);
     setExpandedSections([`exercise-${newExercises.length - 1}`]);
   }
 
@@ -136,10 +137,10 @@ export function useEditWorkoutForm(workout: Workout): UseEditWorkoutFormReturn {
   }
 
   async function handleAction(formData: FormData): Promise<void> {
-    formData.append('workoutId', workout.id as string);
+    formData.append('workoutId', workout._id as string);
     formData.append('workoutName', workoutName);
     formData.append('exercises', JSON.stringify(exercises));
-    formData.append('date', workout.date);
+    formData.append('date', workout.date instanceof Date ? workout.date.toISOString() : String(workout.date));
     
     return action(formData);
   }

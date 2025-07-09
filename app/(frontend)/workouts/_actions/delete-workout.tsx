@@ -1,23 +1,11 @@
-import { getPayload } from 'payload';
-import config from '@payload-config';
+import { env } from '@/lib/config/env.config';
 
 export async function deleteWorkout(workoutId: string) {
-  const payload = await getPayload({ config });
-  const workout = await payload.findByID({
-    collection: 'workouts',
-    id: workoutId,
+  const res = await fetch(`${env.APP_URL}/api/workouts?id=${encodeURIComponent(workoutId)}`, {
+    method: 'DELETE',
   });
-
-  if (!workout) {
-    throw new Error('Workout not found');
+  if (!res.ok) {
+    throw new Error('Failed to delete workout');
   }
-
-  // if (workout.user !== userId) {
-  //   throw new Error('Unauthorized');
-  // }
-
-  await payload.delete({
-    collection: 'workouts',
-    id: workoutId,
-  });
+  return res.json();
 }

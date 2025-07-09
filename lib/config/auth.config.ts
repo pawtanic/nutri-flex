@@ -32,6 +32,34 @@ declare module 'next-auth' {
   }
 }
 
+// Helper to sync user with Payload CMS
+async function syncUserWithPayload({ email, name }: { email: string; name?: string }) {
+  const payloadUrl = `${env.APP_URL}/api/users`;
+  try {
+    // Try to find the user first
+    const findRes = await fetch(`${payloadUrl}?where[email][equals]=${encodeURIComponent(email)}`);
+    const findData = await findRes.json();
+    if (findData?.docs?.length > 0) {
+      // User exists, optionally update name
+      const userId = findData.docs[0].id;
+      await fetch(`${payloadUrl}/${userId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      });
+      return;
+    }
+    // User does not exist, create
+    await fetch(payloadUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name, roles: 'user' }),
+    });
+  } catch (e) {
+    console.error('Failed to sync user with Payload:', e);
+  }
+}
+
 export const authConfig: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -83,6 +111,12 @@ export const authConfig: NextAuthOptions = {
           });
         }
       }
+
+      // Sync user with Payload CMS
+      if (user?.email) {
+        const safeName = typeof user.name === 'string' ? user.name : undefined;
+        await syncUserWithPayload({ email: user.email, name: safeName });
+      }
       return true;
     },
     async jwt({ token, user }) {
@@ -94,8 +128,6 @@ export const authConfig: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      console.log('[session]', { session, token });
-
       if (session?.user) {
         session.user.id = token.id;
         session.user.accessToken = token.accessToken;
